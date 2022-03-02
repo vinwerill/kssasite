@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container p-3 my-3 border" style="width: 60%;">
+    <ul class="nav nav-tabs"  role="tablist">
+        <li class="nav-item col-lg-6">
+            <a class="nav-link {% if active == 'User_login' %} active {% endif %}" data-toggle="tab" href="#login">登入</a>
+        </li>
+        <li class="nav-item col-lg-6">
+            <a class="nav-link {% if active == 'manager_login' %} active {% endif %}" data-toggle="tab" href="#manager_login">管理員登入</a>
+        </li>
+  </ul>
+
+
+<div class="tab-content">
+    <div class="tab-pane container {% if active == 'User_login' %} active {% endif %}" id="login">
+        <form method="POST" action={{url_for('User_login')}}> 
+                {% if errors != "" and active == "User_login"%}
+                    <div  class="alert alert-danger" style="text-align: center;">{{ errors }}</div >
+                {% endif %}
+                <h5>&nbsp;</h5>
+                <div class="input-group mb-lg-12 input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">學號</span>
+                    </div>
+                    <input class="form-control mb-lg-12 input-group-lg" type="text" name="id">
+                </div>
+                <br>
+                <h5>&nbsp;</h5>
+                <div class="input-group mb-lg-12 input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">密碼</span>
+                    </div>
+                    <input class="form-control mb-lg-12 input-group-lg" type="password" name="password" value="">
+                </div>	
+                <br>    
+                <a href="{{url_for('register', order = 'register')}}">沒有帳號？辦一個吧</a><br> 
+                <a href="{{url_for('forgot_password')}}">忘記密碼</a>
+                <h5>&nbsp;</h5> 
+                <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "submit_login"></div>
+        </form>
+    </div>
+    <div class="tab-pane container {% if active == 'manager_login' %} active {% endif %}" id="manager_login">
+        <form method="POST" action={{url_for('manager_login')}}> 
+            <h6 class="text text-danger" style="text-align: center;">非學聯會及學生議會內部人員請勿使用，以免影響行政效率</h6>
+                {% if errors != "" and active == "manager_login" %}
+                    <br>
+                    <div  class="alert alert-danger" style="text-align: center;">{{ errors }}</div >
+                {% endif %}
+                <h5>&nbsp;</h5>
+                <div class="input-group mb-lg-12 input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">學號</span>
+                    </div>
+                    <input class="form-control mb-lg-12 input-group-lg" type="text" name="id">
+                </div>
+                <br>
+                <h5>&nbsp;</h5>
+                <div class="input-group mb-lg-12 input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">密碼</span>
+                    </div>
+                    <input class="form-control mb-lg-12 input-group-lg" type="password" name="password" value="">
+                </div>	
+                <br>    
+                <a href="{{url_for('manager_register', order = 'register')}}">申請管理員</a>
+                <h5>&nbsp;</h5> 
+                <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "submit_login"></div>
+        </form>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+        

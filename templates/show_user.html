@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br>
+    <div class="list-group">
+        {% for user in users %}
+            <div class="container p-3 my-3 border">
+            <div class="row">學號：{{ user.id }}</div>
+            <div class="row">姓名：{{ user.name }}</div>
+            <div class="row">電子郵件：{{ user.email }}</div>
+            <div class="row">入學年：{{ user.enteryear }}</div>
+            <div class="row"></div><a class="btn btn-danger" href = "{{ url_for('delete_account', target = user.id) }}">刪除</a></div>                    
+        {% endfor %}
+    </div>
+{% endblock %}

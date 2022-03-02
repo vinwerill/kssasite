@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action={{url_for('manager_login')}}> 
+    <div class="container p-3 my-3 border" style="width: 60%;">
+        {% if errors != "" %}
+            <p class="text-danger" style="text-align: center;">{{ errors }}</p>
+        {% endif %}
+        <h5>&nbsp;</h5>
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">學號</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="id">
+        </div>
+        <br>
+        <h5>&nbsp;</h5>
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">密碼</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="password" name="password" value="">
+        </div>	
+        <br>    
+        <a href="{{url_for('register')}}">沒有帳號？辦一個吧</a>
+        <h5>&nbsp;</h5> 
+        <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "submit_login"></div>
+    </div>
+</form>
+{% endblock %}
+        

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if order == 'all' %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <div class="container">
+            <br>
+            <ul class="nav nav-pills"  role="tablist" style="padding-left: 10%; padding-right: 10%;">
+                <li class="nav-item col-lg-4">
+                    <a class="nav-link active p-3 my-3 border" data-toggle="pill" href="#adminstration"><h3 style="text-align-last: center;">行政中心</h3></a>
+                </li>
+                <li class="nav-item col-lg-4">
+                    <a class="nav-link p-3 my-3 border" data-toggle="pill" href="#parliament"><h3 style="text-align-last: center;">學生議會</h3></a>
+                </li>
+                <li class="nav-item col-lg-4">
+                    <a class="nav-link p-3 my-3 border" data-toggle="pill" href="#boardofinquiry"><h3 style="text-align-last: center;">評議委員會</h3></a>
+                </li>
+            </ul>
+            <br>
+            <div class="tab-content container " style="padding-left: 10%; padding-right: 10%;">
+                <div class="tab-pane activate"id = 'adminstration'>
+                    {% for ele in adminstration %}
+                    <a class="list-group-item btn" href="{{ url_for('info_web', order = ele.ind) }}"><h5 style="text-align: left;">{{ ele.title}}</h5><h5 style="text-align: right;">{{ ele.apartment.split('-')[1] }}&nbsp{{ ele.date.split('-')[0] }}年{{ ele.date.split('-')[1] }}月{{ ele.date.split('-')[2] }}日</h5></a>
+                    {% endfor %}
+                </div>
+                <div class="tab-pane"id = 'parliament'>
+                    {% for ele in parliament %}
+                    <a class="list-group-item btn" href="{{ url_for('info_web', order = ele.ind) }}"><h5 style="text-align: left;">{{ ele.title}}</h5><h5 style="text-align: right;">{{ ele.apartment.split('-')[1] }}&nbsp{{ ele.date.split('-')[0] }}年{{ ele.date.split('-')[1] }}月{{ ele.date.split('-')[2] }}日</h5></a>
+                    {% endfor %}
+                </div>
+                <div class="tab-pane"id = 'boardofinquiry'>
+                    {% for ele in boardofinquiry %}
+                    <a class="list-group-item btn" href="{{ url_for('info_web', order = ele.ind) }}"><h5 style="text-align: left;">{{ ele.title}}</h5><h5 style="text-align: right;">{{ ele.apartment.split('-')[1] }}&nbsp{{ ele.date.split('-')[0] }}年{{ ele.date.split('-')[1] }}月{{ ele.date.split('-')[2] }}日</h5></a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <div class="container p-3 my-3 border" id = "mails" style="padding-left: align-self; margin-left: align-self;" >
+        <h5 style="text-align:center;">{{ content.title | safe}}</h5>
+        <br><hr><br>
+        <h5 style="text-align:center;">內容:</h5>
+        <br>
+        <p style="text-align:center;">{{ content.content | safe}}</p>
+        <br><hr><br>
+        {% if content.document != "無"%}
+            <h5 style="text-align:center;">檔案連結:</h5>
+            <br>
+            {% if content.document.find('|')==0 %}
+                <a  href="{{ content.document | safe}}"><p style="text-align:center;">{{ content.document | safe}}</p></a>
+            {% endif %}
+            <br><hr><br>
+        {% endif %}
+        <h5 style="text-align:center;">發布部門:{{ content.apartment.split('-')[1] | safe}}</h5>
+    </div>
+    {% endif %}
+{% endblock %}

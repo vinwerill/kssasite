@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <br>
+        <div class="row">
+            <button class="btn btn-primary" id = "getinfoadminstration" data-apartment = "學聯會"><h3 style="text-align-last: center;">學聯會</h3></button>
+            <button class="btn btn-primary" id = "getinfoparliament"  data-apartment = "學生議會"><h3 style="text-align-last: center;">學生議會</h3></button>
+        </div>
+            <br>
+        <table id = "terminal">
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $('button[id^=getinfo]').on('click', function() {
+            var formData = {};
+            var btnID = this.id;
+            var att = $(this).attr('data-apartment')
+            console.log(btnID)
+            console.log(att)
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/MySQL_ajax_get/'+att,
+                beforeSend: function(){ console.log('/MySQL_ajax_get/'+att) },
+            })
+            .done(function(data, textStatus, jqXHR) {
+                console.log(data.info)
+                // var items = [];
+                // var count = 0;
+                // $.each(data.info, function(index, contents) {
+                //     contents.words.forEach(function(word) {
+                //         count++;
+                //         items.push('<tr><td>'+count+'</td>');
+                //         items.push('<td><a target="_blank" href="http://tw.dictionary.search.yahoo.com/search?p='+word[1]+'">'+word[1]+'</a></td>');
+                //         items.push('<td>'+word[2]+'</td></tr>');
+                //     });
+                // });
+
+            //     $('#tableData > tbody').html(items.join(''));
+            //     $('#wordCount').val(count);
+            });
+            // .fail(function(jqXHR, textStatus, errorThrown) { jsfAlert(jqXHR.status); })
+            // .always(function(){ $('#'+btnID+' > span').addClass('d-none'); });
+        });
+    </script>
+{% endblock %}

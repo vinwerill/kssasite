@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if password == '' %}
+<form method="POST" action={{ url_for('set_conference') }}>
+    <br>
+        <div class="container-fluid" style="padding-inline: 10%;" id = "all_option">
+            <div class="form-group">
+                <label for="option1">投票主題:</label>
+                <input type="text" class="form-control" id="topic" name = "topic">
+              </div>
+              <br><hr><br>
+            <div class="form-group">
+                <label for="option1">選項1:</label>
+                <input type="text" class="form-control" id="option1" name = "option">
+              </div>
+              <a class="btn btn-primary" id ="add_option">增加選項</a>
+              <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit_vote_options">
+        </div>
+        <script>
+            var count = 1;
+            $ ('#add_option').click(function(){
+                count++;
+                $ ('#add_option').before('<br><div class="form-group"><label for="option'+count+'">選項'+count+':</label><input type="text" class="form-control" name = "option" id="option1"></div>')
+            });
+        </script>
+    </form>
+{% else %}
+    <br>
+        <h1 style="text-align: center;">會議密碼:{{password}}</h1>
+    <br>
+{% endif %}
+{% endblock %}

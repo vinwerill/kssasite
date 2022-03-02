@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br>
+    <div class="list-group">
+        {% for info in infos %}
+            <div class="container p-3 my-3 border">
+            <div class="row">{{ info.title }}</div>
+            <div class="row">{{ info.content.replace('<br>', '')[:10] }}</div>
+            <div class="row">發布部門：{{ info.apartment }}</div>
+            <br>    
+            <a class="btn btn-primary col-sm-2" href = "{{ url_for('adjust_info', ind = info.ind) }}">修改</a>
+            <a class="btn btn-danger  col-sm-2" href = "{{ url_for('delete', target = info.ind, t = 'info') }}">刪除</a>          
+            </div>        
+        {% endfor %}
+    </div>
+{% endblock %}

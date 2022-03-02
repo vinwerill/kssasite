@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if m == "result" %}
+    <div class="container-fluid" style="padding-inline: 20%;">
+        <input value = "{{ topic }}" id = "topic">
+        <br>
+        <h1 style="text-align: center;">投票者</h1>
+        <br>
+        <h5 style="text-align: center;" id = "participate"></h5>
+        <br><hr><br>
+        <canvas id="myChart" style="width:100%;max-width:100%"></canvas>
+        <script>
+        $('#topic').hide();
+        showchart()
+        var clock = setInterval(showchart , 5000);
+        function showchart(){
+            var formData = {};
+            var xValues = Array();
+            var yValues = Array();
+            console.log($('#topic').val())
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/getoptions/'+$("#topic").val(),})
+            .done(function(data, textStatus, jqXHR) {
+                var show_participate = document.getElementById('participate');
+                console.log(data.participate);
+                show_participate.innerHTML = data.participate;
+                xValues = data.options;
+                yValues = data.result;
+                var barColors = ['rgba(200,10,10,1)', 'rgba(200,200,200,1)'];
+                new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                    display: true,
+                    text: "投票結果"
+                    },
+                    scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                    }
+                }
+                });
+                })
+            .fail()
+            .always();
+            }
+            
+        </script>
+    </div>
+    {% else %}
+    <form method="POST" action={{ url_for('vote_page', m='result') }}>
+    <div class="container-fluid" style="padding-inline: 20%;">
+        {% if options.activate == 1 %}
+            <br>
+            <h1 style="text-align: center;"> {{ options.topic }} </h1>
+            <input type = "text" value = "{{ options.ind }}" id = "ind" name = "ind">
+            <input type = "text" value = "{{ options.holder }}" id = "holder" name = "holder">
+            <br>
+            {% for i in options.options.split('-') %}
+                <!-- <input type="checkbox" class="btn btn-primary btn-block btn-lg" id = "option" value="0" onclick = "value++">{{ i }}</button> -->
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id = "option{{ options.options.split('-').index(i) }}" value="{{ i }}" name = "choice">
+                    <label class="form-check-label" for="option{{ options.options.split('-').index(i) }}">{{ i }}</label>
+                </div>
+                <br><br>
+            {% endfor %}
+            <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "commit"></div>
+        {% else %}
+                <h1 style="text-align: center;">投票已結束</h1>
+        {% endif %}
+    <script>
+        $('#ind').hide();
+        $('#holder').hide();
+    </script>
+    </div>
+    <br>
+    </form>
+    {% endif %}
+{% endblock %}

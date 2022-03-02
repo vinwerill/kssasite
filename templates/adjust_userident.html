@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="{{url_for('register', order = 'adjust')}}"> 
+    <div class="container p-3 my-3 border" style="width: 60%;">
+        <h5 style="margin-left: 45%;">註冊帳號</h5>
+        {% if errors != "" %}
+            <p class="text-danger" style="text-align: center;">{{ errors }}</p>
+        {% endif %}
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">學號</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="id" value="{{ ident.id }}">
+        </div>	
+        <br>      
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">姓名</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="name" value="{{ ident.name }}">
+        </div>
+        <br>
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">密碼</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="password" value="{{ident.password}}">
+        </div>	
+        <br>      
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">確認密碼</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="password" name="checkpassword" value="">
+        </div>	
+        <br>      
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">email信箱</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="email" value="{{ident.email}}">
+        </div>	
+        <br>      
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">入學年度</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="enteryear" value="{{ident.enteryear}}">
+        </div>	
+        <br>
+        <script src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script>
+        <h5>&nbsp;</h5>   
+        <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "submit_login"></div>
+    </div>
+</form>
+{% endblock %}
+        

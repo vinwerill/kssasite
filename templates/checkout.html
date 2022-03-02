@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<br>
+<form method="POST" action={{ url_for('vote_page', m = "checkout") }}>
+    <div class="container-fluid" style="padding-inline: 10%;">
+        <input type="text" class="form-control" placeholder="請輸入會議密碼" name = "address">
+    </div>
+</form>
+<br>
+{% endblock %}

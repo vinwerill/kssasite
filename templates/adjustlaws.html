@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>&nbsp;<br>
+
+{% if step == "1" %}
+<div class='container' style="padding-left: align-self; border: 2px;">
+<form role="form" action="{{ url_for('adjust_laws', step = 2, ind = ind) }}" method="POST">
+    <h1 style="text-align: center;">設定</h1>
+        <h4>法規名稱:</h4>
+       <br>
+       <div class="form-group">
+            <input class="form-control" name = "gettitle" value = "{{law_title.title}}">
+        </div>
+        <br>&nbsp;<br>
+        <hr>
+        <br>&nbsp;<br>
+        <br>&nbsp;<br>
+        <h4>法律類別</h4>
+        <input type="hidden" value="{{law_title.law_type}}" id = "type">
+        <div class="form-check">
+            <br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "組織章程" value="組織章程">
+              <label class="form-check-label" for="組織章程">組織章程</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "自治條例" value="自治條例">
+              <label class="form-check-label" for="自治條例">自治條例</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gettype" id = "自治規則" value="自治規則">
+                <label class="form-check-label" for="自治規則">自治規則</label>
+              </div>
+        </div>
+        <script>
+          var type = $("#type").val();
+          $("#"+type).prop("checked", true);
+        </script>
+        <br>&nbsp;<br>
+        <hr>
+        <br>&nbsp;<br>
+        <h4>沿革</h4>
+        <br>
+        <div class="form-group">
+                <input class="form-control" name = "gethistory" value = "{{law_title.history}}">
+            </div>
+            <br>&nbsp;<br>
+        <hr>
+        <br>&nbsp;<br>
+        <h4>各章節名:</h4>
+        <br>
+        <hr>
+        <br>
+      <input type="hidden" name="all_getchapter_type" id = "all_getchapter_type" value="{% for i in range(length) %}getchapter_type{{i}} {% endfor %}">
+      <div id = "allcontent">
+      {% for i in allchapters %}
+        <input type="hidden" id = "length" value = "{{length}}">
+        <input type="hidden">
+        <div id = "content{{allchapters.index(i)}}">
+            <div class="form-group">
+              <input class="form-control" name = "getcontent" value = "{{i[1]}}">
+            </div>
+            <div class="form-check">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "編{{allchapters.index(i)}}" value="編">
+                <label class="form-check-label" for="編{{allchapters.index(i)}}">編</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "章{{allchapters.index(i)}}" value="章">
+                <label class="form-check-label" for="章{{allchapters.index(i)}}">章</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "節{{allchapters.index(i)}}" value="節">
+                <label class="form-check-label" for="節{{allchapters.index(i)}}">節</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "款{{allchapters.index(i)}}" value="款">
+                <label class="form-check-label" for="款{{allchapters.index(i)}}">款</label>
+              </div><br><br>
+            </div>
+        </div>
+        <script>
+
+        </script>
+        <a class="btn btn-primary" id = "add_line">增加章節</a>
+        <br><br>
+      {% endfor %}
+    </div>
+    <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit_laws" style="margin-left: 50%;">
+</form>
+</div>
+<script>
+  var line = document.getElementById("length").value;
+  function addline_function(target)
+  {
+    var content = '<div class="container">'+
+      '<div class="form-group">'+
+        '<input class="form-control" name = "getcontent">'+
+      '</div>'+
+      '<div class="form-check">'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "編'+String(line)+'" value="編">'+
+          '<label class="form-check-label" for="編'+String(line)+'">編</label>'+
+        '</div>'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "章'+String(line)+'" value="章">'+
+          '<label class="form-check-label" for="章'+String(line)+'">章</label>'+
+        '</div>'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "節'+String(line)+'" value="節">'+
+          '<label class="form-check-label" for="節'+String(line)+'">節</label>'+
+        '</div>'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "款'+String(line)+'" value="款">'+
+          '<label class="form-check-label" for="款'+String(line)+'">款</label>'+
+        '</div>'+'<br>'+
+      '</div>';
+      // '<a class="btn btn-success" id ="add_subline'+String(line)+'">增加附屬章節</a>&nbsp;';
+      $(target).before('<br><br><div class = "container">'+content+'</div><br>')
+      document.getElementById("all_getchapter_type").value = document.getElementById("all_getchapter_type").value+ " "+"getchapter_type"+String(line)
+      line+=1;
+  };
+  // function addsubline_function(target)
+  // {
+  //   var content = '<div class="form-group">'+
+  //     '<input class="form-control" name = "getcontent">'+
+  //     '<div class="form-group">'+
+  //         '<br>'+
+  //         '<div class="form-check form-check-inline">'+
+  //           '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "編'+String(line)+'" value="編">'+
+  //           '<label class="form-check-label" for="編'+String(line)+'">編</label>'+
+  //         '</div>'+
+  //         '<div class="form-check form-check-inline">'+
+  //           '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "章'+String(line)+'" value="章">'+
+  //           '<label class="form-check-label" for="章'+String(line)+'">章</label>'+
+  //         '</div>'+
+  //         '<div class="form-check form-check-inline">'+
+  //             '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "節'+String(line)+'" value="節">'+
+  //             '<label class="form-check-label" for="節'+String(line)+'">節</label>'+
+  //           '</div>'+
+  //           '<div class="form-check form-check-inline">'+
+  //               '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "款'+String(line)+'" value="款">'+
+  //               '<label class="form-check-label" for="款'+String(line)+'">款</label>'+
+  //         '</div>'+
+  //     '</div>'+
+  //        '<a class="btn btn-success" id ="add_subline'+String(line)+'">增加附屬章節</a>&nbsp;'+
+  //        '<a class="btn btn-primary" id ="add_line'+String(line)+'">增加章節</a>&nbsp;'
+  //        +'<div>';
+  //     $(target).before('<br><div class = "container">'+content+'</div><br>')
+  //     document.getElementById("all_getchapter_type").value = document.getElementById("all_getchapter_type").value+ " "+"getchapter_type"+String(line)
+  //     line ++;
+  // };
+
+    $('.container').on('click', 'a[id^=add_line]' ,function (){
+      addline_function(this);
+    });
+    // $('.container').on('click', 'a[id^=add_subline]' ,function (){
+    //   addsubline_function(this);
+    // });
+</script>
+
+{% elif step == "2" %}
+  <div class='container' style="padding-inline: 10%; border: 2px;">
+    <h4 style = "text-align: center;">{{ title }}</h4>
+    <br><hr><br>
+    <h4 style = "text-align: center;">所屬類別:{{ lawtype }}</h4>
+    <br><hr><br>
+    <h4 style = "text-align: center;">所有章節</h4>
+    <div class = "container">
+      <form role="form" action="{{ url_for('addlaws', step = 3) }}" method="POST">
+        <input type="hidden" name = "getind" value={{ind}}>
+        <input type="hidden" value = "{{title}}" name="gettitle">
+        <input type="hidden" value = "{{history}}"  name="gethistory">
+        <input type="hidden" value = "{{lawtype}}" name = "getlawtype">
+        <input type="hidden" value = "{{length}}" id = "length">
+    {% for i in allchapters %}
+      <div style="margin-left: {{ chapter_adjust[i[-1]] }};">
+          <h4>{{i}}:{{content[allchapters.index(i)]}}</h4>
+          <a class="btn btn-primary" id = "add_line{{allchapters.index(i)}}">增加條目</a>
+          <input type="hidden" id = "add_line{{allchapters.index(i)}}" value = "{{i}} {{content[allchapters.index(i)]}}" >
+      </div>
+      <br><br>
+    {% endfor %}
+    <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit_laws" style="margin-left: 50%;">
+  </form>
+  </div>
+  </div>
+<script>
+  $("a[id^=add_line]").click(function(){
+    var temp = this.id
+    var content = '<div class="container">'+
+        '<div class="input-group input-group-lg">'+
+          '<div class="input-group-prepend"><span class="input-group-text">第</span></div>'+
+          '<input class="input-group-lg" type="text" name="getchapter">'+
+          '<div class="input-group-append"><span class="input-group-text">條</span></div>'+
+          '</div>'+
+          '<input type="hidden" value = "'+$("input#"+temp).val()+'" name = "getbelong_chapter">'+
+          '<textarea class="form-control" name="getcontent" id="content" rows="5"></textarea><br>'+
+      '</div>';
+    $(this).before(content);
+  })
+</script>
+{% endif %}
+{% endblock %}
+

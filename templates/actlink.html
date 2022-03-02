@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>&nbsp;<br>
+{% if condition == 1 %}
+    <h1 class="text-danger" style="text-align-last: center;">管理員密碼錯誤</h1>
+{% endif %}
+{% if condition == 2 %}
+    <h1 class="text-success" style="text-align-last: center;">認證成功</h1>
+{% else %}
+    {% if confirm == 0 %}
+        <div class='container' style="padding-left: align-self;">
+            <form method="POST" action={{url_for('actlink', account = wac)}}> 
+            <input type="text" class="form-control" placeholder="請輸入密碼確認管理員身分" name = "password">
+            <br>
+            <input class="btn btn-primary btn-lg" type="submit" name="send" value="核可帳號{{ wac }}">
+            </form>
+        </div>
+    {% endif %}
+{% endif %}
+<br>&nbsp;<br>
+{% endblock %}

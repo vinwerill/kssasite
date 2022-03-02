@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>&nbsp;<br>
+<form role="form" action="" method="post">
+    <div class='container' style="padding-left: align-self; border: 2px;">
+       <h4>一、標題</h4>
+       <br>
+       <div class="form-group">
+            <input class="form-control" name = "gettitle"></input>
+        </div>
+       <h4>二、內容</h4>
+       <br>
+       <div class="form-group">
+            <textarea class="form-control" rows="5" name = "getcontent"></textarea>
+        </div>
+       <h4>三、附加檔案</h4>
+       <br>
+       <div class="form-group">
+            <textarea class="form-control" rows="1" name = "getdocument" placeholder="多個檔案請換行"></textarea>
+        </div>
+        <h4>四、發布單位</h4>
+       <br>
+       <div class="form-group">
+        <br>
+        <!-- <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration1" value="會長">
+            <label class="form-check-label" for="adminstration1">會長</label>
+        </div>
+        <br><br> -->
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration2" value="學聯會-自治部">
+            <label class="form-check-label" for="adminstration2">自治部</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration3" value="學聯會-秘書部">
+            <label class="form-check-label" for="adminstration3">秘書部</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration4" value="學聯會-公關部">
+            <label class="form-check-label" for="adminstration4">公關部</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration5" value="學聯會-活動部">
+            <label class="form-check-label" for="adminstration5">活動部</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration6" value="學聯會-學藝部">
+            <label class="form-check-label" for="adminstration6">學藝部</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration7" value="學聯會-社團部">
+            <label class="form-check-label" for="adminstration7">社團部</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="adminstration8" value="學聯會-財務部">
+            <label class="form-check-label" for="adminstration8">財務部</label>
+        </div>
+        <br><br>
+        <!-- <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament1" value="學生議會">
+            <label class="form-check-label" for="parliament1">學生議會</label>
+        </div> -->
+        <!-- <br><br> -->
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament2" value="學生議會-學生議會秘書處">
+            <label class="form-check-label" for="parliament2">學生議會秘書處</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament3" value="評議委員會-主任評議委員">
+            <label class="form-check-label" for="parliament3">主任評議委員</label>
+        </div>
+        <!-- <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament3" value="動審查委員會">
+            <label class="form-check-label" for="parliament3">活動審查委員會</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament4" value="社團審查委員會">
+            <label class="form-check-label" for="parliament4">社團審查委員會</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament6" value="公關秘書審查委員會">
+            <label class="form-check-label" for="parliament6">公關秘書審查委員會</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament7" value="學權自治審查委員會">
+            <label class="form-check-label" for="parliament7">學權自治審查委員會</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament8" value="學藝財務審查委員會">
+            <label class="form-check-label" for="parliament8">學藝財務審查委員會</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament9" value="法規審查委員會">
+            <label class="form-check-label" for="parliament9">法規審查委員會</label>
+        </div>
+        <br><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="getapartment" id="parliament10" value="紀律委員會">
+            <label class="form-check-label" for="parliament10">紀律委員會</label>
+        </div> -->
+        <br><br>
+</div>
+       <h4>五、日期</h4>
+       <br>
+        <input placeholder="年" col-lg-4 name = "y">
+        <input placeholder="月" col-lg-4 name= "m">
+        <input placeholder="日" col-lg-4 name = "d">
+    </div>
+    <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit_info" style="margin-left: 50%;">
+</form>
+<br>&nbsp;<br>
+{% endblock %}

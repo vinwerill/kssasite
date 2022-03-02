@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block content %}
+            <br>
+            {% if login == True %}
+                    {% for mail in retrun_mails %}
+                        {% if letters == 'all'%}
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action col-lg-8" href="/mailbox/{{ mail.ind }}" target="_blank" style="margin-left: 10%;">
+                                <div class="row"><h5 style="text-align:left;">信件回覆：<br>{{ mail.sender_name }}：{{ mail.return_massege[:10].replace('<br>', ' ') }}...</h5><h5 style="text-align:right;">{{ mail.progress }}</h5><h5 style="text-align:right;">{{ mail.sned_date }}</h5></div>
+                            </a>
+                        </div>
+                        {% elif letters == mail.ind | string %}
+                        <div class="container p-3 my-3 border" id = "mails" style="padding-left: align-self; margin-left: align-self;" >
+                            {% if mail.anonymous == "anonymous" %}
+                                <h5 style="text-align:center;">寄件者：匿名</h5>
+                            {% else %}
+                                <h5 style="text-align:center;">寄件者：{{ mail.sender_name }}</h5>
+                            {% endif %}
+                                <br><hr><br>
+                            <h5 style="text-align:center;">收信部門：{{ mail.to_who | safe }}</h5>
+                            <br><hr><br>
+                            <h5 style="text-align:center;">內容</h5>
+                            <br>
+                            <h5 style="text-align:center;">{{ mail.content | safe }}</h5>
+                            <br><hr><br>
+                            <h5 style="text-align:center;">建議</h5>
+                            <br>
+                            <h5 style="text-align:center;">{{ mail.advice | safe }}</h5>
+                            <br><hr><br>
+                            <h5 style="text-align:center;">回覆內容</h5>
+                            <br>
+                            <h5 style="text-align:center;" >{{ mail.return_massege | safe }}</h5>
+                            <br><hr><br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% elif manager_login == True %}
+                    {% for mail in mails %}
+                        {% if letters == 'all'%}
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action col-lg-8" href="/mailbox/{{ mail.ind }}" target="_blank" style="margin-left: 10%;">
+                                    <div class="row"><h5 style="text-align:left;">{{ mail.sender_name }}：{{ mail.content[:10].replace('<br>', ' ') }}...</h5><h5 style="text-align:right;">{{ mail.progress }}</h5><h5 style="text-align:right;">{{ mail.sned_date }}</h5></div>
+                                </a>
+                            </div>
+                        {% elif letters == mail.ind | string %}
+                        <div class="container p-3 my-3 border" id = "mails" style="padding-left: align-self; margin-left: align-self;" >
+                            {% if mail.anonymous == "anonymous" or mail.sender_id == "unsigned" %}
+                                <h5 style="text-align:center;">寄件者：匿名</h5>
+                            {% else %}
+                                <h5 style="text-align:center;">寄件者：{{ mail.sender_name }}</h5>
+                            {% endif %}
+                                <br><hr><br>
+                            <h5 style="text-align:center;">收信部門：<br>{{ mail.to_who | safe }}</h5>
+                            <br><hr><br>
+                            <h5 style="text-align:center;">內容</h5>
+                            <br>
+                            <h5 style="text-align:center;">{{ mail.content | safe }}</h5>
+                            <br><hr><br>
+                            <h5 style="text-align:center;">建議</h5>
+                            <br>
+                            <h5 style="text-align:center;">{{ mail.advice | safe }}</h5>
+                            <br><hr><br>
+                            {% if apartment == "分類者" %}
+                                <h5 style="text-align:center;">給予對象</h5>
+                                <br>
+                                <h5 style="text-align:center;">{{ mail.to_who | safe }}</h5>
+                                <br><hr><br>
+                            {% endif %}
+                            <div class="container p-3 my-3 border" id = "mails" style="padding-left: align-self; margin-left: align-self;" >
+                                {% if apartment == "分類者" %}
+                                    {% for manager in managers %}
+                                    <div class="container p-3 my-3 border">
+                                    <div class="row">{{ manager.id }}</div>
+                                    <div class="row">{{ manager.name }}</div>
+                                    <div class="row">職位：{{ manager.apartment }}</div>
+                                    <input type ="hidden" value="{{ mail.ind }}" name = "mailind">
+                                    <div class="row"></div><a class="btn btn-success" href = "{{ url_for('change_receiver', letter_id = mail.ind, receiver = manager.id) }}">送給{{ manager.id }}</a></div>                    
+                                    {% endfor %}
+                                {% else %}
+                                    {% if mail.sender_id != "unsigned" %}
+                                    <form method="POST"> 
+                                            <h5>回覆</h5>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <br>
+                                                        <div class="form-check form-check-inline ">
+                                                        <input class="form-check-input" type="radio" name="progress" id="審查中" value="審查中" {% if mail.progress == '審查中' %} checked {% endif %}>
+                                                        <label class="form-check-label" for="agree">審查中</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline ">
+                                                        <input class="form-check-input" type="radio" name="progress" id="不受理" value="不受理" {% if mail.progress == '不受理' %} checked {% endif %}>
+                                                        <label class="form-check-label" for="disagree">不受理</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline ">
+                                                        <input class="form-check-input" type="radio" name="progress" id="已提案" value="已提案" {% if mail.progress == '已提案' %} checked {% endif %}>
+                                                        <label class="form-check-label" for="skip">已提案</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline ">
+                                                            <input class="form-check-input" type="radio" name="progress" id="已接案" value="已接案" {% if mail.progress == '已接案' %} checked {% endif %}>
+                                                            <label class="form-check-label" for="skip">已接案</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <textarea class="form-control" rows="5" id="return_massege" name = "return_massege">{{ mail.return_massege }}</textarea>
+                                                <input value="{{ mail.ind }}" type = "hidden" name = "sender">
+                                            </div>
+                                            <div class="row" style="padding-left: 40%;">
+                                                <a class="btn btn-primary col-sm-2" href="{{ url_for('mailbox', letters = 'all') }}">返回</a>
+                                                &nbsp;
+                                                <input class="btn btn-primary col-sm-2" type="submit" name="send" value="送出" id = "submit_return">
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <h4>提案者未登入(匿名)</h4>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+        <br>
+{% endblock %}

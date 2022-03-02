@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class='container' style="padding-left: align-self;">
+    <br>
+    您好，這裡是高雄中學學生聯合自治會的意見反映平台。
+    <br>&nbsp;<br>
+    作為反映學生意見的組織，學聯會非常樂意聆聽每一位雄中學生對於校園議題的看法，無論是對學校的想法、給學聯會的建議、或是受到了什麼不合理的對待、也可以只是單純的想更瞭解學生自治及學聯會，都可以在這裡跟我們反應。
+    <br>&nbsp;<br>
+    以下表單將分為兩個部分，<br>
+    第一部分希望您留下您的連絡方式，以便我們能夠更詳細的向您瞭解事情的來龍去脈，同時也幫助我們在有更進一步的消息時通知您。如果您不希望留下您的資料，也可以選擇保持匿名。
+    <br>&nbsp;<br>
+    第二部分則是關於您要反應的議題，包含對象、內容及建議的處理方式。您可以指定要將此議題反應給特定的機關，例如行政中心部門，或是學生議會的委員會。
+    <br>&nbsp;<br>
+    透過您提交的意見，我們將得以更瞭解學生對於校園以及學聯會的期待，並持續推動相關改善以打造更符合學生需求的校園環境。您的支持和參與，就是對我們最大的鼓勵！
+    <br>
+</div>
+<form role="form" action="" method="post">
+    <div class='container' style="padding-left: align-self; border: 2px;">
+        <br>
+        第一部分
+        <br>&nbsp;<br>
+        一、是否匿名<br>
+        若勾選「是」會隱藏你的學號，收信人不會知道你是誰
+        <br>
+        <div class="form-group">
+            <br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="getid" id="anonymous" value = "anonymous">
+              <label class="form-check-label" for="anonymous">匿名</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="getid" id="disanonymous" value = "disanonymous">
+              <label class="form-check-label" for="disanonymous">公開</label>
+            </div>
+        </div>
+        <br>
+        二、您是否同意我們在公開回覆時提到您的個人資料?<br>
+        讓大家知道是誰提出了這麼棒的想法！同時讓和您有相同想法的人能夠找到您，進一步討論後續的方案。
+        <br>
+        <div class="form-group">
+            <br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="agreement" id="agree" value="agree">
+              <label class="form-check-label" for="agree">是，我同意</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="agreement" id="disagree" value="disagree">
+              <label class="form-check-label" for="disagree">否，我不同意</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="agreement" id="skip" value="skip">
+              <label class="form-check-label" for="skip">我沒有登入</label>
+            </div>
+        </div>
+    <br>
+    <hr>
+    <div class='container' style="padding-left: align-self; border: 2px;">
+        <br>
+        第二部分
+        <br>&nbsp;<br>
+        一、意見的性質
+        請根據議題的性質至少選擇一個分類，這樣能夠幫助我們更快的處理。
+        <div class="form-group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="type" id="type1" value="thinking">
+                <label class="form-check-label" for="type1">對學校的想法</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="type" id="type2" value="advice">
+                <label class="form-check-label" for="type2">對學聯會（包含行政中心及學生議會）的建議</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="type" id="type3" value="acuse">
+                <label class="form-check-label" for="type3">對學聯會（包含行政中心及學生議會）的申訴</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="type" id="type4" value="info">
+                <label class="form-check-label" for="type4">想要更瞭解學生自治及學生議會</label>
+            </div>
+        </div>
+        <br>
+        二、意見內容 
+        若為想法或建議，請在此敘明您的動機和理念。若為申訴，請詳細說明事情的經過。若為提問，請指出想要瞭解的部分。
+        <br>
+        <div class="form-group">
+            <div class="row"><textarea class="form-control" rows="5" id="getcontent" name = "getcontent"></textarea></div>
+        </div>       
+        <br>
+        三、向誰反應 
+        選擇您想將此議題反應給哪些議員，例如您選區中的議員、特定在關注此議題的議員，或是全體議員。
+        <br>
+        <div class="form-group">
+            <br>
+            <!-- <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration1" value="會長">
+                <label class="form-check-label" for="adminstration1">會長</label>
+            </div>
+            <br><br> -->
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration2" value="自治部">
+                <label class="form-check-label" for="adminstration2">自治部</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration3" value="秘書部">
+                <label class="form-check-label" for="adminstration3">秘書部</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration4" value="公關部">
+                <label class="form-check-label" for="adminstration4">公關部</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration5" value="活動部">
+                <label class="form-check-label" for="adminstration5">活動部</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration6" value="學藝部">
+                <label class="form-check-label" for="adminstration6">學藝部</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration7" value="社團部">
+                <label class="form-check-label" for="adminstration7">社團部</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="adminstration8" value="財務部">
+                <label class="form-check-label" for="adminstration8">財務部</label>
+            </div>
+            <br><br>
+            <!-- <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament1" value="學生議會">
+                <label class="form-check-label" for="parliament1">學生議會</label>
+            </div> -->
+            <!-- <br><br> -->
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament2" value="學生議會秘書處">
+                <label class="form-check-label" for="parliament2">學生議會秘書處</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament3" value="主任評議委員">
+                <label class="form-check-label" for="parliament3">主任評議委員</label>
+            </div>
+            <!-- <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament3" value="動審查委員會">
+                <label class="form-check-label" for="parliament3">活動審查委員會</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament4" value="社團審查委員會">
+                <label class="form-check-label" for="parliament4">社團審查委員會</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament6" value="公關秘書審查委員會">
+                <label class="form-check-label" for="parliament6">公關秘書審查委員會</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament7" value="學權自治審查委員會">
+                <label class="form-check-label" for="parliament7">學權自治審查委員會</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament8" value="學藝財務審查委員會">
+                <label class="form-check-label" for="parliament8">學藝財務審查委員會</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament9" value="法規審查委員會">
+                <label class="form-check-label" for="parliament9">法規審查委員會</label>
+            </div>
+            <br><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="towho" id="parliament10" value="紀律委員會">
+                <label class="form-check-label" for="parliament10">紀律委員會</label>
+            </div> -->
+            <br><br>
+    </div>
+        四、建議我們如何處理
+        請在這裡說明您認為上述問題應該如何解決，並簡述其理由，以及是否有時效性，讓我們知道您覺得怎麼做比較好。若為提問，請填「無」。
+        <br>
+        <div class="form-group">
+            <div class="row"><textarea class="form-control" rows="5" id="getadvice" name = "getadvice"></textarea></div>
+        </div>
+        <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "submit_report"></div>
+    </div>
+</div>
+</form>
+{% endblock %}

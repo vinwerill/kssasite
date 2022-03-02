@@ -1,0 +1,193 @@
+def addlaws():
+    temp = db.session.execute('select ind from laws order by ind').fetchall()
+    try:
+        ind = max(temp[-1])
+    except:
+        ind = 0
+    temp = db.session.execute('select ind from law_title order by ind').fetchall()
+    try:
+        tind = max(temp[-1])
+    except:
+        tind = 0
+    if session['manager_login']:
+        if request.method == "POST":
+            title = request.values.get("gettitle")
+            law_type = request.values.get("gettype")
+            history = request.values.get("gethistory")
+            content = request.values.getlist("getcontent")
+            order = request.values.getlist("getorder")
+            y1 = request.values.get("y")
+            m1 = request.values.get("m")
+            d1 = request.values.get("d")
+            if db.session.execute('select title from law_title where title = "{}"'.format(title)).fetchall() == []:
+                tind = tind + 1
+                db.session.add(law_title(tind, law_type, title, '<br>'.join(history.split('\r\n')), y1+"-"+m1+"-"+d1, "none-none-none"))
+            for i in range(len(content)):
+                db.session.add(laws(ind+1+i, tind, law_type, title, order[i], '<br>'.join(content[i].split('\r\n'))))
+            db.session.commit()
+        return render_template('addlaws.html')
+    else:
+        return redirect(url_for('login', errors = ""))
+
+<br>&nbsp;<br>
+<form role="form" action="" method="post">
+    <div class='container' style="padding-left: align-self; border: 2px;">
+       <h4>一、法規名稱:</h4>
+       <br>
+       <div class="form-group">
+            <textarea class="form-control" rows="1" name = "gettitle"></textarea>
+        </div>
+        <hr>
+        <br>
+        <h4>二、法律類別</h4>
+        <div class="form-group">
+            <br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "組織章程" value="組織章程">
+              <label class="form-check-label" for="組織章程">組織章程</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "自治條例" value="自治條例">
+              <label class="form-check-label" for="自治條例">自治條例</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "自治規則" value="自治規則">
+              <label class="form-check-label" for="自治規則">自治條例</label>
+            </div>
+        </div>
+        <hr>
+        <h4>三、沿革</h4>
+        <br>
+        <div class="form-group">
+                <textarea class="form-control" rows="1" name = "gethistory"></textarea>
+            </div>
+        <hr>
+        <h4>四、內容</h4>
+        <br>
+        <div class="form-group">
+                <textarea class="form-control" rows="1" name = "getorder" placeholder="第x章-第x條..."></textarea>
+            </div>
+       <div class="form-group">
+            <textarea class="form-control" rows="5" name = "getcontent" id = "line"></textarea>
+        </div>
+        <a class="btn btn-primary" id ="add_line">增加條目</a>
+        <hr>
+       <h4>五、日期:</h4>
+        <h5>公布日期:</h4>
+        <input placeholder="年" col-lg-4 name = "y">
+        <input placeholder="月" col-lg-4 name= "m">
+        <input placeholder="日" col-lg-4 name = "d">
+    </div>
+    <br>&nbsp;<br>
+    <br>&nbsp;<br>
+    <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit_laws" style="margin-left: 50%;">
+</form>
+<br>&nbsp;<br>
+<script>
+    $ ('#add_line').click(function(){
+        $ ('#add_line').before('<hr><div class="form-group"><textarea class="form-control" rows="1" name = "getorder" placeholder="第x章-第x條..."></textarea></div><div class="form-group"><textarea class="form-control" rows="5" name = "getcontent" id = "line"></textarea></div>')
+    });
+</script>
+
+  var line = 1;
+  var subline = 1;
+  function addline_function(target)
+  {
+    var content = '<div class="container">'+
+      '<div class="form-group">'+
+        '<input class="form-control" name = "getcontent">'+
+      '</div>'+
+      '<div class="form-check">'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type" id = "編" value="編">'+
+          '<label class="form-check-label" for="編">編</label>'+
+        '</div>'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type" id = "章" value="章">'+
+          '<label class="form-check-label" for="章">章</label>'+
+        '</div>'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type" id = "節" value="節">'+
+          '<label class="form-check-label" for="節">節</label>'+
+        '</div>'+
+        '<div class="form-check form-check-inline">'+
+          '<input class="form-check-input" type="radio" name="getchapter_type" id = "款" value="款">'+
+          '<label class="form-check-label" for="款">款</label>'+
+        '</div>'+
+      '</div>';
+      $(target).before('<div class = "container">'+content+'</div>')
+      line+=1;
+  };
+  function addsubline_function(target)
+  {
+    var content = '<div class="form-group">'+
+      '<input class="form-control" name = "getcontent">'+
+      '<div class="form-group">'+
+          '<br>'+
+          '<div class="form-check form-check-inline">'+
+            '<input class="form-check-input" type="radio" name="getchapter_type" id = "編'+String(line)+'-'+String(subline)+'" value="編">'+
+            '<label class="form-check-label" for="編'+String(line)+'-'+String(subline)+'">編</label>'+
+          '</div>'+
+          '<div class="form-check form-check-inline">'+
+            '<input class="form-check-input" type="radio" name="getchapter_type" id = "章'+String(line)+'-'+String(subline)+'" value="章">'+
+            '<label class="form-check-label" for="章'+String(line)+'-'+String(subline)+'">章</label>'+
+          '</div>'+
+          '<div class="form-check form-check-inline">'+
+              '<input class="form-check-input" type="radio" name="getchapter_type" id = "節'+String(line)+'-'+String(subline)+'" value="節">'+
+              '<label class="form-check-label" for="節'+String(line)+'-'+String(subline)+'">節</label>'+
+            '</div>'+
+            '<div class="form-check form-check-inline">'+
+                '<input class="form-check-input" type="radio" name="getchapter_type" id = "款'+String(line)+'-'+String(subline)+'" value="款">'+
+                '<label class="form-check-label" for="款'+String(line)+'-'+String(subline)+'">款</label>'+
+          '</div>'+
+      '</div>'+
+         '<a class="btn btn-success" id ="add_subline'+String(line)+'-'+String(subline)+'">增加附屬章節</a>&nbsp;'+
+         '<a class="btn btn-primary" id ="add_line'+String(line)+'">增加章節</a>&nbsp;'
+         +'<div>';
+      $(target).before('<div class = "container" style = "margin-left: 20%">'+content+'</div>')
+      subline+=1;
+  };
+
+    $('.container').on('click', 'a[id^=add_line]' ,function (){
+      addline_function(this);
+    });
+    $('.container').on('click', 'a[id^=add_subline]' ,function (){
+      addsubline_function(this);
+    });
+
+if session['manager_login']:
+        if request.method == "POST":
+            db.session.execute('delete from laws where law_type_ind = {}'.format(ind))
+            db.session.execute('delete from law_name where ind = {}'.format(ind))
+            temp = db.session.execute('select ind from laws order by ind').fetchall()
+            try:
+                ind = max(temp[-1])
+            except:
+                ind = 0
+            temp = db.session.execute('select ind from law_name order by ind').fetchall()
+            try:
+                tind = max(temp[-1])
+            except:
+                tind = 0
+            title = request.values.get("gettitle")
+            law_type = request.values.get("gettype")
+            history = request.values.get("gethistory")
+            content = request.values.getlist("getcontent")
+            order = request.values.getlist("getorder")
+            y1 = request.values.get("y")
+            m1 = request.values.get("m")
+            d1 = request.values.get("d")
+            y2 = request.values.get("new_y")
+            m2 = request.values.get("new_m")
+            d2 = request.values.get("new_d")
+            if db.session.execute('select title from law_name where title = "{}"'.format(title)).fetchall() == []:
+                tind = tind + 1
+                db.session.add(law_name(tind, law_type, title, '<br>'.join(history.split('\r\n')), y1+"-"+m1+"-"+d1, y2+"-"+m2+"-"+d2))
+            for i in range(len(content)):
+                if order[i] != "":
+                    db.session.add(laws(ind+1+i, tind, law_type, title, order[i], '<br>'.join(content[i].split('\r\n'))))
+            db.session.commit()
+            return redirect(url_for('show_laws'))
+        find_laws = db.session.execute('select * from laws where law_type_ind = {}'.format(ind)).fetchall()
+        law_set = db.session.execute('select * from law_name where ind = {}'.format(ind)).fetchall()
+        return render_template('adjustlaws.html', find_laws = find_laws, law_set = law_set[0])

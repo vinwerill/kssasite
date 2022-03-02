@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container p-3 my-3 border">
+    {% for manager in managers %}
+    <div class="container p-3 my-3 border">
+        <div class="row">學號：{{ manager.id }}</div>
+        <div class="row">姓名：{{ manager.name }}</div>
+        <div class="row">電子郵件：{{ manager.email }}</div>
+        <div class="row">所屬職位：{{ manager.apartment }}</div>
+        <div class="row">入學年{{ manager.enteryear }}</div>
+        <div class="row"></div><a class="btn btn-danger" href = "{{ url_for('delete', t='manager', target = manager.id) }}">刪除</a></div>  
+        {% endfor %}
+{% endblock %}

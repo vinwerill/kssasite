@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>&nbsp;<br>
+<form role="form" action="{{ url_for('addleader') }}" method="POST">
+    <div class='container' style="padding-left: align-self; border: 2px;">
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">第</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="getperiod">
+            <div class="input-group-append">
+                <span class="input-group-text">屆</span>
+              </div>
+        </div>
+        <br>
+       <h4>會長</h4>
+       <div class="form-group">
+            <input class="form-control" name = "getleader"></input>
+        </div>
+       <br>
+       <h4>副會長</h4>
+       <div class="form-group">
+            <input class="form-control" name = "getsecondleader"></input>
+        </div>
+        <h4>年分</h4>
+        <div class="form-group">
+            <input class="form-control" name = "getyear"></input>
+        </div>
+        <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit" style="margin-left: 50%;">
+</form>
+<br>&nbsp;<br>
+{% endblock %}

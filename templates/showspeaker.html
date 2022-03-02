@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br>
+    <div class="list-group">
+        <div class = "container-fluid" style="text-align: center;">
+        {% for content in contents %}
+        <h3>第{{content.period}}屆</h3>    
+        <div class = "row"><h3 class = "col-sm-6">議長：{{content.speaker}}</h3><h3 class = "col-sm-6">副議長：{{content.secondspeaker}}</h3></div>        
+        <br><hr><br>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

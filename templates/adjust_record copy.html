@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>&nbsp;<br>
+<form role="form" action="" method="post">
+    <div class='container' style="padding-left: align-self; border: 2px;">
+       <h4>一、標題</h4>
+       <br>
+       <div class="form-group">
+            <input class="form-control" name = "gettitle" value="{{ record.title }}">
+        </div>
+        <h4>二、書面內容(嵌入式程式碼)</h4>
+        <br>
+        <div class="form-group">
+             <textarea class="form-control" rows="3" name = "getform" placeholder="多個檔案請換行">{{ record.form }}</textarea>
+         </div>
+        <h4>三、會議影片(嵌入式程式碼)</h4>
+        <br>
+        <div class="form-group">
+             <textarea class="form-control" rows="3" name = "getvideo" placeholder="多個檔案請換行">{{ record.video }}</textarea>
+         </div>
+         <h4>四、發布單位</h4>
+        <br>
+        <br>
+        <div class="form-group">
+         <br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id ="adminstration1" value="行政中心-學聯會" {% if record.apartment == '行政中心-學聯會' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration1">學聯會</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "adminstration2" value="行政中心-行政中心" {% if record.apartment == '行政中心-行政中心' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration2">行政中心</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration3" value="行政中心-秘書部" {% if record.apartment == '行政中心-秘書部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration3">秘書部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration4" value="行政中心-公關部" {% if record.apartment == '行政中心-公關部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration4">公關部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration5" value="行政中心-活動部" {% if record.apartment == '行政中心-活動部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration5">活動部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration6" value="行政中心-學藝部" {% if record.apartment == '行政中心-學藝部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration6">學藝部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration7" value="行政中心-社團部" {% if record.apartment == '行政中心-社團部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration7">社團部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration8" value="行政中心-財務部" {% if record.apartment == '行政中心-財務部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration8">財務部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id="adminstration9" value="行政中心-自治部" {% if record.apartment == '行政中心-自治部' %} checked {% endif %}>
+             <label class="form-check-label" for="adminstration9">自治部(行政中心)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament1" value="學生議會-學生議會" {% if record.apartment == '學生議會-學生議會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament1">學生議會</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament2" value="學生議會-秘書處" {% if record.apartment == '學生議會-秘書部' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament2">秘書處(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament3" value="學生議會-活動審查委員會" {% if record.apartment == '學生議會-活動審查委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament3">活動審查委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament4" value="學生議會-社團審查委員會" {% if record.apartment == '學生議會-社團審查委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament4">社團審查委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament6" value="學生議會-公關秘書審查委員會" {% if record.apartment == '學生議會-公關秘書審查委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament6">公關秘書審查委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament7" value="學生議會-學權自治審查委員會" {% if record.apartment == '學生議會-學權自治審查委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament7">學權自治審查委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament8" value="學生議會-學藝財務審查委員會" {% if record.apartment == '學生議會-學藝財務審查委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament8">學藝財務審查委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament9" value="學生議會-法規審查委員會" {% if record.apartment == '學生議會-法規審查委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament9">法規審查委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "parliament10" value="學生議會-紀律委員會" {% if record.apartment == '學生議會-紀律委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="parliament10">紀律委員會(學生議會)</label>
+         </div>
+         <br><br>
+         <div class="form-check form-check-inline">
+             <input class="form-check-input" type="radio" name="getapartment" id = "boardofinquiry" value="評議委員會" {% if record.apartment == '評議委員會' %} checked {% endif %}>
+             <label class="form-check-label" for="boardofinquiry">評議委員會</label>
+         </div>
+         <br><br>
+    </div>
+       <h4>五、日期</h4>
+       <br>
+        <input placeholder="年" col-lg-4 name = "y" value="{{ record.date.split('-')[0] }}">
+        <input placeholder="月" col-lg-4 name= "m" value="{{ record.date.split('-')[1] }}">
+        <input placeholder="日" col-lg-4 name = "d" value="{{ record.date.split('-')[2] }}">
+    </div>
+    <input class="btn btn-primary" type="submit" name="send" value="送出" id = "submit_record" style="margin-left: 50%;">
+</form>
+<br>&nbsp;<br>
+{% endblock %}

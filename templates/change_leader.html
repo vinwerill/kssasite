@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if step == "1" %}
+<form method="POST" action = "{{ url_for('change_leader', step=2) }}">
+    <input type="hidden" name="target" id = "target">
+    {% for manager in managers %}
+            <div class="container p-3 my-3 border">
+            <div class="row">學號：{{ manager.id }}</div>
+            <div class="row">姓名：{{ manager.name }}</div>
+            <div class="row">所屬職位：{{ manager.apartment }}</div>
+            <input type="hidden" name="target{{ manager.id }}" id="target{{ manager.id }}" value="{{ manager.id }}">
+            <div class="row"></div><input class="btn btn-success" type="submit" value="轉交" id = "target{{ manager.id }}"></div>
+    {% endfor %}
+</form>
+<script>
+    $("input[id^=target]").click(function(){
+        document.getElementById("target").value = this.id
+    })
+</script>
+{% elif step == "2" %}
+<div class="container" style="margin: 5%; margin-left: 30%;">
+    <form method="POST" action = "{{ url_for('change_leader', step=3) }}">
+        <h5>確認轉移會長職位給{{ target }}？</h5>
+        <input type="hidden" name="target" value="{{ target }}">
+        <input class="btn btn-success col-sm-5" type="submit" value="確認" id = "submit_return">
+    </form>
+</div>
+{% endif %}
+{% endblock %}

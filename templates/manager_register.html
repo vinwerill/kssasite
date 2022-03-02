@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="{{url_for('manager_register', order = 'register')}}"> 
+    <div class="container p-3 my-3 border" style="width: 60%;">
+        <h5 style="margin-left: 45%;">註冊帳號</h5>
+        <br>
+        <h6 class="text-danger" style="text-align: center;">非學聯會及學生議會內部人員請勿使用，以免影響行政效率</h6>
+        {% if errors != "" %}
+            <br>
+            <p class="text-danger" style="text-align: center;">{{ errors }}</p>
+        {% endif %}
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">學號</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="id" value="">
+        </div>	
+        <br>      
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">姓名</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="name">
+        </div>
+        <br>
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">密碼</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="password" name="password" value="">
+        </div>	
+        <br>
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">確認密碼</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="password" name="checkpassword" value="">
+        </div>	
+        <br>          
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">email信箱</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="email" value="">
+        </div>	
+        <br>     
+            <span class="input-group-text">職位</span>
+            <div class="form-group">
+                <br>
+                <!-- <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration1" value="會長">
+                    <label class="form-check-label" for="adminstration1">會長</label>
+                </div>
+                <br><br> -->
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration2" value="自治部">
+                    <label class="form-check-label" for="adminstration2">自治部</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration3" value="秘書部">
+                    <label class="form-check-label" for="adminstration3">秘書部</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration4" value="公關部">
+                    <label class="form-check-label" for="adminstration4">公關部</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration5" value="活動部">
+                    <label class="form-check-label" for="adminstration5">活動部</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration6" value="學藝部">
+                    <label class="form-check-label" for="adminstration6">學藝部</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration7" value="社團部">
+                    <label class="form-check-label" for="adminstration7">社團部</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="adminstration8" value="財務部">
+                    <label class="form-check-label" for="adminstration8">財務部</label>
+                </div>
+                <br><br>
+                <!-- <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament1" value="學生議會">
+                    <label class="form-check-label" for="parliament1">學生議會</label>
+                </div> -->
+                <!-- <br><br> -->
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament2" value="學生議會秘書處">
+                    <label class="form-check-label" for="parliament2">學生議會秘書處</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament3" value="主任評議委員">
+                    <label class="form-check-label" for="parliament3">主任評議委員</label>
+                </div>
+                <!-- <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament3" value="動審查委員會">
+                    <label class="form-check-label" for="parliament3">活動審查委員會</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament4" value="社團審查委員會">
+                    <label class="form-check-label" for="parliament4">社團審查委員會</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament6" value="公關秘書審查委員會">
+                    <label class="form-check-label" for="parliament6">公關秘書審查委員會</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament7" value="學權自治審查委員會">
+                    <label class="form-check-label" for="parliament7">學權自治審查委員會</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament8" value="學藝財務審查委員會">
+                    <label class="form-check-label" for="parliament8">學藝財務審查委員會</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament9" value="法規審查委員會">
+                    <label class="form-check-label" for="parliament9">法規審查委員會</label>
+                </div>
+                <br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="apartment" id="parliament10" value="紀律委員會">
+                    <label class="form-check-label" for="parliament10">紀律委員會</label>
+                </div> -->
+                <br><br>
+        </div>
+        <br>    
+        <div class="input-group mb-lg-12 input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text">入學年度</span>
+            </div>
+            <input class="form-control mb-lg-12 input-group-lg" type="text" name="enteryear" value="">
+        </div>	
+        <br>    
+        <h5>&nbsp;</h5>   
+        <div class="row"><input class="btn btn-primary btn-lg" type="submit" name="send" value="送出" id = "submit_login"></div>
+    
+    </div>
+</form>
+<script>
+    
+</script>
+{% endblock %}
+        
