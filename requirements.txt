@@ -20,7 +20,7 @@ firebase-admin==3.2.1
 Flask==1.1.4
 Flask-Migrate==3.0.1
 Flask-SQLAlchemy==2.5.1
-futures==3.3.0
+futures==3.1.1
 google-api-core==1.31.3
 google-api-python-client==1.12.8
 google-auth==2.3.3
