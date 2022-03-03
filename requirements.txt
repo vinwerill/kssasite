@@ -1,5 +1,4 @@
 astroid==2.9.0
-beautifulsoup4 @ file:///C:/myweb/beautifulsoup4-4.10.0-py3-none-any.whl
 colorama==0.4.4
 isort==5.10.1
 lazy-object-proxy==1.6.0
