@@ -1,0 +1,22 @@
+{
+    "name": "tic-tac-toe",
+    "version": "0.1.0",
+  
+    "dependencies": {
+      "react": "^15.5.4",
+      "react-dom": "^15.5.4"
+    },
+    "engines": {
+        "node": "6.10.3",
+        "npm":"3.10.10"
+    },
+    "devDependencies": {
+      "react-scripts": "1.0.7"
+    },
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test --env=jsdom",
+      "eject": "react-scripts eject"
+    }
+  }
