@@ -19,7 +19,7 @@ app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
 app.config['SECRET_KEY'] = '18f4173d24f63dd99d2700aad88002c61c864f83255f5c76da4a0002db1f31c4'
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:1014vincentss@localhost:3306/kshsparliament"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://ejbmw8g7yhmi4c0u:b3s9faj385y2lb2c@kutnpvrhom7lki7u.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/q9cbstir0fhhvua3"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_POOL_SIZE'] = 100
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
