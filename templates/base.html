@@ -39,42 +39,7 @@
             </button>
             <a class="navbar-brand" href="{{ url_for('index') }}">高雄中學學生聯合自治會 KSSA</a>
             <div class="collapse navbar-collapse" id="home-menu">
-                <ul class="nav navbar-nav navbar-right">
-                    {% if manager_login != True %}
-                    <li class="nav-item"><a href="{{ url_for('laws_web', order='all') }}" class="btn btn-dark nav-link" role="button" >法規檢索</a></li>
-                    <li class="nav-item"><a href="{{ url_for('info_web', order='all') }}" class="btn btn-dark nav-link" role="button" >最新消息</a></li>
-                    <li class="nav-item"><a href="{{ url_for('record_web', order='all') }}" class="btn btn-dark nav-link" role="button" >會議記錄</a></li>
-                    {% else %}
-                    <li class="nav-item"><a href="{{ url_for('show_users') }}" class="btn btn-dark nav-link" role="button" >顯示所有會員</a></li>
-                    <li class="nav-item"><div class="btn-group">
-                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#info">增訂消息</button>
-                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="info">
-                                <a href="{{ url_for('addinfo', order = 'add') }}" class="dropdown-item" role="button" >新增消息</a>
-                                <a href="{{ url_for('show_info') }}" class="dropdown-item" role="button" >修改消息</a>
-                            </div>
-                    </div></li>
-                    <li class="nav-item"><div class="btn-group">
-                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#record">增訂會議記錄</button>
-                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="record">
-                                <a href="{{ url_for('addrecord') }}" class="dropdown-item " role="button" >新增會議記錄</a>
-                                <a href="{{ url_for('show_record') }}" class="dropdown-item" role="button" >修改會議記錄</a>
-                            </div>
-                        </div></li>
-                        <li class="nav-item"><div class="btn-group">
-                            <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#laws">增訂法律</button>
-                                <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="laws">
-                                    <a href="{{ url_for('addlaws', step = 1) }}" class="dropdown-item " role="button" >新增法律</a>
-                                    <a href="{{ url_for('show_laws') }}" class="dropdown-item" role="button" >修改法律</a>
-                                </div>
-                            </div></li>
-                    {%endif%}
-                    <li class="nav-item"><div class="btn-group">
-                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#report">意見反映</button>
-                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="report">
-                                <a class="dropdown-item" href="{{ url_for('mailbox', letters = 'all') }}">意見/回應</a>
-                                <a class="dropdown-item" href="{{ url_for('report_web', report_type = 'report') }}" role="button" >意見反映</a>
-                            </div>
-                    </div></li>
+                <ul class="nav navbar-nav justify-content-end">
                     {% if manager_login == True %}
                         <div class="btn-group">
                             <li class="nav-item"><button type="button" class="btn btn-dark nav-link"  aria-expanded="false" data-toggle="dropdown" data-target="#id_menu">{{ user }}</button></li>
@@ -104,6 +69,55 @@
                         {% else %}
                         <li class="nav-item"><a href="{{ url_for('login') }}" type="button" class="btn btn-dark nav-link">登入</a></li>
                         {% endif %}
+                    {% if manager_login != True %}
+                    <li class="nav-item"><a href="{{ url_for('laws_web', order='all') }}" class="btn btn-dark nav-link" role="button" >法規檢索</a></li>
+                    <li class="nav-item"><a href="{{ url_for('info_web', order='all') }}" class="btn btn-dark nav-link" role="button" >最新消息</a></li>
+                    <li class="nav-item"><a href="{{ url_for('record_web', order='all') }}" class="btn btn-dark nav-link" role="button" >會議記錄</a></li>
+                    <li class="nav-item"><div class="btn-group">
+                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#ex">歷屆議長/會長</button>
+                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="ex">
+                                <a class="dropdown-item" href="{{ url_for('showspeaker') }}">歷屆議長</a>
+                                <a class="dropdown-item" href="{{ url_for('showleader') }}" role="button" >歷屆會長</a>
+                            </div>
+                    </div></li>
+                    {% else %}
+                    <li class="nav-item"><a href="{{ url_for('show_users') }}" class="btn btn-dark nav-link" role="button" >顯示所有會員</a></li>
+                    <li class="nav-item"><div class="btn-group">
+                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#info">增訂消息</button>
+                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="info">
+                                <a href="{{ url_for('addinfo', order = 'add') }}" class="dropdown-item" role="button" >新增消息</a>
+                                <a href="{{ url_for('show_info') }}" class="dropdown-item" role="button" >修改消息</a>
+                            </div>
+                    </div></li>
+                    <li class="nav-item"><div class="btn-group">
+                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#record">增訂會議記錄</button>
+                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="record">
+                                <a href="{{ url_for('addrecord') }}" class="dropdown-item " role="button" >新增會議記錄</a>
+                                <a href="{{ url_for('show_record') }}" class="dropdown-item" role="button" >修改會議記錄</a>
+                            </div>
+                        </div></li>
+                        <div class="btn-group">
+                            <li class="nav-item"><button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#laws">增訂法律</button>
+                                <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="laws">
+                                    <a href="{{ url_for('addlaws', step = 1) }}" class="dropdown-item " role="button" >新增法律</a>
+                                    <a href="{{ url_for('show_laws') }}" class="dropdown-item" role="button" >修改法律</a>
+                                </div>
+                            </div></li>
+                        <li class="nav-item"><div class="btn-group">
+                            <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#ex">修訂歷屆議長/會長</button>
+                                <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="ex">
+                                    <a class="dropdown-item" href="{{ url_for('addspeaker') }}">修訂歷屆議長</a>
+                                    <a class="dropdown-item" href="{{ url_for('addleader') }}" role="button" >修訂歷屆會長</a>
+                                </div>
+                        </div></li>
+                    {%endif%}
+                    <li class="nav-item"><div class="btn-group">
+                        <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#report">意見反映</button>
+                            <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="report">
+                                <a class="dropdown-item" href="{{ url_for('mailbox', letters = 'all') }}">意見/回應</a>
+                                <a class="dropdown-item" href="{{ url_for('report_web', report_type = 'report') }}" role="button" >意見反映</a>
+                            </div>
+                    </div></li>
                 </ul>
             </div>
         </nav>
