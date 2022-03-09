@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 style = "text-align:center">申請場地</h1>
+<br>
+<form role="form" action="{{ url_for('applyplace') }}" method="POST">
+<div class = "container">
+    <div class="form-group">
+        <label for="name"><h4>政黨名稱:</h4></label>
+        <input type="text" class="form-control" id="name" name = "applier">
+      </div>
+      <div class="form-group">
+        <label for="charge"><h4>負責人</h4></label>
+        <input type="text" class="form-control" id="charge" name = "charger">
+      </div>
+      <div class="form-group">
+        <label for="time"><h4>時間</h4></label>
+        <div class="input-group">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="年" name = "year">
+                <input type="text" class="form-control" placeholder="月" name = "month">
+                <input type="text" class="form-control" placeholder="日" name = "date">
+              </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="place"><h4>位置</h4></label>
+        <br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="place" id="活三" value="活三">
+            <label class="form-check-label" for="活三">活動中心三樓</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="place" id="二會" value="二會">
+            <label class="form-check-label" for="二會">二樓會議室</label>
+          </div>
+      </div>
+      <p style="text-align:center;"><button type="submit" class="btn btn-primary">申請</button></p>
+</div>
+</form>
+{% endblock %}

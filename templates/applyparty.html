@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 style = "text-align:center">申請場地</h1>
+<form role="form" action="{{ url_for('applyparty') }}" method="POST">
+<div class = "container">
+    <div class="form-group">
+        <label for="name"><h4>政黨負責人名冊:</h4></label>
+        <input type="file" class="form-control-file border" id="charger" name = "charger">
+      </div>
+    <br>
+    <div class="form-group">
+    <label for="name"><h4>政黨備案申請書:</h4></label>
+    <input type="file" class="form-control-file border" id="application" name = "application">
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="name"><h4>政黨標章備案申請書:</h4></label>
+        <input type="file" class="form-control-file border" id="icon" name = "icon">
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="name"><h4>政黨黨員名冊:</h4></label>
+        <input type="file" class="form-control-file border" id="member" name = "member">
+    </div>
+</div>
+</form>
+{% endblock %}
