@@ -115,8 +115,8 @@
                     <li class="nav-item"><div class="btn-group">
                         <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#report">意見反映</button>
                             <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="report">
-                                <a class="dropdown-item" href="{{ url_for('mailbox', letters = 'all') }}">意見/回應</a>
                                 <a class="dropdown-item" href="{{ url_for('report_web', report_type = 'report') }}" role="button" >意見反映</a>
+                                <a class="dropdown-item" href="{{ url_for('mailbox', letters = 'all') }}">意見/回應</a>
                             </div>
                     </div></li>
                 </ul>
