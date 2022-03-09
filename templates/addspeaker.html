@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <br>&nbsp;<br>
-<form role="form" action="{{ url_for('addspeaker') }}" method="POST">
+<form role="form" action="{{ url_for('addleader') }}" method="POST">
     <div class='container' style="padding-left: align-self; border: 2px;">
         <div class="input-group mb-lg-12 input-group-lg">
             <div class="input-group-prepend">
@@ -13,14 +13,14 @@
               </div>
         </div>
         <br>
-       <h4>議長</h4>
+       <h4>會長</h4>
        <div class="form-group">
-            <input class="form-control" name = "getspeaker"></input>
+            <textarea class="form-control" name = "getleader" rows = "1"></textarea>
         </div>
        <br>
-       <h4>副議長</h4>
+       <h4>副會長</h4>
        <div class="form-group">
-            <input class="form-control" name = "getsecondspeaker"></input>
+            <textarea class="form-control" name = "getsecondleader" rows = "1"></textarea>
         </div>
         <h4>年分</h4>
         <div class="form-group">
