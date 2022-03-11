@@ -19,7 +19,7 @@ app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
 app.config['SECRET_KEY'] = '18f4173d24f63dd99d2700aad88002c61c864f83255f5c76da4a0002db1f31c4'
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52g9@m7az7525jg6ygibs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xkbq7dgi25ki89nk"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:1014vincentss@localhost:3306/kshsparliament"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_POOL_SIZE'] = 100
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
@@ -35,8 +35,8 @@ def favicon():
 
 def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
-    sender = 'vinwerill1204@gmail.com'
-    password = 'kuhdaqkciaadlame'
+    sender = 'kssasite.com'
+    password = 'kssasiteadmin'
     # email
     content = MIMEMultipart()
     content['subject'] = subject
@@ -45,7 +45,7 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # content.attach(MIMEText('主機時間'))
     content.attach(MIMEText(embody, 'html'))
 
-    with smtplib.SMTP(host='smtp.gmail.com', port='587') as smtp:
+    with smtplib.SMTP(host='kssasite.com', port='587') as smtp:
         try:
             # 驗證 SMTP 伺服器
             smtp.ehlo()
@@ -744,3 +744,20 @@ def addrecord():
         return render_template('addrecord.html')
     else:
         return redirect(url_for('login', errors = ""))
+
+@app.route('/applyrule')
+def applyrule():
+    if session['manager_login']:
+        return render_template("applyrule.html")
+
+@app.route('/applyparty', methods=['POST', 'GET'])
+def applyparty():
+    if session['manager_login']:
+        return render_template("applyparty.html")
+
+@app.route('/applyplace', methods=['POST', 'GET'])
+def applyplace():
+    if session['manager_login']:
+        if request.method == 'POST':
+            return redirect(url_for('applyrule'))
+        return render_template("applyplace.html")
