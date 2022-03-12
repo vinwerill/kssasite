@@ -14,7 +14,7 @@ from email.mime.text import MIMEText
 import smtplib
 # from flask_migrate import Migrate
 
-app_host = 'http://localhost:5000'
+app_host = 'http://kssasite.herokuapp.com/'
 app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
