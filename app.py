@@ -14,7 +14,7 @@ from email.mime.text import MIMEText
 import smtplib
 # from flask_migrate import Migrate
 
-app_host = 'http://kssasite.herokuapp.com/'
+app_host = 'http://kssasite.herokuapp.com'
 app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
@@ -35,7 +35,7 @@ def favicon():
 
 def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
-    sender = 'kssasite.com'
+    sender = 'support@kssasite.com'
     password = 'kssasiteadmin'
     # email
     content = MIMEMultipart()
@@ -45,7 +45,7 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # content.attach(MIMEText('主機時間'))
     content.attach(MIMEText(embody, 'html'))
 
-    with smtplib.SMTP(host='kssasite.com', port='587') as smtp:
+    with smtplib.SMTP(host='smtp.kssasite.com', port='587') as smtp:
         try:
             # 驗證 SMTP 伺服器
             smtp.ehlo()
