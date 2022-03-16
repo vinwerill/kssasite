@@ -42,7 +42,7 @@
         <h4>沿革</h4>
         <br>
         <div class="form-group">
-                <input class="form-control" name = "gethistory" value = "{{law_title.history}}">
+                <textarea class="form-control" name = "gethistory" value = "{{law_title.history}}"></textarea>
             </div>
             <br>&nbsp;<br>
         <hr>
@@ -55,6 +55,7 @@
       <div id = "allcontent">
       {% for i in allchapters %}
         <input type="hidden" id = "length" value = "{{length}}">
+        <input type="hidden" id = "chaptertype" value = "{{i[0][-1]}}">
         <input type="hidden">
         <div id = "content{{allchapters.index(i)}}">
             <div class="form-group">
@@ -62,26 +63,24 @@
             </div>
             <div class="form-check">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "編{{allchapters.index(i)}}" value="編">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "編{{allchapters.index(i)}}" value="編" {% if i[0][-1] == "編"  %}checked{%endif%}>
                 <label class="form-check-label" for="編{{allchapters.index(i)}}">編</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "章{{allchapters.index(i)}}" value="章">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "章{{allchapters.index(i)}}" value="章" {% if i[0][-1] == "章"  %}checked{%endif%}>
                 <label class="form-check-label" for="章{{allchapters.index(i)}}">章</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "節{{allchapters.index(i)}}" value="節">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "節{{allchapters.index(i)}}" value="節" {% if i[0][-1] == "節"  %}checked{%endif%}>
                 <label class="form-check-label" for="節{{allchapters.index(i)}}">節</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "款{{allchapters.index(i)}}" value="款">
+                <input class="form-check-input" type="radio" name="getchapter_type{{allchapters.index(i)}}" id = "款{{allchapters.index(i)}}" value="款" {% if i[0][-1] == "款"  %}checked{%endif%}>
                 <label class="form-check-label" for="款{{allchapters.index(i)}}">款</label>
               </div><br><br>
             </div>
+            <a class="btn btn-success" id = "add_subline">增加附屬章節</a><br><br>
         </div>
-        <script>
-
-        </script>
         <a class="btn btn-primary" id = "add_line">增加章節</a>
         <br><br>
       {% endfor %}
@@ -114,49 +113,49 @@
           '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "款'+String(line)+'" value="款">'+
           '<label class="form-check-label" for="款'+String(line)+'">款</label>'+
         '</div>'+'<br>'+
-      '</div>';
-      // '<a class="btn btn-success" id ="add_subline'+String(line)+'">增加附屬章節</a>&nbsp;';
+      '</div>'+
+      '<a class="btn btn-success" id ="add_subline'+String(line)+'">增加附屬章節</a>&nbsp;';
       $(target).before('<br><br><div class = "container">'+content+'</div><br>')
       document.getElementById("all_getchapter_type").value = document.getElementById("all_getchapter_type").value+ " "+"getchapter_type"+String(line)
       line+=1;
   };
-  // function addsubline_function(target)
-  // {
-  //   var content = '<div class="form-group">'+
-  //     '<input class="form-control" name = "getcontent">'+
-  //     '<div class="form-group">'+
-  //         '<br>'+
-  //         '<div class="form-check form-check-inline">'+
-  //           '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "編'+String(line)+'" value="編">'+
-  //           '<label class="form-check-label" for="編'+String(line)+'">編</label>'+
-  //         '</div>'+
-  //         '<div class="form-check form-check-inline">'+
-  //           '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "章'+String(line)+'" value="章">'+
-  //           '<label class="form-check-label" for="章'+String(line)+'">章</label>'+
-  //         '</div>'+
-  //         '<div class="form-check form-check-inline">'+
-  //             '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "節'+String(line)+'" value="節">'+
-  //             '<label class="form-check-label" for="節'+String(line)+'">節</label>'+
-  //           '</div>'+
-  //           '<div class="form-check form-check-inline">'+
-  //               '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "款'+String(line)+'" value="款">'+
-  //               '<label class="form-check-label" for="款'+String(line)+'">款</label>'+
-  //         '</div>'+
-  //     '</div>'+
-  //        '<a class="btn btn-success" id ="add_subline'+String(line)+'">增加附屬章節</a>&nbsp;'+
-  //        '<a class="btn btn-primary" id ="add_line'+String(line)+'">增加章節</a>&nbsp;'
-  //        +'<div>';
-  //     $(target).before('<br><div class = "container">'+content+'</div><br>')
-  //     document.getElementById("all_getchapter_type").value = document.getElementById("all_getchapter_type").value+ " "+"getchapter_type"+String(line)
-  //     line ++;
-  // };
+  function addsubline_function(target)
+  {
+    var content = '<div class="form-group">'+
+      '<input class="form-control" name = "getcontent">'+
+      '<div class="form-group">'+
+          '<br>'+
+          '<div class="form-check form-check-inline">'+
+            '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "編'+String(line)+'" value="編">'+
+            '<label class="form-check-label" for="編'+String(line)+'">編</label>'+
+          '</div>'+
+          '<div class="form-check form-check-inline">'+
+            '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "章'+String(line)+'" value="章">'+
+            '<label class="form-check-label" for="章'+String(line)+'">章</label>'+
+          '</div>'+
+          '<div class="form-check form-check-inline">'+
+              '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "節'+String(line)+'" value="節">'+
+              '<label class="form-check-label" for="節'+String(line)+'">節</label>'+
+            '</div>'+
+            '<div class="form-check form-check-inline">'+
+                '<input class="form-check-input" type="radio" name="getchapter_type'+String(line)+'" id = "款'+String(line)+'" value="款">'+
+                '<label class="form-check-label" for="款'+String(line)+'">款</label>'+
+          '</div>'+
+      '</div>'+
+         '<a class="btn btn-success" id ="add_subline'+String(line)+'">增加附屬章節</a>&nbsp;'+
+         '<a class="btn btn-primary" id ="add_line'+String(line)+'">增加章節</a>&nbsp;'
+         +'<div>';
+      $(target).before('<br><div class = "container">'+content+'</div><br>')
+      document.getElementById("all_getchapter_type").value = document.getElementById("all_getchapter_type").value+ " "+"getchapter_type"+String(line)
+      line ++;
+  };
 
     $('.container').on('click', 'a[id^=add_line]' ,function (){
       addline_function(this);
     });
-    // $('.container').on('click', 'a[id^=add_subline]' ,function (){
-    //   addsubline_function(this);
-    // });
+    $('.container').on('click', 'a[id^=add_subline]' ,function (){
+      addsubline_function(this);
+    });
 </script>
 
 {% elif step == "2" %}

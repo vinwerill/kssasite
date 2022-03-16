@@ -45,7 +45,7 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # content.attach(MIMEText('主機時間'))
     content.attach(MIMEText(embody, 'html'))
 
-    with smtplib.SMTP(host='smtp.kssasite.com', port='587') as smtp:
+    with smtplib.SMTP(host='kssasite.com', port='587') as smtp:
         try:
             # 驗證 SMTP 伺服器
             smtp.ehlo()
