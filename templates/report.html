@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<input type="hidden" value="{{login}}" id = "wlogin">
 <div class='container' style="padding-left: align-self;">
     <br>
     您好，這裡是高雄中學學生聯合自治會的意見反映平台。
@@ -192,7 +191,6 @@
     </div>
 </div>
 </form>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 if (document.getElementById("wlogin").value == "False")
 {

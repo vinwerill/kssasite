@@ -89,4 +89,31 @@
         </p>
     </div>
 </div>
+<script>
+    if (document.getElementById("wmanager_login").value == "False")
+    {
+        swal({
+        title: "您尚未登入",
+        icon: "error",
+        buttons: {
+          Btn: false,
+          success: {
+            text: "繼續",
+            visible: true,
+            value: "continue"
+          },
+          danger: {
+            text: "登入",
+            visible: true,
+            value: "redirect"
+          }
+        }
+      }).then((result) => {
+          if (result == "redirect")
+          {
+            window.location.href = '/login';
+          }
+      })
+    }
+</script>
 {% endblock %}

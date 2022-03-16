@@ -747,8 +747,7 @@ def addrecord():
 
 @app.route('/applyrule')
 def applyrule():
-    if session['manager_login']:
-        return render_template("applyrule.html")
+    return render_template("applyrule.html")
 
 @app.route('/applyparty', methods=['POST', 'GET'])
 def applyparty():
