@@ -35,8 +35,8 @@ def favicon():
 
 def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
-    sender = 'support@kssasite.com'
-    password = 'kssasiteadmin'
+    sender = 'vincent@kssasite.com'
+    password = 'vincent1204'
     # email
     content = MIMEMultipart()
     content['subject'] = subject
@@ -45,7 +45,7 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # content.attach(MIMEText('主機時間'))
     content.attach(MIMEText(embody, 'html'))
 
-    with smtplib.SMTP(host='kssasite.com', port='587') as smtp:
+    with smtplib.SMTP(host='kssasite.com', port='465') as smtp:
         try:
             # 驗證 SMTP 伺服器
             smtp.ehlo()
@@ -700,7 +700,7 @@ def addlaws(step):
                 ind = max(temp[-1])
             except:
                 ind = 0
-            db.session.add(law_name(ind+1, lawtype, title, history, date, ""))
+            db.session.add(law_name(ind+1, lawtype, title, "<br>".join(history.split("\r\n")), date, ""))
             temp = db.session.execute('select ind from laws order by ind').fetchall()
             try:
                 ind = max(temp[-1])
@@ -747,7 +747,10 @@ def addrecord():
 
 @app.route('/applyrule')
 def applyrule():
-    return render_template("applyrule.html")
+    if session['manager_login'] or session['login']:
+        return render_template("applyrule.html")
+    else:
+        return redirect(url_for('login', errors = ""))
 
 @app.route('/applyparty', methods=['POST', 'GET'])
 def applyparty():

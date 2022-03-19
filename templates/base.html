@@ -70,7 +70,7 @@
                         {% else %}
                         <li class="nav-item"><a href="{{ url_for('login') }}" type="button" class="btn btn-dark nav-link">登入</a></li>
                         {% endif %}
-                    <li class="nav-item"><a href="{{ url_for('applyrule') }}" class="btn btn-dark nav-link" role="button" >申請</a></li>
+                    <li class="nav-item"><a href="{{ url_for('applyrule') }}" class="btn btn-dark nav-link" role="button" >政黨</a></li>
                     {% if manager_login != True %}
                     <li class="nav-item"><a href="{{ url_for('laws_web', order='all') }}" class="btn btn-dark nav-link" role="button" >法規檢索</a></li>
                     <li class="nav-item"><a href="{{ url_for('info_web', order='all') }}" class="btn btn-dark nav-link" role="button" >最新消息</a></li>

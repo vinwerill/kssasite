@@ -35,7 +35,7 @@
     </div>
 {% else %}
     <div class="container p-3 my-3 border" id = "laws">
-        <h5 style="text-align:center;">{{ title.title }}</h5>
+        <h1 style="text-align:center;">{{ title.title }}</h1>
             <br><hr><br>
                 <div class="btn-group">
                     <button type="button" class="btn btn-success btn-lg" id = "all" ind = "{{ title.ind }}">所有條文</button>
@@ -91,6 +91,7 @@
             .always();
             
         });
+
         $('#history').on('click', function() {
             var formData = {};
             $.ajax({'type': 'POST', 'data': formData, 'url': '/gethistory/'+$("#history").attr("ind"),})
