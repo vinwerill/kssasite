@@ -35,8 +35,8 @@ def favicon():
 
 def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
-    sender = 'vincent@kssasite.com'
-    password = 'vincent1204'
+    sender = 'vinwerill1204@gmail.com'
+    password = 'oqilrejligqaiyog'
     # email
     content = MIMEMultipart()
     content['subject'] = subject
@@ -45,7 +45,7 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # content.attach(MIMEText('主機時間'))
     content.attach(MIMEText(embody, 'html'))
 
-    with smtplib.SMTP(host='kssasite.com', port='465') as smtp:
+    with smtplib.SMTP(host='smtp.gmail.com', port='587') as smtp:
         try:
             # 驗證 SMTP 伺服器
             smtp.ehlo()
@@ -104,8 +104,11 @@ def change_leader(step):
 def forgot_password():
     if request.method == "POST":
         email = request.values.get("email")
-        if User.query.filter_by(email = email).first() != None:
+        usertype = request.values.get("type")
+        if User.query.filter_by(email = email).first() != None and usertype == "User":
             send_email("密碼遺失備援", render_template('password.html', password = User.query.filter_by(email = email).first().password), email)
+        elif User.query.filter_by(email = email).first() != None and usertype == "manager":
+            send_email("密碼遺失備援", render_template('password.html', password = manager.query.filter_by(email = email).first().password), email)
         return render_template('forget_password.html', send = 1)
     return render_template('forget_password.html', send = 0)
 
@@ -747,10 +750,7 @@ def addrecord():
 
 @app.route('/applyrule')
 def applyrule():
-    if session['manager_login'] or session['login']:
-        return render_template("applyrule.html")
-    else:
-        return redirect(url_for('login', errors = ""))
+    return render_template("applyrule.html")
 
 @app.route('/applyparty', methods=['POST', 'GET'])
 def applyparty():

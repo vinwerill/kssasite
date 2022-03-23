@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if manager_login == True or login == True %}
 <h1 style="text-align: center;">申請規則</h1>
 <div class="container-fluid">
     <a class="btn btn-primary" href="{{ url_for('applyparty') }}">申請政黨</a>
@@ -89,26 +90,13 @@
         </p>
     </div>
 </div>
-<!-- <script>
-    if (document.getElementById("wmanager_login").value == "False")
-    {
-        swal({
-        title: "您尚未登入",
-        icon: "error",
-        buttons: {
-          Btn: false,
-          danger: {
-            text: "登入",
-            visible: true,
-            value: "redirect"
-          }
-        }
-      }).then((result) => {
-          if (result == "redirect")
-          {
-            window.location.href = '/login';
-          }
-      })
-    }
-</script> -->
+{% else %}
+<div class="container" style="margin-top: 5%">
+  <h1 style="text-align: center;">尚未登錄</h1>
+  <br>
+  <h3 style="text-align: center;">登入已執行政黨相關功能</h3>
+  <br>
+  <a class="btn btn-primary btn-block" href="{{url_for('User_login')}}">登錄</a>
+  </div>
+{% endif %}
 {% endblock %}

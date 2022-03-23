@@ -196,7 +196,8 @@ def index():
     test5 = manager("099998", 'manager2', "099998",'vincent.super8@gmail.com', '2021', '自治部', 1)
     test2 = manager("099997", 'sorter', "sorter",'vincent.super8@gmail.com', '2021', '分類者', 1)
     test6 = manager("090060", '唐珩鈞', "090060",'jonny30904@gmail.com', '2020', '議長', 1)
-    test7 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
+    test8 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
+    test7 = manager("090744", '張瑞祐', "090744",'rayyoboy@gmail.com', '2020', '', 1)
     test3 = User("090000", 'test1', "090000",'vincent.super8@gmail.com', '2020')
     test4 = User("090039", '陳廷森', "090039",'vincent.super8@gmail.com', '2020')
     db.create_all()
@@ -207,6 +208,7 @@ def index():
     db.session.add(test5)
     db.session.add(test6)
     db.session.add(test7)
+    db.session.add(test8)
     db.session.commit()
     return 'ok'
 
