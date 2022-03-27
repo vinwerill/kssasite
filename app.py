@@ -91,13 +91,13 @@ def send_data(subject, embody, attachments, recipient='vincent.super8@gmail.com'
 
 @app.route('/show_manager')
 def show_manager():
-    if session['manager_login'] and session['apartment'] == "議長":
+    if session['manager_login'] and (session['apartment'] == "議長" or session['apartment'] =="會長"):
         managers = db.session.execute('select * from manager').fetchall()
         return render_template('show_manager.html', managers = managers)
 
 @app.route('/change_speaker/<step>', methods = ['POST', 'GET'])
 def change_speaker(step):
-    if session['manager_login'] and session['apartment'] == "議長":
+    if session['manager_login'] and (session['apartment'] == "議長" or session['apartment'] =="會長"):
         if request.method == "POST":
             if step == "2":
                 target = request.values.get(request.values.get("target"))

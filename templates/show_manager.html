@@ -10,4 +10,5 @@
         <div class="row">入學年{{ manager.enteryear }}</div>
         <div class="row"></div><a class="btn btn-danger" href = "{{ url_for('delete', t='manager', target = manager.id) }}">刪除</a></div>  
         {% endfor %}
+    </div>
 {% endblock %}
