@@ -167,6 +167,7 @@
     <h4 style = "text-align: center;">所有章節</h4>
     <div class = "container">
       <form role="form" action="{{ url_for('addlaws', step = 3) }}" method="POST">
+        <input type="hidden" id = "originallaws" value='{{originallaws}}'>
         <input type="hidden" name = "getind" value={{ind}}>
         <input type="hidden" value = "{{title}}" name="gettitle">
         <input type="hidden" value = "{{history}}"  name="gethistory">
@@ -185,6 +186,7 @@
   </div>
   </div>
 <script>
+  console.log($("#originallaws").val());
   $("a[id^=add_line]").click(function(){
     var temp = this.id
     var content = '<div class="container">'+

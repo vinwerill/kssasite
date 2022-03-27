@@ -56,6 +56,39 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
         except Exception as e:
             pass
 
+def send_data(subject, embody, attachments, recipient='vincent.super8@gmail.com'):
+    # flaskemail of google account
+    sender = 'vinwerill1204@gmail.com'
+    password = 'oqilrejligqaiyog'
+    # email
+    content = MIMEMultipart()
+    content['subject'] = subject
+    content['from'] = sender
+    content['to'] = recipient
+    # content.attach(MIMEText('主機時間'))
+    content.attach(MIMEText(embody, 'html'))
+
+    with smtplib.SMTP(host='smtp.gmail.com', port='587') as smtp:
+        try:
+            # 驗證 SMTP 伺服器
+            smtp.ehlo()
+            # 建立加密傳輸
+            smtp.starttls()
+            smtp.login(sender, password)
+            # 附加 pdf 檔
+            for data in attachments:
+                try:
+                    with open(data, "rb") as fho:
+                        attach = MIMEMultipart(fho.read(), _subtype=data.filename.split(".")[0])
+                    attach.add_header('Content-Disposition', 'attachment', filename=str(data))
+                    content.attach(attach)
+                except:
+                    print(f"No such file '{data}'")
+                    pass
+            smtp.send_message(content)
+        except Exception as e:
+            pass
+
 @app.route('/show_manager')
 def show_manager():
     if session['manager_login'] and session['apartment'] == "議長":
@@ -431,6 +464,7 @@ def adjust_laws(ind, step):
             exchapter = '章'
             ch_chapter = "一二三四五六七八九十"
             allchapters = []
+            originallaws = db.session.execute("select * from laws where law_type_ind = {}".format(ind)).fetchall()
             for i in allchapter_type.split(" "):
                 chapter = request.values.get(i)
                 if chapter == None:
@@ -440,7 +474,7 @@ def adjust_laws(ind, step):
                     allchapters.append("第"+ch_chapter[chapters[chapter]-1]+chapter)
                 else:
                     allchapters.append("第"+ch_chapter[chapters[chapter]//10-1]+"十"+ch_chapter[chapters[chapter]%10-1]+chapter)
-            return render_template('adjustlaws.html', step = "2", title = title, history = history, ind = ind, lawtype = lawtype, allchapters = allchapters, chapter_adjust = chapter_adjust,content = content, length = len(allchapters))
+            return render_template('adjustlaws.html', step = "2", title = title, history = history, ind = ind, lawtype = lawtype, allchapters = allchapters, chapter_adjust = chapter_adjust,content = content, length = len(allchapters), originallaws = originallaws)
     law_title = db.session.execute('select * from law_name where ind = {}'.format(ind)).fetchall()[0]
     temp = db.session.execute('select chapter from laws where law_type_ind = {}'.format(ind)).fetchall()
     allchapters = []
@@ -449,7 +483,6 @@ def adjust_laws(ind, step):
             pass
         else:
             allchapters.append(list(i[0].split(' ')))
-    print(allchapters)
     return render_template('adjustlaws.html', ind = ind, step = step, law_title =law_title, allchapters = allchapters, length = len(allchapters))
 
 @app.route('/getlaws/<law>', methods=['POST', 'GET'])
@@ -755,11 +788,28 @@ def applyrule():
 @app.route('/applyparty', methods=['POST', 'GET'])
 def applyparty():
     if session['manager_login']:
+        if request.method == "POST":
+            charger = request.files['charger']
+            application = request.files['application']
+            icon = request.files['icon']
+            member = request.files['member']
+            to_who = db.session.execute('select email from manager where apartment = "學生議會秘書處"').fetchone()[0]
+            send_data("政黨申請提醒", render_template('applypartymail.html'), [charger, application, icon, member], to_who)
+            return redirect(url_for('applyrule', charger = charger, application = application, icon = icon, member = member))
         return render_template("applyparty.html")
 
 @app.route('/applyplace', methods=['POST', 'GET'])
 def applyplace():
     if session['manager_login']:
         if request.method == 'POST':
+            applier = request.values.get("applier")
+            charger = request.values.get("charger")
+            year = request.values.get("year")
+            month = request.values.get("month")
+            date = request.values.get("date")
+            place = request.values.get("place")
+            to_who = db.session.execute('select email from manager where apartment = "學生議會秘書處"').fetchone()[0]
+            print(to_who)
+            send_email("場地申請提醒", render_template("applyplacemail.html", applier=applier, charger=charger, year=year, month=month, date=date, place=place), to_who)
             return redirect(url_for('applyrule'))
         return render_template("applyplace.html")
