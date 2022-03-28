@@ -101,7 +101,7 @@
             .fail()
             .always();
         });
-        $("*").ready(function() {
+        $("#content").ready(function() {
             var formData = {};
             $.ajax({'type': 'POST', 'data': formData, 'url': '/getlaws/'+$("#all").attr("ind"),})
             .done(function(data, textStatus, jqXHR) {
