@@ -12,6 +12,7 @@ from createdb import manager, info, report, User, record, laws, law_name, alllea
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+import tempfile
 # from flask_migrate import Migrate
 
 app_host = 'http://kssasite.herokuapp.com'
@@ -787,7 +788,7 @@ def applyrule():
 
 @app.route('/applyparty', methods=['POST', 'GET'])
 def applyparty():
-    if session['manager_login']:
+    if session['manager_login'] or session['login']:
         if request.method == "POST":
             charger = request.files['charger']
             application = request.files['application']
@@ -800,7 +801,7 @@ def applyparty():
 
 @app.route('/applyplace', methods=['POST', 'GET'])
 def applyplace():
-    if session['manager_login']:
+    if session['manager_login'] or session['login']:
         if request.method == 'POST':
             applier = request.values.get("applier")
             charger = request.values.get("charger")
