@@ -713,11 +713,12 @@ def addlaws(step):
                "編":{"編":"0%","章":"10%","節":"20%","款":"30%"}, "章":{"章":"0%","節":"10%","款":"20%"},"節":{"節":"0%","款":"10%"}
             }
             chapter_adjust = chapter_adjust_list[request.values.get(allchapter_type.split(" ")[0])]
-            exchapter = '章'
+            exchapter = '編'
             for i in allchapter_type.split(" "):
                 chapter = request.values.get(i)
                 if exchapter != chapter and chapter_type.index(chapter) < chapter_type.index(exchapter):
                     chapters[exchapter] = 0
+                exchapter = chapter
                 chapters[chapter] += 1
                 if chapters[chapter] <= 10:
                     allchapters.append("第"+ch_chapter[chapters[chapter]-1]+chapter)
