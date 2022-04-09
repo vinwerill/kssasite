@@ -11,6 +11,7 @@ pymysql.install_as_MySQLdb()
 from createdb import manager, info, report, User, record, laws, law_name, allleaders, allspeaker
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 import smtplib
 import tempfile
 # from flask_migrate import Migrate
@@ -57,7 +58,7 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
         except Exception as e:
             pass
 
-def send_data(subject, embody, attachments, recipient='vincent.super8@gmail.com'):
+def send_data(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
     sender = 'vinwerill1204@gmail.com'
     password = 'oqilrejligqaiyog'
@@ -76,11 +77,11 @@ def send_data(subject, embody, attachments, recipient='vincent.super8@gmail.com'
             # 建立加密傳輸
             smtp.starttls()
             smtp.login(sender, password)
-            # 附加 pdf 檔
-            for data in attachments:
+            dir = 'static/uploads/'
+            for data in os.listdir(dir):
                 try:
-                    with open(data, "rb") as fho:
-                        attach = MIMEMultipart(fho.read(), _subtype=data.filename.split(".")[0])
+                    with open(os.path.join("static/uploads/", data), "rb") as fho:
+                        attach = MIMEApplication(fho.read(), _subtype=data.split(".")[1])
                     attach.add_header('Content-Disposition', 'attachment', filename=str(data))
                     content.attach(attach)
                 except:
@@ -789,13 +790,20 @@ def applyrule():
 @app.route('/applyparty', methods=['POST', 'GET'])
 def applyparty():
     if session['manager_login'] or session['login']:
-        if request.method == "POST":
+        if request.method == "POST":     
+            dir = 'static/uploads/'
+            for f in os.listdir(dir):
+                os.remove(os.path.join(dir, f))
+            # basepath = os.path.join(os.path.dirname(__file__), 'static','uploads')
             charger = request.files['charger']
             application = request.files['application']
             icon = request.files['icon']
             member = request.files['member']
-            to_who = db.session.execute('select email from manager where apartment = "學生議會秘書處"').fetchone()[0]
-            send_data("政黨申請提醒", render_template('applypartymail.html'), [charger, application, icon, member], to_who)
+            documents = [charger, application, icon, member]
+            for d in documents:
+                d.save(os.path.join("static/uploads/", d.filename))
+            to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
+            send_data("政黨申請提醒", render_template('applypartymail.html'), "vincent.super8@gmail.com")
             return redirect(url_for('applyrule', charger = charger, application = application, icon = icon, member = member))
         return render_template("applyparty.html")
 
@@ -809,8 +817,7 @@ def applyplace():
             month = request.values.get("month")
             date = request.values.get("date")
             place = request.values.get("place")
-            to_who = db.session.execute('select email from manager where apartment = "學生議會秘書處"').fetchone()[0]
-            print(to_who)
+            to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
             send_email("場地申請提醒", render_template("applyplacemail.html", applier=applier, charger=charger, year=year, month=month, date=date, place=place), to_who)
             return redirect(url_for('applyrule'))
         return render_template("applyplace.html")
