@@ -68,6 +68,8 @@
                 // console.log(data);
                 var now_chapter;
                 var exchapter = "";
+                var chapter_list = document.getElementById("list_chapter")
+                // console.log(data.all_laws)
                 $.each(data.all_laws, function(index, all_laws) {
                     now_chapter = all_laws[3]
                     // console.log(all_laws)
@@ -113,13 +115,19 @@
                     now_chapter = all_laws[3]
                     // console.log(all_laws)
                     if (now_chapter == exchapter) {
-                        items.push('<h5 id = >第'+all_laws[2]+'條</h5>')
-                        items.push('<p>'+all_laws[4]+'</p><br>')
+                        if (all_laws[2] != '')
+                        {
+                            items.push('<h5 id = >第'+all_laws[2]+'條</h5>')
+                            items.push('<p>'+all_laws[4]+'</p><br>')
+                        }
                     }
                     else{
                         items.push('<h5 id = "'+all_laws[3]+'">'+all_laws[3]+'</h5><br>')
-                        items.push('<h5>第'+all_laws[2]+'條</h5>')
-                        items.push('<p>'+all_laws[4]+'</p><br>')
+                        if (all_laws[2] != '')
+                        {
+                            items.push('<h5>第'+all_laws[2]+'條</h5>')
+                            items.push('<p>'+all_laws[4]+'</p><br>')
+                        }
                     }
                     exchapter = now_chapter
                     // console.log(items)

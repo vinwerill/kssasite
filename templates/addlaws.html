@@ -164,6 +164,7 @@
         <input type="hidden" value = "{{history}}"  name="gethistory">
         <input type="hidden" value = "{{lawtype}}" name = "getlawtype">
         <input type="hidden" value = "{{length}}" id = "length">
+        <input type="hidden" value = "{{'-'.join(content)}}" id = "list_chapters" name="getlist_chapters">
     {% for i in allchapters %}
       <div style="margin-left: {{ chapter_adjust[i[-1]] }};">
           <h4>{{i}}:{{content[allchapters.index(i)]}}</h4>

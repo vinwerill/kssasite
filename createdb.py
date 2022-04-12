@@ -124,13 +124,15 @@ class law_name(db.Model):
     law_type = db.Column('law_type', db.String(100))
     title = db.Column('title', db.String(100))
     history = db.Column('history', db.Text(10000000))
+    list_chapters = db.Column('list_chapters', db.Text(10000000))
     date = db.Column('date', db.String(100))
     mod_date = db.Column('mod_date', db.String(100))
-    def __init__(self, ind, law_type, title, history, date, mod_date):
+    def __init__(self, ind, law_type, title, history, list_chapters, date, mod_date):
         self.ind = ind
         self.law_type = law_type
         self.title = title
         self.history = history
+        self.list_chapters = list_chapters
         self.date = date
         self.mod_date = mod_date
 
@@ -190,26 +192,23 @@ class allspeaker(db.Model):
 
 @app.route('/')
 def index():
-    db.drop_all()
     # Create data
-    test = manager("099999", 'manager1', "099999",'vincent.super8@gmail.com', '2020', '學生議會秘書處', 1)
-    test5 = manager("099998", 'manager2', "099998",'vincent.super8@gmail.com', '2021', '自治部', 1)
-    test2 = manager("099997", 'sorter', "sorter",'vincent.super8@gmail.com', '2021', '分類者', 1)
-    test6 = manager("090060", '唐珩鈞', "090060",'jonny30904@gmail.com', '2020', '議長', 1)
-    test8 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
-    test7 = manager("090744", '張瑞祐', "090744",'rayyoboy@gmail.com', '2020', '', 1)
-    test3 = User("090000", 'test1', "090000",'vincent.super8@gmail.com', '2020')
-    test4 = User("090039", '陳廷森', "090039",'vincent.super8@gmail.com', '2020')
+    # test = manager("099999", 'manager1', "099999",'vincent.super8@gmail.com', '2020', '學生議會秘書處', 1)
+    # test5 = manager("099998", 'manager2', "099998",'vincent.super8@gmail.com', '2021', '自治部', 1)
+    # test2 = manager("099997", 'sorter', "sorter",'vincent.super8@gmail.com', '2021', '分類者', 1)
+    # test6 = manager("090060", '唐珩鈞', "090060",'jonny30904@gmail.com', '2020', '議長', 1)
+    # test8 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
+    # test7 = manager("090744", '張瑞祐', "090744",'rayyoboy@gmail.com', '2020', '', 1)
+    # test4 = User("090039", '陳廷森', "090039",'vincent.super8@gmail.com', '2020')
     db.create_all()
-    db.session.add(test)
-    db.session.add(test2)
-    db.session.add(test3)
-    db.session.add(test4)
-    db.session.add(test5)
-    db.session.add(test6)
-    db.session.add(test7)
-    db.session.add(test8)
-    db.session.commit()
+    # db.session.add(test)
+    # db.session.add(test2)
+    # db.session.add(test4)
+    # db.session.add(test5)
+    # db.session.add(test6)
+    # db.session.add(test7)
+    # db.session.add(test8)
+    # db.session.commit()
     return 'ok'
 
 

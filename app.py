@@ -734,12 +734,13 @@ def addlaws(step):
             allchapters = request.values.getlist("getchapter")
             belong_chapter = request.values.getlist("getbelong_chapter")
             allcontent = request.values.getlist("getcontent")
+            list_chapters = request.values.getlist("getlist_chapters")
             temp = db.session.execute('select ind from law_name order by ind').fetchall()
             try:
                 ind = max(temp[-1])
             except:
                 ind = 0
-            db.session.add(law_name(ind+1, lawtype, title, "<br>".join(history.split("\r\n")), date, ""))
+            db.session.add(law_name(ind+1, lawtype, title, "<br>".join(history.split("\r\n")), list_chapters, date, ""))
             temp = db.session.execute('select ind from laws order by ind').fetchall()
             try:
                 ind = max(temp[-1])
@@ -804,7 +805,7 @@ def applyparty():
             for d in documents:
                 d.save(os.path.join("static/uploads/", d.filename))
             to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
-            send_data("政黨申請提醒", render_template('applypartymail.html'), "vincent.super8@gmail.com")
+            send_data("政黨申請提醒", render_template('applypartymail.html'), to_who)
             return redirect(url_for('applyrule', charger = charger, application = application, icon = icon, member = member))
         return render_template("applyparty.html")
 
