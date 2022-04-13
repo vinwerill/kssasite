@@ -37,8 +37,8 @@ def favicon():
 
 def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
-    sender = 'vinwerill1204@gmail.com'
-    password = 'oqilrejligqaiyog'
+    sender = 'kssasite1989@gmail.com'
+    password = 'qpznmorkbfqfqvay'
     # email
     content = MIMEMultipart()
     content['subject'] = subject
@@ -60,8 +60,8 @@ def send_email(subject, embody, recipient='vincent.super8@gmail.com'):
 
 def send_data(subject, embody, recipient='vincent.super8@gmail.com'):
     # flaskemail of google account
-    sender = 'vinwerill1204@gmail.com'
-    password = 'oqilrejligqaiyog'
+    sender = 'kssasite1989@gmail.com'
+    password = 'qpznmorkbfqfqvay'
     # email
     content = MIMEMultipart()
     content['subject'] = subject
@@ -282,12 +282,11 @@ def adjust_ident():
 def actlink(account):
     if request.method == "POST":
         password = request.values.get("password")
-        if password == "test":
-            db.session.execute('update manager set activate = 1 where id = "{}"'.format(1, account))
-            db.session.commit()
-            return render_template('actlink.html', confirm = 0, wac = account, condition = 2)
-        else:
-            return render_template('actlink.html', confirm = 0, wac = account, condition = 1)
+        db.session.execute('update manager set activate = 1 where id = "{}"'.format(1, account))
+        db.session.commit()
+        return render_template('actlink.html', confirm = 0, wac = account, condition = 2)
+        # else:
+        #     return render_template('actlink.html', confirm = 0, wac = account, condition = 1)
     return render_template('actlink.html', confirm = 0, wac = account, condition = 0)
 
 @app.route('/')
@@ -617,7 +616,7 @@ def report_web():
         # print('-'*20)
         # print(ind)
         # print('-'*20)
-        to_who_email = db.session.execute('select email from manager where apartment = "分類者"').fetchall()[0][0]
+        to_who_email = db.session.execute('select email from manager where apartment = "秘書部"').fetchall()[0][0]
         send_email("新案件審理提醒", "{}/".format(app_host), to_who_email)
         db.session.add(report(str(ind+1), anonymous, sender, sender_id, publish, form_type, content, to_who, str(sorter[0][0]), advice, date, "", "", ""))
         db.session.commit()

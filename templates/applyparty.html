@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1 style = "text-align:center">申請政黨</h1>
-<!-- <form role="form" action="{{ url_for('applyparty') }}" method="POST" enctype="multipart/form-data">
+<form role="form" action="{{ url_for('applyparty') }}" method="POST" enctype="multipart/form-data">
 <div class = "container">
     <div class="form-group">
         <label for="charger"><h4>政黨負責人名冊:</h4></label>
@@ -24,7 +24,34 @@
     </div>
     <button type="submit" class="btn btn-primary btn-block">送出</button>
 </div>
-</form> -->
-<h1 style="text-align:center;">請將檔案寄至jonny30904@gmail.com</h1>
+</form>
+<!-- <h1 style="text-align:center;">請將檔案寄至rayyoboy@gmail.com</h1> -->
+
+<script>
+
+swal({
+    title: "創黨請先申請場地並召開創黨大會  再申請政黨備案",
+    icon: "info",
+    buttons: {
+      Btn: false,
+      success: {
+        text: "繼續",
+        visible: true,
+        value: "continue"
+      },
+      danger: {
+        text: "登入",
+        visible: true,
+        value: "redirect"
+      }
+    }
+  }).then((result) => {
+      if (result == "redirect")
+      {
+        window.location.href = '/login';
+      }
+})
+</script>
+</script>
 
 {% endblock %}

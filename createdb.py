@@ -181,8 +181,8 @@ class allleaders(db.Model):
 
 class allspeaker(db.Model):
     period = db.Column('period', db.String(15), primary_key=True)
-    speaker = db.Column('speaker', db.String(15))
-    secondspeaker = db.Column('secondspeaker', db.String(15))
+    speaker = db.Column('speaker', db.String(100))
+    secondspeaker = db.Column('secondspeaker', db.String(100))
     year = db.Column('year', Integer)
     def __init__(self, period, speaker, secondspeaker, year):
         self.period = period
@@ -200,6 +200,7 @@ def index():
     # test8 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
     # test7 = manager("090744", '張瑞祐', "090744",'rayyoboy@gmail.com', '2020', '', 1)
     # test4 = User("090039", '陳廷森', "090039",'vincent.super8@gmail.com', '2020')
+    # db.session.execute("drop table allspeaker")
     db.create_all()
     # db.session.add(test)
     # db.session.add(test2)

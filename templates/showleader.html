@@ -5,7 +5,7 @@
         <div class = "container-fluid" style="text-align: center;">
         {% for content in contents %}
         <h3>第{{content.period}}屆</h3>    
-        <div class = "row"><h3 class = "col-sm-6">會長：{{content.leader}}</h3><h3 class = "col-sm-6">副會長：{{content.secondleader}}</h3></div>        
+        <div class = "row"><h3 class = "col-sm-6">會長：{{content.leader | safe}}</h3><h3 class = "col-sm-6">副會長：{{content.secondleader}}</h3></div>        
         <br><hr><br>
         {% endfor %}
         </div>
