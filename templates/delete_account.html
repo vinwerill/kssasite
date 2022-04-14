@@ -3,7 +3,8 @@
 <div class="container" style="margin: 5%; margin-left: 30%;">
     <form method="POST">
         <h5>確認刪除帳號{{ target_id }}？資料不會保留，後果自行負責。</h5>
-        <input value="{{ target_id }}" id = "hidden" name = "target_account">
+        <br><br>
+        <input value="{{ target_id }}" type = "hidden" name = "target_account">
         <input class="btn btn-danger col-sm-5" type="submit" value="確認" id = "submit_return">
     </form>
 </div>

@@ -266,7 +266,7 @@ def register(order):
             db.session.execute("DELETE FROM user where id = '{}'".format(ident))
         db.session.add(User(ident, user, password, email, enteryear))
         db.session.commit()
-        return render_template('index.html', user=user, login = True)
+        return render_template('waitcommit.html', user=user, login = True)
     return render_template('register.html', errors = "")
 
 @app.route('/adjust_ident', methods=['POST', 'GET'])
@@ -504,10 +504,11 @@ def gethistory(history):
 def info_web(order):
     content = []
     if order == 'all':
-        adminstration = db.session.execute('select * from info where apartment like "%學聯會-%"').fetchall()
-        parliament = db.session.execute('select * from info where apartment like "%學生議會-%"').fetchall()
-        boardofinquiry = db.session.execute('select * from info where apartment like "%評議委員會-%"').fetchall()
-        return render_template('info.html', adminstration = adminstration, parliament = parliament, boardofinquiry = boardofinquiry, order = order, content = content)
+        # adminstration = db.session.execute('select * from info where apartment like "%學聯會-%"').fetchall()
+        # parliament = db.session.execute('select * from info where apartment like "%學生議會-%"').fetchall()
+        # boardofinquiry = db.session.execute('select * from info where apartment like "%評議委員會-%"').fetchall()
+        all_infos = db.session.execute('select * from info').fetchall()
+        return render_template('info.html', infos=all_infos, content = content, order = order)
     else:
         content = db.session.execute('select * from info where ind = {}'.format(order)).fetchall()
         # print(content)
@@ -803,8 +804,8 @@ def applyparty():
             documents = [charger, application, icon, member]
             for d in documents:
                 d.save(os.path.join("static/uploads/", d.filename))
-            to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
-            send_data("政黨申請提醒", render_template('applypartymail.html'), to_who)
+            # to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
+            send_data("政黨申請提醒", render_template('applypartymail.html'), "kssa.autonomy@gmail.com")
             return redirect(url_for('applyrule', charger = charger, application = application, icon = icon, member = member))
         return render_template("applyparty.html")
 
@@ -818,7 +819,7 @@ def applyplace():
             month = request.values.get("month")
             date = request.values.get("date")
             place = request.values.get("place")
-            to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
-            send_email("場地申請提醒", render_template("applyplacemail.html", applier=applier, charger=charger, year=year, month=month, date=date, place=place), to_who)
+            # to_who = db.session.execute('select email from manager where apartment = "自治部"').fetchone()[0]
+            send_email("場地申請提醒", render_template("applyplacemail.html", applier=applier, charger=charger, year=year, month=month, date=date, place=place), "kssa.autonomy@gmail.com")
             return redirect(url_for('applyrule'))
         return render_template("applyplace.html")
