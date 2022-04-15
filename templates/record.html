@@ -32,16 +32,20 @@
         <br><hr><br>
         <h5 style="text-align:center;">書面紀錄：</h5>
         <br>
-        <a href = "{{content.form }}" style="align-self: center;">{{ content.form | safe}}</a>
+        {% if content.form != '無' %}
+            <a href = "{{content.form }}" style="align-self: center;">{{ content.title | safe}}書面檔案</a>
+        {% else %}
+        <h5 style="text-align:center;">無</h5>
+        {% endif %}
         <br><hr><br>
         <h5 style="text-align:center;">會議影片連結：</h5>
         <br>
         {% if content.video != '無' %}
             {% if content.video.find('|')==0 %}
-            <a href = "{{content.video}}">{{ content.video | safe }}<a>
+            {{ content.video | safe }}
             {% else %}
                 {% for i in content.video.split('|') %}
-                <a href="{{ i }}">{{ i }}</a>{{ i |safe }}<a>
+                {{ i |safe }}
                 {% endfor %}
             {% endif %}
         {% else %}
