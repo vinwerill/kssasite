@@ -3,8 +3,8 @@
 {% if manager_login == True or login == True %}
 <div class="container-fluid" style="margin-left: 43%;">
     <br>
-    <a class="btn btn-primary" href="{{ url_for('applyparty') }}">申請政黨</a>
-    <!-- <a class="btn btn-primary" href="{{ url_for('applyplace') }}">申請場地</a> -->
+    <a class="btn btn-primary" href="{{ url_for('applyparty') }}">申請政黨</a> 
+    <a class="btn btn-primary disabled" href="{{ url_for('applyplace') }}">申請場地更新中</a>
 </div>
 <br><hr><br>
 <div class="container">

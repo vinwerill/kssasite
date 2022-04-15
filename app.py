@@ -613,13 +613,17 @@ def report_web():
         except:
             advice = request.values.get("getadvice")
         date = now.strftime("%Y-%m-%d")
-        sorter = db.session.execute('select id from manager where apartment = "分類者"').fetchall()
+        sorter = db.session.execute('select id from manager where apartment = "秘書部"').fetchall()[0][0]
+        leader = db.session.execute('select id from manager where apartment = "會長"').fetchall()[0][0]
         # print('-'*20)
         # print(ind)
         # print('-'*20)
         to_who_email = db.session.execute('select email from manager where apartment = "秘書部"').fetchall()[0][0]
         send_email("新案件審理提醒", "{}/".format(app_host), to_who_email)
-        db.session.add(report(str(ind+1), anonymous, sender, sender_id, publish, form_type, content, to_who, str(sorter[0][0]), advice, date, "", "", ""))
+        to_who_email = db.session.execute('select email from manager where apartment = "會長"').fetchall()[0][0]
+        send_email("新案件審理提醒", "{}/".format(app_host), to_who_email)
+        db.session.add(report(str(ind+1), anonymous, sender, sender_id, publish, form_type, content, to_who, str(sorter), advice, date, "", "", ""))
+        db.session.add(report(str(ind+2), anonymous, sender, sender_id, publish, form_type, content, to_who, str(leader), advice, date, "", "", ""))
         db.session.commit()
         return render_template('index.html')
     return render_template('report.html')
@@ -642,7 +646,7 @@ def mailbox(letters):
             #     email = db.session.execute('select email from manager where id = "{}"'.format(ind)).fetchall()[0][0]
             # send_email("新案件審理提醒", "{}/".format(app_host), email)
             return render_template('mailbox.html', mails = mails, retrun_mails = retrun_mails, letters = 'all')
-        if session['manager_login'] and session['apartment'] == '分類者':
+        if session['manager_login'] and (session['apartment'] == '秘書部' or session['apartment'] == "會長"):
             managers = db.session.execute('select id, name, apartment from manager').fetchall()
             return render_template('mailbox.html', mails = mails, retrun_mails = retrun_mails, letters = letters, managers = managers)
         return render_template('mailbox.html', mails = mails, retrun_mails = retrun_mails, letters = letters)

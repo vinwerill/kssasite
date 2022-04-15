@@ -67,7 +67,7 @@
                                 <br><hr><br>
                             {% endif %}
                             <div class="container p-3 my-3 border" id = "mails" style="padding-left: align-self; margin-left: align-self;" >
-                                {% if apartment == "分類者" %}
+                                {% if apartment == "秘書部" %}
                                     {% for manager in managers %}
                                     <div class="container p-3 my-3 border">
                                     <div class="row">{{ manager.id }}</div>
@@ -76,6 +76,52 @@
                                     <input type ="hidden" value="{{ mail.ind }}" name = "mailind">
                                     <div class="row"></div><a class="btn btn-success" href = "{{ url_for('change_receiver', letter_id = mail.ind, receiver = manager.id) }}">送給{{ manager.id }}</a></div>                    
                                     {% endfor %}
+                                {% elif apartment == "會長" %}
+                                    {% for manager in managers %}
+                                    <div class="container p-3 my-3 border">
+                                    <div class="row">{{ manager.id }}</div>
+                                    <div class="row">{{ manager.name }}</div>
+                                    <div class="row">職位：{{ manager.apartment }}</div>
+                                    <input type ="hidden" value="{{ mail.ind }}" name = "mailind">
+                                    <div class="row"></div><a class="btn btn-success" href = "{{ url_for('change_receiver', letter_id = mail.ind, receiver = manager.id) }}">送給{{ manager.id }}</a></div>                    
+                                    {% endfor %}
+                                    {% if mail.sender_id != "unsigned" %}
+                                    <form method="POST"> 
+                                            <h5>回覆</h5>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <br>
+                                                        <div class="form-check form-check-inline ">
+                                                        <input class="form-check-input" type="radio" name="progress" id="審查中" value="審查中" {% if mail.progress == '審查中' %} checked {% endif %}>
+                                                        <label class="form-check-label" for="agree">審查中</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline ">
+                                                        <input class="form-check-input" type="radio" name="progress" id="不受理" value="不受理" {% if mail.progress == '不受理' %} checked {% endif %}>
+                                                        <label class="form-check-label" for="disagree">不受理</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline ">
+                                                        <input class="form-check-input" type="radio" name="progress" id="已提案" value="已提案" {% if mail.progress == '已提案' %} checked {% endif %}>
+                                                        <label class="form-check-label" for="skip">已提案</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline ">
+                                                            <input class="form-check-input" type="radio" name="progress" id="已接案" value="已接案" {% if mail.progress == '已接案' %} checked {% endif %}>
+                                                            <label class="form-check-label" for="skip">已接案</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <textarea class="form-control" rows="5" id="return_massege" name = "return_massege">{{ mail.return_massege }}</textarea>
+                                                <input value="{{ mail.ind }}" type = "hidden" name = "sender">
+                                            </div>
+                                            <div class="row" style="padding-left: 40%;">
+                                                <a class="btn btn-primary col-sm-2" href="{{ url_for('mailbox', letters = 'all') }}">返回</a>
+                                                &nbsp;
+                                                <input class="btn btn-primary col-sm-2" type="submit" name="send" value="送出" id = "submit_return">
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <h4>提案者未登入(匿名)</h4>
+                                    {% endif %}
                                 {% else %}
                                     {% if mail.sender_id != "unsigned" %}
                                     <form method="POST"> 
