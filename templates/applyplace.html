@@ -4,6 +4,7 @@
 <br>
 <form role="form" action="{{ url_for('applyplace') }}" method="POST">
 <div class = "container">
+  <div  class="alert alert-danger" style="text-align: center;">備註：請於借用日七天前申請，以利作業流程</div >
     <div class="form-group">
         <label for="name"><h4>政黨名稱:</h4></label>
         <input type="text" class="form-control" id="name" name = "applier">
@@ -13,7 +14,7 @@
         <input type="text" class="form-control" id="charge" name = "charger">
       </div>
       <div class="form-group">
-        <label for="time"><h4>時間</h4></label>
+        <label for="time"><h4>借用日期</h4></label>
         <div class="input-group">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="年" name = "year">

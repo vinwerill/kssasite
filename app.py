@@ -6,6 +6,7 @@ import os
 import json
 from random import sample
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import OperationalError
 import pymysql
 pymysql.install_as_MySQLdb()
 from createdb import manager, info, report, User, record, laws, law_name, allleaders, allspeaker
@@ -264,9 +265,12 @@ def register(order):
             return render_template('register.html', errors = "所有表格皆須填入，請重新輸入")
         if order == 'adjust':
             db.session.execute("DELETE FROM user where id = '{}'".format(ident))
-        db.session.add(User(ident, user, password, email, enteryear))
-        db.session.commit()
-        return render_template('waitcommit.html', user=user, login = True)
+        try:
+            db.session.add(User(ident, user, password, email, enteryear))
+            db.session.commit()
+            return render_template('waitcommit.html', user=user, login = True)
+        except OperationalError:
+            return render_template('waitcommit.html', user=user, login = True)
     return render_template('register.html', errors = "")
 
 @app.route('/adjust_ident', methods=['POST', 'GET'])
