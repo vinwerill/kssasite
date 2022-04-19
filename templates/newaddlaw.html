@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<br><br>
+<div class='container' style="padding-left: align-self; border: 2px;">
+<!-- <form role="form" action="" method="POST"> -->
+    <h1 style="text-align: center;">設定</h1>
+        <h4>法規名稱:</h4>
+       <br>
+       <div class="form-group">
+            <input class="form-control" name = "gettitle">
+        </div>
+        <br>&nbsp;<br>
+        <hr>
+        <br>&nbsp;<br>
+        <br>&nbsp;<br>
+        <h4>法律類別</h4>
+        <div class="form-check">
+            <br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "組織章程" value="組織章程">
+              <label class="form-check-label" for="組織章程">組織章程</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gettype" id = "自治條例" value="自治條例">
+              <label class="form-check-label" for="自治條例">自治條例</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gettype" id = "自治規則" value="自治規則">
+                <label class="form-check-label" for="自治規則">自治規則</label>
+              </div>
+        </div>
+        <br>&nbsp;<br>
+        <hr>
+        <br>&nbsp;<br>
+        <h4>沿革</h4>
+        <br>
+        <div class="form-group">
+                <textarea class="form-control" name = "gethistory"></textarea>
+            </div>
+            <br>&nbsp;<br>
+        <hr>
+        <br>&nbsp;<br>
+        <div id="newdiv"></div>
+        <br>
+        <button class="btn btn-primary" id = "addchapter0" onclick="addchapter()">增加章節</button> <button class="btn btn-success" id = "addcolumn0" onclick="addcolumn()">增加條目</button><br>
+        <script type="text/javascript">
+            var elementid = 1;
+            function addchapter() {
+                // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
+                var addcontentarea = '<input class = "form-control" type="text" id="chapter'+elementid+'"><br>';
+                $("#newdiv").before(addcontentarea);
+                elementid += 1;
+            };
+            function addcolumn() {
+                // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
+                var addcontentarea = '<input type="text" id="column-order'+elementid+'"><br><textarea id = "content'+elementid+'" class="form-control" row = "5"></textarea><br>';
+                $("#newdiv").before(addcontentarea);
+                elementid += 1;
+            };
+        </script>
+    <!-- </form> -->
+    </div>
+{% endblock %}
+

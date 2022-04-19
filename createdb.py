@@ -189,6 +189,20 @@ class allspeaker(db.Model):
         self.speaker = speaker
         self.secondspeaker = secondspeaker
         self.year = year
+    
+class newlaws(db.Model):
+    __tablename__ = 'newlaws'
+    ind = db.Column('ind', Integer, primary_key=True)
+    law_title_ind = db.Column('law_title_ind', Integer)
+    chapter_name = db.Column('chapter_name', db.String(1000))
+    order = db.Column('order', db.String(1000))
+    content = db.Column('content', db.Text(10000000))
+    def __init__(self, ind, law_title_ind, chapter_name, order, content):
+        self.ind = ind
+        self.law_title_ind = law_title_ind
+        self.chapter_name = chapter_name
+        self.belong_chapter = order
+        self.content = content
 
 @app.route('/')
 def index():

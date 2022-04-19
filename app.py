@@ -229,8 +229,14 @@ def manager_register(order):
             return render_template('manager_register.html', errors = "所有表格皆須填入，請重新輸入")
         if order == 'adjust':
             db.session.execute("DELETE FROM manager where id = '{}'".format(ident))
-        db.session.add(manager(ident, user, password, email, enteryear, apartment, exist[order]))
-        db.session.commit()
+        try:
+            db.session.add(manager(ident, user, password, email, enteryear, apartment, exist[order]))
+            db.session.commit()
+        except OperationalError:
+            os.system("heroku restart -a kssasite")
+            db.session.add(manager(ident, user, password, email, enteryear, apartment, exist[order]))
+            db.session.commit()
+            return render_template('waitcommit.html', user=user, login = True)
         if order == 'register':
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), 'jonny30904@gmail.com')
             return render_template('wait_for_activating.html')
@@ -270,6 +276,9 @@ def register(order):
             db.session.commit()
             return render_template('waitcommit.html', user=user, login = True)
         except OperationalError:
+            os.system("heroku restart -a kssasite")
+            db.session.add(User(ident, user, password, email, enteryear))
+            db.session.commit()
             return render_template('waitcommit.html', user=user, login = True)
     return render_template('register.html', errors = "")
 
@@ -338,12 +347,12 @@ def addspeaker():
 
 @app.route('/showspeaker', methods=['POST', 'GET'])
 def showspeaker():
-    contents = db.session.execute("select * from allspeaker order by year")
+    contents = db.session.execute("select * from allspeaker order by year desc")
     return render_template('showspeaker.html', contents = contents)
 
 @app.route('/showleader', methods=['POST', 'GET'])
 def showleader():
-    contents = db.session.execute("select * from allleaders order by year")
+    contents = db.session.execute("select * from allleaders order by year desc")
     return render_template('showleader.html', contents = contents)
 
 
@@ -760,6 +769,10 @@ def addlaws(step):
             db.session.commit()
             return render_template('addlaws.html', step = "1")
     return render_template('addlaws.html', step = step)
+
+@app.route('/newaddlaw')
+def newaddlaw():
+    return render_template('newaddlaw.html')
 
 @app.route('/addrecord', methods=['POST', 'GET'])
 def addrecord():
