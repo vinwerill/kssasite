@@ -435,7 +435,7 @@ def getoptions(topic):
 def laws_web(order):
     if order == 'all':
         constitution = db.session.execute('select * from law_name where law_type like "%組織章程%"').fetchall()
-        ordinance = db.session.execute('select * from law_name where law_type like "%自治條例%"').fetchall()
+        ordinance = db.session.execute('select * from law_name where law_type like "%自治條例%" order by ind').fetchall()
         rule = db.session.execute('select * from law_name where law_type like "%自治規則%"').fetchall()
         return render_template('laws.html', order = order, constitution = constitution, ordinance = ordinance, rule = rule)
     else:
