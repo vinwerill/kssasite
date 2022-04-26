@@ -191,3 +191,16 @@ if session['manager_login']:
         find_laws = db.session.execute('select * from laws where law_type_ind = {}'.format(ind)).fetchall()
         law_set = db.session.execute('select * from law_name where ind = {}'.format(ind)).fetchall()
         return render_template('adjustlaws.html', find_laws = find_laws, law_set = law_set[0])
+
+choice = request.values.getlist('choice')
+ind = request.values.get('ind')
+alloptions = db.session.execute('select options from vote where ind = {}'.format(ind)).fetchall()[0][0].split('-')
+nowresult = list(map(int, db.session.execute('select result from vote where ind = {}'.format(ind)).fetchall()[0][0].split('-')))
+nowresult_t = list(map(str, db.session.execute('select result_t from vote where ind = {}'.format(ind)).fetchall()[0][0].split(',')))
+for i in choice:
+    nowresult[alloptions.index(i)]+=1
+    nowresult_t[alloptions.index(i)] += session['user'] + '-'
+db.session.execute('update vote set result = "{}", result_t = "{}" where ind = {}'.format('-'.join(map(str, nowresult)), ','.join(map(str, nowresult_t)),ind))
+db.session.commit()
+return render_template('vote.html', m = "result", p = ind)
+return redirect(url_for('show_vote', ind = ind))

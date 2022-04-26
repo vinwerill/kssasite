@@ -1,4 +1,5 @@
 from typing import Optional
+from unittest import result
 from flask import Flask, render_template,redirect, session, url_for, request, jsonify, wrappers
 from flask import Flask
 from datetime  import datetime
@@ -9,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import OperationalError
 import pymysql
 pymysql.install_as_MySQLdb()
-from createdb import manager, info, report, User, record, laws, law_name, allleaders, allspeaker
+from createdb import manager, info, report, User, record, laws, law_name, allleaders, allspeaker, vote, parliamentary, conference
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
@@ -356,80 +357,95 @@ def showleader():
     return render_template('showleader.html', contents = contents)
 
 
-# @app.route('/set_conference', methods=['POST', 'GET'])
-# def set_conference():
-#     if session['manager_login']:
-#         if request.method == "POST":
-#             topic = request.values.get('topic')
-#             options = request.values.getlist('option')
-#             temp = db.session.execute('select ind from vote order by ind').fetchall()
-#             try:
-#                 ind = max(temp[-1])
-#             except:
-#                 ind = 0
-#             init_result = ['0' for i in range(len(options))]
-#             init_result_t = [' ' for i in range(len(options))]
-#             element = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890"
-#             password = ''.join(sample(element, 6))
-#             db.session.add(vote(ind+1, topic, session['id'],'-'.join(options), '-'.join(init_result), ','.join(init_result_t), 1, "", password))
-#             db.session.commit()
-#             return render_template('set_conference.html', password = password)
-#         return render_template('set_conference.html', password = '')
-    # else:
-    #     return redirect(url_for('User_login'))
-# @app.route('/vote/<m>', methods=['POST', 'GET'])
-# def vote_page(m, p = ''):
-#     if session['manager_login']:
-#         if request.method == "POST":
-#             if m == "result":
-#                 choice = request.values.getlist('choice')
-#                 ind = request.values.get('ind')
-#                 alloptions = db.session.execute('select options from vote where ind = {}'.format(ind)).fetchall()[0][0].split('-')
-#                 nowresult = list(map(int, db.session.execute('select result from vote where ind = {}'.format(ind)).fetchall()[0][0].split('-')))
-#                 nowresult_t = list(map(str, db.session.execute('select result_t from vote where ind = {}'.format(ind)).fetchall()[0][0].split(',')))
-#                 for i in choice:
-#                     nowresult[alloptions.index(i)]+=1
-#                     nowresult_t[alloptions.index(i)] += session['user'] + '-'
-#                 db.session.execute('update vote set result = "{}", result_t = "{}" where ind = {}'.format('-'.join(map(str, nowresult)), ','.join(map(str, nowresult_t)),ind))
-#                 db.session.commit()
-#                 # return render_template('vote.html', m = "result", p = ind)
-#                 return redirect(url_for('show_vote', ind = ind))
-#             elif m == "vote":
-#                 p = request.values.get('topic')
-#                 options = request.values.getlist('option')
-#                 temp = db.session.execute('select ind from vote order by ind').fetchall()
-#                 try:
-#                     ind = max(temp[-1])
-#                 except:
-#                     ind = 0
-#                 init_result = ['0' for i in range(len(options))]
-#                 db.session.add(vote(ind+1, p, '-'.join(options), '-'.join(init_result), 1))
-#                 db.session.commit()
-#                 return redirect(url_for('vote_page', m = ind+1))
-#             elif m == "checkout":
-#                 address = request.values.get('address')
-#                 participate = db.session.execute('select participate from vote where address = "{}"'.format(address)).fetchall()[0][0]
-#                 options = db.session.execute('select * from vote where address = "{}"'.format(address)).fetchall()[0]
-#                 db.session.execute('update vote set participate = "{}" where address = "{}"'.format(participate+session['user']+'-', address))
-#                 db.session.commit()
-#                 return render_template('vote.html', m = address, options = options)
-    # else:
-    #     return redirect(url_for('User_login'))
+@app.route('/set_conference', methods=['POST', 'GET'])
+def set_conference():
+    if session['manager_login']:
+        # temp = db.session.execute('select ind from vote order by ind').fetchall()
+        # try:
+        #     ind = temp[-1][0]
+        # except:
+        #     ind = 0
+        # db.session.add(vote(ind+1, session['id'], "", "", 1))
+        check_exist = db.session.execute("select * from conference").fetchall()[0]
+        # print(check_exist)
+        if check_exist[0] == 0:
+            db.session.execute("update parliamentary set choice = '', participation = 0")
+            db.session.execute("update conference set activation = 1, result = ''")
+            db.session.commit()
+        else:
+            return render_template('set_conference.html', exist = 1)
+        return render_template('set_conference.html', exist = 0)
+    else:
+        return redirect(url_for('User_login'))
 
-@app.route('/checkout', methods=['POST', 'GET'])
-def checkout():
-    return render_template('checkout.html')
+@app.route('/vote/<m>', methods=['POST', 'GET'])
+def vote_page(m):
+    if session['manager_login']:
+        check_exist = db.session.execute("select * from conference").fetchall()[0]
+        if m == "end":
+            choice = request.values.get('choice')
+            # ind = request.values.get('ind')
+            # choice = request.values.get('choice')
+            # old_participant = db.session.execute('select participant from vote where ind = {}'.format(ind)).fetchall()[0][0]
+            # if session['user'] in old_participant:
+            #     return render_template("vote.html", m = "result", ind = ind)
+            # update_participant = old_participant+"-"+session['user']
+            # old_choice = db.session.execute('select choice from vote where ind = {}'.format(ind)).fetchall()[0][0]
+            # update_choice = old_choice+"-"+choice
+            db.session.execute('update parliamentary set choice = "{}" where name = "{}"'.format(choice, session['user']))
+            db.session.commit()
+
+            return render_template("vote.html", m = "vote")
+        elif m == "vote":
+            db.session.execute('update parliamentary set participation = 1, choice = "adstain" where name = "{}"'.format(session['user']))
+            db.session.commit()
+            return render_template("vote.html", m = "vote")
+        elif m == "checkout":
+            if check_exist[0] == 1:
+                return render_template("vote.html", m = "checkout", exist = 1)
+            else:
+                return render_template("vote.html", m = "checkout", exist = 0)
+        elif m == "result":
+            if check_exist[0] == 1:
+                return render_template("vote.html", m = "result", exist = 1)
+            else:
+                return render_template("vote.html", m = "result", exist = 0)
+        elif m == "conclusion":
+            result = request.values.get('conclusion').split("-")
+            # db.session.execute("update parliamentary set choice = '', participation = 0")
+            db.session.execute("update conference set activation = 0")
+            db.session.commit()
+            return render_template("vote.html", m = "conclusion", result = result)
+        
+    else:
+        return redirect(url_for('User_login'))
+
 
 # @app.route('/show_vote/<ind>', methods=['POST', 'GET'])
 # def show_vote(ind):
-#     return render_template('vote.html', m = "result", topic = ind)
+#     options = db.session.execute('select options from vote where ind = {}'.format(ind)).fetchall()[0][0].split("-")
+#     topic = db.session.execute('select topic from vote where ind = {}'.format(ind)).fetchall()[0][0]
+#     return render_template('vote.html', m = "result", ind = ind, options = options, length = len(options), topic = topic)
 
-@app.route('/getoptions/<topic>', methods=['POST', 'GET'])
-def getoptions(topic):
-    options = db.session.execute('select options from vote where ind = {}'.format(topic)).fetchall()[0]
-    result = db.session.execute('select result from vote where ind = {}'.format(topic)).fetchall()[0]
-    participate = db.session.execute('select participate from vote where ind = {}'.format(topic)).fetchall()[0][0]
-    return {'options':list(options[0].split('-')), 'result':list(result[0].split('-')), "participate":participate.replace('-', '<br>')}
+# @app.route('/getoptions/<topic>', methods=['POST', 'GET'])
+# def getoptions(topic):
+#     participant = db.session.execute('select participant from vote where ind = {}'.format(topic)).fetchall()[0][0].split("-")
+#     choice = db.session.execute('select choice from vote where ind = {}'.format(topic)).fetchall()[0][0].split("-")
+#     return {"participant":participant, 'choice':choice}
+
+@app.route('/getparliamentary', methods=['POST', 'GET'])
+def getparliamentary():
+    temp = db.session.execute('select * from parliamentary').fetchall()
+    data = []
+    for i in temp:
+        tempdict = {}
+        tempdict['name'] = i[0]
+        tempdict['choice'] = i[1]
+        tempdict['participation'] = i[2]
+        data.append(tempdict)
+    data = json.dumps(data)
+    # print(data)
+    return {'data':data}
 
 @app.route('/laws/<order>')
 def laws_web(order):

@@ -1,73 +1,102 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if m == "result" %}
-    <div class="container-fluid" style="padding-inline: 20%;">
-        <input value = "{{ topic }}" id = "topic">
+    {% if exist == 1 %}
+    <div class="container-fluid bg-dark">
         <br>
-        <h1 style="text-align: center;">投票者</h1>
-        <br>
-        <h5 style="text-align: center;" id = "participate"></h5>
+        <div class="row"><h3 class="text-success col-md-3">綠色：同意</h3><h3 class="text-danger col-md-3">紅色：不同意</h3><h3 class="text-warning col-md-3">黃色：棄權</h3><h3 class=" col-md-3">黑色：缺席</h3></div>
         <br><hr><br>
-        <canvas id="myChart" style="width:100%;max-width:100%"></canvas>
-        <script>
-        $('#topic').hide();
-        showchart()
-        var clock = setInterval(showchart , 5000);
-        function showchart(){
-            var formData = {};
-            var xValues = Array();
-            var yValues = Array();
-            console.log($('#topic').val())
-            $.ajax({'type': 'POST', 'data': formData, 'url': '/getoptions/'+$("#topic").val(),})
-            .done(function(data, textStatus, jqXHR) {
-                var show_participate = document.getElementById('participate');
-                console.log(data.participate);
-                show_participate.innerHTML = data.participate;
-                xValues = data.options;
-                yValues = data.result;
-                var barColors = ['rgba(200,10,10,1)', 'rgba(200,200,200,1)'];
-                new Chart("myChart", {
-                type: "bar",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                    }]
-                },
-                options: {
-                    legend: {display: false},
-                    title: {
-                    display: true,
-                    text: "投票結果"
-                    },
-                    scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                    }
-                }
-                });
-                })
-            .fail()
-            .always();
-            }
-            
-        </script>
+        
+        <div class="container-fluid" id = "result">
+
+        </div>
     </div>
+        {% if apartment == "議長"%}
+        <div class="container-fluid">
+            <form method="POST" action="{{ url_for('vote_page', m='conclusion') }}">
+                <input  type = "hidden" value = "" name="conclusion" id = "conclusion">
+                <button type="submit" class="btn btn-primary btn-block">結束投票</button>
+            </form>
+        </div>
+        {% endif %}
+        <script>
+            showresult()
+            var clock = setInterval(showresult , 500);
+            function showresult(){
+                var formData = {};
+                // console.log($('#ind').val());
+                $.ajax({'type': 'POST', 'data': formData, 'url': '/getparliamentary',})
+                .done(function(data, textStatus, jqXHR) {
+                    console.log("work")
+                    var items = [];
+                    var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning'};
+                    var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
+                    var conclusion = {"agree":0, "disagree":0, "adstain":0};
+                    $.each(JSON.parse(data.data), function(index, parliamentary) 
+                    {
+                        if ((index+1) % 4 == 1)
+                        {
+                            items.push("<div class='row'>")
+                        }
+                        if (parliamentary.participation == 1)
+                        {
+                            conclusion[parliamentary.choice] += 1;
+                            items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-3'>"+parliamentary.name+"</h3>")
+                        }
+                        else
+                        {
+                            items.push("<h3 class = 'col-md-3 '>"+parliamentary.name+"</h3>")
+                        }
+                        if ((index+1) % 4 == 0)
+                        {
+                            items.push("</div><br>")
+                        }
+                    })
+    
+                    document.getElementById("result").innerHTML = "";
+                    document.getElementById("result").innerHTML = items.join('');
+                    document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain'])
+                })
+                .fail()
+                .always()
+            }  
+            </script>
     {% else %}
-    <form method="POST" action={{ url_for('vote_page', m='result') }}>
-    <div class="container-fluid" style="padding-inline: 20%;">
-        {% if options.activate == 1 %}
+    <br><br>
+    <div class="container-fluid">
+        <h1 style="text-align: center;">現無投票會議，請先發布會議</h1>
+    <br><br>
+    </div>
+    <br><br>
+    {% endif %}
+    
+    {% elif m == 'checkout' %}
+    {% if exist == 1 %}
+    <form method="POST" action="{{ url_for('vote_page', m='vote') }}">
+    <br><br>
+    <div class="container-fluid">
+    <button type="submit" class="btn btn-primary btn-block btn-lg">加入投票</button>
+    <br><br>
+    </div>
+    </form>
+    {% else %}
+    <br><br>
+    <div class="container-fluid">
+        <h1 style="text-align: center;">現無投票會議，請等待會議發布</h1>
+    <br><br>
+    </div>
+    <br><br>
+    {% endif %}
+    {% elif m == 'vote' %}
+    <form method="POST" action="{{ url_for('vote_page', m='end') }}">
+    <div class="container-fluid" style="padding-inline: 10%;">
+        <!-- {% if activation == 1 %}
             <br>
-            <h1 style="text-align: center;"> {{ options.topic }} </h1>
+            <h1 style="text-align: center;"> {{ options.ind }} </h1>
             <input type = "text" value = "{{ options.ind }}" id = "ind" name = "ind">
             <input type = "text" value = "{{ options.holder }}" id = "holder" name = "holder">
             <br>
             {% for i in options.options.split('-') %}
-                <!-- <input type="checkbox" class="btn btn-primary btn-block btn-lg" id = "option" value="0" onclick = "value++">{{ i }}</button> -->
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id = "option{{ options.options.split('-').index(i) }}" value="{{ i }}" name = "choice">
                     <label class="form-check-label" for="option{{ options.options.split('-').index(i) }}">{{ i }}</label>
@@ -81,9 +110,68 @@
     <script>
         $('#ind').hide();
         $('#holder').hide();
-    </script>
+    </script> -->
+    <br><br>
+    <div class="row">
+        <button type="submit" name="choice" value="agree" id = "agree" class = "btn btn-success col-md-4">同意</button>
+        <button type="submit" name="choice" value="disagree" id = "disagree" class = "btn btn-danger col-md-4">不同意</button>
+        <button type="submit" name="choice" value="adstain" id = "adstain" class = "btn btn-secondary col-md-4">棄權</button>
     </div>
-    <br>
+    <br><br>
+    </div>
+    <br><br>
     </form>
+    {% elif m == 'conclusion' %}
+    <br><br>
+    <div class="container-fluid bg-dark">
+        <div class="row"><h3 class="text-success col-md-3">同意：{{result[0]}}人</h3><h3 class="text-danger col-md-3">不同意：{{result[1]}}人</h3><h3 class="text-warning col-md-3">棄權：{{result[2]}}人</h3></div>
+        <br><hr><br>
+        
+        <div class="container-fluid" id = "result">
+
+        </div>
+    </div>
+    <br><br>
+    <script>
+        showresult()
+        function showresult(){
+            var formData = {};
+            // console.log($('#ind').val());
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/getparliamentary',})
+            .done(function(data, textStatus, jqXHR) {
+                console.log("work")
+                var items = [];
+                var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning'};
+                var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
+                var conclusion = {"agree":0, "disagree":0, "adstain":0};
+                $.each(JSON.parse(data.data), function(index, parliamentary) 
+                {
+                    if ((index+1) % 4 == 1)
+                    {
+                        items.push("<div class='row'>")
+                    }
+                    if (parliamentary.participation == 1)
+                    {
+                        conclusion[parliamentary.choice] += 1;
+                        items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-3'>"+parliamentary.name+"</h3>")
+                    }
+                    else
+                    {
+                        items.push("<h3 class = 'col-md-3 '>"+parliamentary.name+"</h3>")
+                    }
+                    if ((index+1) % 4 == 0)
+                    {
+                        items.push("</div><br>")
+                    }
+                })
+
+                document.getElementById("result").innerHTML = "";
+                document.getElementById("result").innerHTML = items.join('');
+                document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain'])
+            })
+            .fail()
+            .always()
+        }  
+        </script>
     {% endif %}
 {% endblock %}

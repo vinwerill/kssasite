@@ -66,27 +66,19 @@ class info(db.Model):
         self.apartment = apartment
         self.date = date
 
-# class vote(db.Model):
-#     __tablename__ = 'vote'
-#     ind = db.Column('ind', Integer, primary_key=True)
-#     topic = db.Column('topic', db.String(100))
-#     holder = db.Column('holder', db.String(100))
-#     options = db.Column('options', db.Text(10000000))
-#     result = db.Column('result', db.String(1000))
-#     result_t = db.Column('result_t', db.String(1000))
-#     activate = db.Column('activate', Integer)
-#     participate = db.Column('participate', db.String(1000))
-#     address = db.Column('address', db.String(100))
-#     def __init__(self, ind, topic, holder, options, result, result_t, activate, participate, address):
-#         self.ind = ind
-#         self.topic = topic
-#         self.holder = holder
-#         self.options = options
-#         self.result = result
-#         self.result_t = result_t
-#         self.activate = activate
-#         self.participate = participate
-#         self.address = address
+class vote(db.Model):
+    __tablename__ = 'vote'
+    ind = db.Column('ind', Integer, primary_key=True)
+    holder = db.Column('holder', db.String(100))
+    participant = db.Column('participant', db.String(10000))
+    choice = db.Column('choice', db.String(1000))
+    activate = db.Column('activate', Integer)
+    def __init__(self, ind, holder, participant, choice, activate):
+        self.ind = ind
+        self.holder = holder
+        self.participant = participant
+        self.choice = choice
+        self.activate = activate
 
 class record(db.Model):
     __tablename__ = 'record'
@@ -204,6 +196,24 @@ class newlaws(db.Model):
         self.belong_chapter = order
         self.content = content
 
+class parliamentary(db.Model):
+    __tablename__ = 'parliamentary'
+    name = db.Column('name', db.String(100), primary_key=True)
+    choice = db.Column('choice', db.String(100))
+    participation = db.Column('participation', Integer)
+    def __init__(self, name=name, choice=choice, participation=participation):
+        self.name = name
+        self.choice = choice
+        self.participation = participation
+
+class conference(db.Model):
+    __tablename__ = 'conference'
+    activation = db.Column('activation', Integer, primary_key=True)
+    result = db.Column('result', db.String(100))
+    def __init__(self, activation=activation, result=result):
+        self.activation = activation
+        self.result = result
+
 @app.route('/')
 def index():
     # Create data
@@ -214,7 +224,7 @@ def index():
     # test8 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
     # test7 = manager("090744", '張瑞祐', "090744",'rayyoboy@gmail.com', '2020', '', 1)
     # test4 = User("090039", '陳廷森', "090039",'vincent.super8@gmail.com', '2020')
-    # db.session.execute("drop table allspeaker")
+    db.session.execute("drop table conference")
     db.create_all()
     # db.session.add(test)
     # db.session.add(test2)
