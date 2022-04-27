@@ -379,8 +379,8 @@ def set_conference():
                 db.session.execute("update conference set activation = 1, result = ''")
                 db.session.commit()
         else:
-            return render_template('set_conference.html', exist = 1)
-        return render_template('set_conference.html', exist = 0)
+            return redirect(url_for('vote_page', m='result'))
+        return redirect(url_for('vote_page', m='result'))
     else:
         return redirect(url_for('User_login'))
 
@@ -401,7 +401,7 @@ def vote_page(m):
             db.session.execute('update parliamentary set choice = "{}" where name = "{}"'.format(choice, session['user']))
             db.session.commit()
 
-            return render_template("vote.html", m = "vote")
+            return render_template("vote.html", m = "vote", exist = 1)
         elif m == "vote":
             if check_exist[0] == 1:
                 try:
@@ -415,18 +415,18 @@ def vote_page(m):
             else:
                 return render_template("vote.html", m = "vote", exist = 0)
         elif m == "checkout":
-            try:
-                return render_template("vote.html", m = "checkout", exist = 1)
-            except OperationalError:
-                os.system("heroku restart -a kssasite")
-                return render_template("vote.html", m = "checkout", exist = 1)
+            # try:
+            #     return render_template("vote.html", m = "checkout", exist = 1)
+            # except OperationalError:
+            #     os.system("heroku restart -a kssasite")
+            return render_template("vote.html", m = "checkout", exist = 1)
         elif m == "result":
             if check_exist[0] == 1:
                 return render_template("vote.html", m = "result", exist = 1)
             else:
                 return render_template("vote.html", m = "result", exist = 0)
         elif m == "conclusion":
-            result = request.values.get('conclusion').split("-")
+            result = list(map(int, request.values.get('conclusion').split("-")))
             db.session.execute("update parliamentary set choice = 'adstain' where choice = 'none'")
             db.session.execute("update conference set activation = 0")
             db.session.commit()

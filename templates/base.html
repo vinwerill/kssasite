@@ -84,7 +84,7 @@
                                 <a class="dropdown-item" href="{{ url_for('showspeaker') }}">歷屆議長</a>
                             </div>
                     </div></li>
-                    {% else %}
+                    {% elif apartment != "學生議會議員"%}
                     <li class="nav-item"><a href="{{ url_for('show_users') }}" class="btn btn-dark nav-link" role="button" >顯示所有會員</a></li>
                     <li class="nav-item"><div class="btn-group">
                         <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#info">增訂消息</button>
@@ -114,16 +114,16 @@
                                     <a class="dropdown-item" href="{{ url_for('addspeaker') }}">修訂歷屆議長</a>
                                 </div>
                         </div></li>
-                        {% if apartment == "議長" or apartment == "學生議會議員" %}
-                            <li class="nav-item"><div class="btn-group">
-                                <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#vote">投票</button>
-                                    <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="vote">
-                                        {% if apartment == "議長" %}<a href="{{ url_for('set_conference') }}" class="dropdown-item" role="button">發起投票</a>{% endif %}
-                                        <a href="{{ url_for('vote_page', m='checkout') }}" class="dropdown-item" role="button">表決器</a>
-                                        {% if apartment == "議長" %}<a href="{{ url_for('vote_page', m='result') }}" class="dropdown-item" role="button">查看結果</a>{% endif %}
-                                    </div>
-                            </div></li>
-                        {%endif%}
+                    {%endif%}
+                    {% if apartment == "議長" or apartment == "學生議會議員" %}
+                        <li class="nav-item"><div class="btn-group">
+                            <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#vote">投票</button>
+                                <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="vote">
+                                    {% if apartment == "議長" %}<a href="{{ url_for('set_conference') }}" class="dropdown-item" role="button">發起投票</a>{% endif %}
+                                    <a href="{{ url_for('vote_page', m='checkout') }}" class="dropdown-item" role="button">表決器</a>
+                                    {% if apartment == "議長" %}<a href="{{ url_for('vote_page', m='result') }}" class="dropdown-item" role="button">查看結果</a>{% endif %}
+                                </div>
+                        </div></li>
                     {%endif%}
                     <li class="nav-item"><div class="btn-group">
                         <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#report">意見反映</button>
