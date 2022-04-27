@@ -369,9 +369,15 @@ def set_conference():
         check_exist = db.session.execute("select * from conference").fetchall()[0]
         # print(check_exist)
         if check_exist[0] == 0:
-            db.session.execute("update parliamentary set choice = '', participation = 0")
-            db.session.execute("update conference set activation = 1, result = ''")
-            db.session.commit()
+            try:
+                db.session.execute("update parliamentary set choice = '', participation = 0")
+                db.session.execute("update conference set activation = 1, result = ''")
+                db.session.commit()
+            except OperationalError:
+                os.system("heroku restart -a kssasite")
+                db.session.execute("update parliamentary set choice = '', participation = 0")
+                db.session.execute("update conference set activation = 1, result = ''")
+                db.session.commit()
         else:
             return render_template('set_conference.html', exist = 1)
         return render_template('set_conference.html', exist = 0)
@@ -397,14 +403,23 @@ def vote_page(m):
 
             return render_template("vote.html", m = "vote")
         elif m == "vote":
-            db.session.execute('update parliamentary set participation = 1, choice = "adstain" where name = "{}"'.format(session['user']))
-            db.session.commit()
-            return render_template("vote.html", m = "vote")
-        elif m == "checkout":
             if check_exist[0] == 1:
-                return render_template("vote.html", m = "checkout", exist = 1)
+                try:
+                    db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                    db.session.commit()
+                except OperationalError:
+                    os.system("heroku restart -a kssasite")
+                    db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                    db.session.commit()
+                return render_template("vote.html", m = "vote", exist = 1)
             else:
-                return render_template("vote.html", m = "checkout", exist = 0)
+                return render_template("vote.html", m = "vote", exist = 0)
+        elif m == "checkout":
+            try:
+                return render_template("vote.html", m = "checkout", exist = 1)
+            except OperationalError:
+                os.system("heroku restart -a kssasite")
+                return render_template("vote.html", m = "checkout", exist = 1)
         elif m == "result":
             if check_exist[0] == 1:
                 return render_template("vote.html", m = "result", exist = 1)
@@ -412,7 +427,7 @@ def vote_page(m):
                 return render_template("vote.html", m = "result", exist = 0)
         elif m == "conclusion":
             result = request.values.get('conclusion').split("-")
-            # db.session.execute("update parliamentary set choice = '', participation = 0")
+            db.session.execute("update parliamentary set choice = 'adstain' where choice = 'none'")
             db.session.execute("update conference set activation = 0")
             db.session.commit()
             return render_template("vote.html", m = "conclusion", result = result)
@@ -446,6 +461,17 @@ def getparliamentary():
     data = json.dumps(data)
     # print(data)
     return {'data':data}
+
+@app.route('/getconferenceact', methods=['POST', 'GET'])
+def getconferenceact():
+    try:
+        temp = db.session.execute('select * from conference').fetchall()[0][0]
+    except OperationalError:
+        os.system("heroku restart -a kssasite")
+        temp = db.session.execute('select * from conference').fetchall()[0][0]
+    return {'data':temp}
+
+
 
 @app.route('/laws/<order>')
 def laws_web(order):
@@ -609,9 +635,12 @@ def delete_account(target):
 
 @app.route('/delete/<t>/<target>', methods=['POST', 'GET'])
 def delete(t, target):
-    db.session.execute('delete from {} where ind = {}'.format(t, target))
     if t == "law_name":
         db.session.execute('delete from laws where law_type_ind = {}'.format(target))
+    if t == "manager":
+        db.session.execute('delete from manager where id = {}'.format(target))
+    else:
+         db.session.execute('delete from {} where ind = {}'.format(t, target))
     db.session.commit()
     return render_template('index.html', target_id = target)
 

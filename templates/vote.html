@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}}
+
 {% block content %}
     {% if m == "result" %}
     {% if exist == 1 %}
@@ -29,9 +30,9 @@
                 .done(function(data, textStatus, jqXHR) {
                     console.log("work")
                     var items = [];
-                    var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning'};
-                    var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
-                    var conclusion = {"agree":0, "disagree":0, "adstain":0};
+                    var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning', "none":'text-white'};
+                    // var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
+                    var conclusion = {"agree":0, "disagree":0, "adstain":0, "none":0};
                     $.each(JSON.parse(data.data), function(index, parliamentary) 
                     {
                         if ((index+1) % 4 == 1)
@@ -55,7 +56,7 @@
     
                     document.getElementById("result").innerHTML = "";
                     document.getElementById("result").innerHTML = items.join('');
-                    document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain'])
+                    document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain']+conclusion['none'])
                 })
                 .fail()
                 .always()
@@ -64,14 +65,13 @@
     {% else %}
     <br><br>
     <div class="container-fluid">
-        <h1 style="text-align: center;">現無投票會議，請先發布會議</h1>
+        <h1 style="text-align: center;">請等待主席宣布開始投票</h1>
     <br><br>
     </div>
     <br><br>
     {% endif %}
     
     {% elif m == 'checkout' %}
-    {% if exist == 1 %}
     <form method="POST" action="{{ url_for('vote_page', m='vote') }}">
     <br><br>
     <div class="container-fluid">
@@ -79,15 +79,8 @@
     <br><br>
     </div>
     </form>
-    {% else %}
-    <br><br>
-    <div class="container-fluid">
-        <h1 style="text-align: center;">現無投票會議，請等待會議發布</h1>
-    <br><br>
-    </div>
-    <br><br>
-    {% endif %}
     {% elif m == 'vote' %}
+    {% if exist == 1 %}
     <form method="POST" action="{{ url_for('vote_page', m='end') }}">
     <div class="container-fluid" style="padding-inline: 10%;">
         <!-- {% if activation == 1 %}
@@ -121,6 +114,34 @@
     </div>
     <br><br>
     </form>
+    <form method="POST" action="{{ url_for('vote_page', m= 'checkout') }}">
+        <br><br>
+        <div class="container-fluid">
+        <button type="submit" class="btn btn-primary btn-block btn-lg">參與下一輪投票</button>
+        <br><br>
+        </div>
+     </form>
+    <!-- <script>
+        var clock = setInterval(getact , 1000);
+            function getact(){
+                var formData = {};
+                $.ajax({'type': 'POST', 'data': formData, 'url': '/getconferenceact',})
+                .done(function(data, textStatus, jqXHR) {
+                    if (data.data == 1)
+                    {
+                        window.location.href = '/vote/checkout';
+                    }
+                })
+            }   -->
+    </script>
+    {% else %}
+    <br><br>
+    <div class="container-fluid">
+        <h1 style="text-align: center;">請等待主席宣布開始投票</h1>
+    <br><br>
+    </div>
+    <br><br>
+    {% endif %}
     {% elif m == 'conclusion' %}
     <br><br>
     <div class="container-fluid bg-dark">
@@ -173,5 +194,14 @@
             .always()
         }  
         </script>
+        {% if apartment == "議長"%}
+        <form method="POST" action="{{ url_for('set_conference') }}">
+        <br><br>
+        <div class="container-fluid">
+        <button type="submit" class="btn btn-primary btn-block btn-lg">進行下一輪投票</button>
+        <br><br>
+        </div>
+        </form>
+        {% endif %}
     {% endif %}
 {% endblock %}

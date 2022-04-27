@@ -40,20 +40,22 @@
             <br>&nbsp;<br>
         <hr>
         <br>&nbsp;<br>
-        <div id="newdiv0"></div>
         <br>
+        <div id="newdiv0">
         <button class="btn btn-primary" id = "addchapter0" onclick="addchapter(0)">增加章節</button>
+        
+         </div>
         <script type="text/javascript">
             var elementid = 1;
             function addchapter(index) {
                 // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
-                var addcontentarea = '</div><input class = "form-control" type="text" id="chapter'+elementid+'">'+'<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter('+String(elementid)+')">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')">增加條目</button><br><br><br><div id="newdiv'+String(elementid)+'">';
-                $("#newdiv"+String(index)).after(addcontentarea);
+                var addcontentarea = '<br><div id="newdiv'+elementid+'"><input class = "form-control" type="text" id="chapter'+elementid+'" name="content">'+'<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter('+String(elementid)+')">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')">增加條目</button><br><br><br><div id="newdiv'+String(elementid)+'"><div>';
+                $("#newdiv"+String(index)).before(addcontentarea);
                 elementid += 1;
             };
             function addcolumn(index) {
                 // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
-                var addcontentarea = '<input type="text" id="column-order'+elementid+'"><br><textarea id = "content'+elementid+'" class="form-control" row = "5"></textarea><br><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')">增加條目</button><br><br><div id="newdiv'+String(elementid)+'">';
+                var addcontentarea = '<input type="text" id="column-order'+elementid+'" name="content-order"><br><textarea id = "content'+elementid+'" class="form-control" row = "5" name="content"></textarea><br><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')">增加條目</button><br><br><div id="newdiv'+String(elementid)+'">';
                 $("#newdiv"+String(index)).after(addcontentarea);
                 elementid += 1;
             };
