@@ -815,8 +815,14 @@ def addlaws(step):
             return render_template('addlaws.html', step = "1")
     return render_template('addlaws.html', step = step)
 
-@app.route('/newaddlaw')
+@app.route('/newaddlaw', methods=['POST', 'GET'])
 def newaddlaw():
+    if request.method == "POST":
+        content = request.values.getlist("content")
+        order = request.values.getlist('content-order')
+        # print(content)
+        # print(order)
+        return render_template('newaddlaw.html')
     return render_template('newaddlaw.html')
 
 @app.route('/addrecord', methods=['POST', 'GET'])

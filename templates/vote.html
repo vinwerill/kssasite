@@ -1,5 +1,17 @@
 {% extends 'base.html' %}}
-
+{% block style %}
+{% if m == 'vote' and exist == 1 %}
+<style>
+    header.masthead {
+        position: relative;
+        background: url("");
+        background-size: cover;
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+    }
+</style>
+{% endif %}
+{% endblock %}
 {% block content %}
     {% if m == "result" %}
     {% if exist == 1 %}
@@ -63,7 +75,7 @@
             }  
             </script>
     {% else %}
-    <br><br>
+    <br>
     <div class="container-fluid">
         <h1 style="text-align: center;">請等待主席宣布開始投票</h1>
     <br><br>
@@ -81,6 +93,16 @@
     </form>
     {% elif m == 'vote' %}
     {% if exist == 1 %}
+    <br><br><br>
+    <div class="container-fluid bg-dark">
+        <br>
+        <div class="row"><h3 class="text-white col-md-3">出席：白色</h3><h3 class="text-success col-md-3">同意：綠色</h3><h3 class="text-danger col-md-3">不同意：紅色</h3><h3 class="text-warning col-md-3">棄權：黃色</h3></div>
+        <br><hr><br>
+        
+        <div class="container-fluid" id = "result">
+
+        </div>
+    </div>
     <form method="POST" action="{{ url_for('vote_page', m='end') }}">
     <div class="container-fluid" style="padding-inline: 10%;">
         <!-- {% if activation == 1 %}
@@ -134,6 +156,48 @@
                 })
             }   -->
     </script>
+    <script>
+        showresult()
+        var clock = setInterval(showresult , 500);
+        function showresult(){
+            var formData = {};
+            // console.log($('#ind').val());
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/getparliamentary',})
+            .done(function(data, textStatus, jqXHR) {
+                console.log("work")
+                var items = [];
+                var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning', "none":'text-white'};
+                // var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
+                var conclusion = {"agree":0, "disagree":0, "adstain":0, "none":0};
+                $.each(JSON.parse(data.data), function(index, parliamentary) 
+                {
+                    if ((index+1) % 4 == 1)
+                    {
+                        items.push("<div class='row'>")
+                    }
+                    if (parliamentary.participation == 1)
+                    {
+                        conclusion[parliamentary.choice] += 1;
+                        items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-3'>"+parliamentary.name+"</h3>")
+                    }
+                    else
+                    {
+                        items.push("<h3 class = 'col-md-3 '>"+parliamentary.name+"</h3>")
+                    }
+                    if ((index+1) % 4 == 0)
+                    {
+                        items.push("</div><br>")
+                    }
+                })
+
+                document.getElementById("result").innerHTML = "";
+                document.getElementById("result").innerHTML = items.join('');
+                document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain']+conclusion['none'])
+            })
+            .fail()
+            .always()
+        }  
+        </script>
     {% else %}
     <br><br>
     <div class="container-fluid">
