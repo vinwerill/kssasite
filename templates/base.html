@@ -33,6 +33,27 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         {% block set %}{% endblock %}
         {% block style %}{% endblock %}
+        {% if apartment != "學生議會議員" %}
+            <style>
+                header.masthead {
+                    position: relative;
+                    background: url("../static/assets/img/bg-masthead.jpg") no-repeat center center;
+                    background-size: cover;
+                    padding-top: 12rem;
+                    padding-bottom: 12rem;
+                }
+            </style>
+        {% else %}
+        <style>
+            header.masthead {
+                position: relative;
+                background: url("../static/assets/img/bg-masthead2.jpg") no-repeat center center;
+                background-size: cover;
+                padding-top: 12rem;
+                padding-bottom: 12rem;
+            }
+        </style>
+        {% endif %}
     </head>
     <body>
         <!-- Navigation-->

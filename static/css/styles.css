@@ -10684,13 +10684,13 @@ textarea.form-control-lg {
   font-size: 4.5rem;
 }
 
-header.masthead {
+/* header.masthead {
   position: relative;
   background: url("../assets/img/bg-masthead.jpg") no-repeat center center;
   background-size: cover;
   padding-top: 8rem;
   padding-bottom: 8rem;
-}
+} */
 header.masthead:before {
   content: "";
   position: absolute;
