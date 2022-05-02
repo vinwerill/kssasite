@@ -41,8 +41,8 @@ while True:
 db.session.commit()
 # db.session.execute('update conference set activation = 0')
 # db.session.commit()
-# temp = db.session.execute("select * from laws where ind = 51").fetchall()
-# for i in temp:
-#     print(i)
+temp = db.session.execute("select * from parliamentary").fetchall()
+for i in temp:
+    print(i)
 
 

@@ -406,13 +406,13 @@ def vote_page(m):
             return render_template("vote.html", m = "vote", exist = 1)
         elif m == "vote":
             if check_exist[0] == 1:
-                try:
-                    db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
-                    db.session.commit()
-                except OperationalError:
-                    os.system("heroku restart -a kssasite")
-                    db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
-                    db.session.commit()
+                # try:
+                #     db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                #     db.session.commit()
+                # except OperationalError:
+                #     os.system("heroku restart -a kssasite")
+                #     db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                #     db.session.commit()
                 return render_template("vote.html", m = "vote", exist = 1)
             else:
                 return render_template("vote.html", m = "vote", exist = 0)
@@ -461,13 +461,13 @@ def vote_page(m):
 
 @app.route('/getparliamentary', methods=['POST', 'GET'])
 def getparliamentary():
-    try:
-        db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
-        db.session.commit()
-    except OperationalError:
-        os.system("heroku restart -a kssasite")
-        db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
-        db.session.commit()
+    # try:
+    #     db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+    #     db.session.commit()
+    # except OperationalError:
+    #     os.system("heroku restart -a kssasite")
+    #     db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+    #     db.session.commit()
     temp = db.session.execute('select * from parliamentary order by ind').fetchall()
     data = []
     for i in temp:
