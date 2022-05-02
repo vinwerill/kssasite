@@ -14,7 +14,7 @@ app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
 app.config['SECRET_KEY'] = '18f4173d24f63dd99d2700aad88002c61c864f83255f5c76da4a0002db1f31c4'
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52g9@m7az7525jg6ygibs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xkbq7dgi25ki89nk"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://kssasite:kssaadmin@184.168.117.210:3306/kssadb"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
@@ -198,10 +198,12 @@ class newlaws(db.Model):
 
 class parliamentary(db.Model):
     __tablename__ = 'parliamentary'
-    name = db.Column('name', db.String(100), primary_key=True)
+    ind = db.Column('ind', Integer, primary_key=True)
+    name = db.Column('name', db.String(100))
     choice = db.Column('choice', db.String(100))
     participation = db.Column('participation', Integer)
-    def __init__(self, name=name, choice=choice, participation=participation):
+    def __init__(self, ind = ind, name=name, choice=choice, participation=participation):
+        self.ind = ind
         self.name = name
         self.choice = choice
         self.participation = participation
@@ -224,7 +226,9 @@ def index():
     # test8 = manager("090703", '謝子琪', "090703",'hsieh.tzuchi@gmail.com', '2020', '會長', 1)
     # test7 = manager("090744", '張瑞祐', "090744",'rayyoboy@gmail.com', '2020', '', 1)
     # test4 = User("090039", '陳廷森', "090039",'vincent.super8@gmail.com', '2020')
-    db.session.execute("drop table conference")
+    # db.session.execute("drop table manager")
+    db.session.execute("drop table parliamentary")
+    # db.session.execute("SET NAMES 'UTF8'")
     db.create_all()
     # db.session.add(test)
     # db.session.add(test2)
@@ -233,7 +237,7 @@ def index():
     # db.session.add(test6)
     # db.session.add(test7)
     # db.session.add(test8)
-    # db.session.commit()
+    db.session.commit()
     return 'ok'
 
 

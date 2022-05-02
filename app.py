@@ -16,6 +16,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 import smtplib
 import tempfile
+import time
 # from flask_migrate import Migrate
 
 app_host = 'http://kssasite.herokuapp.com'
@@ -23,7 +24,7 @@ app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
 app.config['SECRET_KEY'] = '18f4173d24f63dd99d2700aad88002c61c864f83255f5c76da4a0002db1f31c4'
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52g9@m7az7525jg6ygibs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xkbq7dgi25ki89nk"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://kssasite:kssaadmin@184.168.117.210:3306/kssadb"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_POOL_SIZE'] = 100
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
@@ -389,43 +390,54 @@ def vote_page(m):
     if session['manager_login']:
         check_exist = db.session.execute("select * from conference").fetchall()[0]
         if m == "end":
-            choice = request.values.get('choice')
-            # ind = request.values.get('ind')
-            # choice = request.values.get('choice')
-            # old_participant = db.session.execute('select participant from vote where ind = {}'.format(ind)).fetchall()[0][0]
-            # if session['user'] in old_participant:
-            #     return render_template("vote.html", m = "result", ind = ind)
-            # update_participant = old_participant+"-"+session['user']
-            # old_choice = db.session.execute('select choice from vote where ind = {}'.format(ind)).fetchall()[0][0]
-            # update_choice = old_choice+"-"+choice
-            db.session.execute('update parliamentary set choice = "{}" where name = "{}"'.format(choice, session['user']))
-            db.session.commit()
+            if request.method == "POST":
+                choice = request.values.get('choice')
+                # ind = request.values.get('ind')
+                # choice = request.values.get('choice')
+                # old_participant = db.session.execute('select participant from vote where ind = {}'.format(ind)).fetchall()[0][0]
+                # if session['user'] in old_participant:
+                #     return render_template("vote.html", m = "result", ind = ind)
+                # update_participant = old_participant+"-"+session['user']
+                # old_choice = db.session.execute('select choice from vote where ind = {}'.format(ind)).fetchall()[0][0]
+                # update_choice = old_choice+"-"+choice
+                db.session.execute('update parliamentary set choice = "{}" where name = "{}"'.format(choice, session['user']))
+                db.session.commit()
 
             return render_template("vote.html", m = "vote", exist = 1)
         elif m == "vote":
             if check_exist[0] == 1:
-                try:
-                    db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
-                    db.session.commit()
-                except OperationalError:
-                    os.system("heroku restart -a kssasite")
-                    db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
-                    db.session.commit()
+                # try:
+                #     db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                #     db.session.commit()
+                # except OperationalError:
+                #     os.system("heroku restart -a kssasite")
+                #     db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                #     db.session.commit()
                 return render_template("vote.html", m = "vote", exist = 1)
             else:
                 return render_template("vote.html", m = "vote", exist = 0)
         elif m == "checkout":
+            if request.method == "POST":
+                db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
+                db.session.commit()
+                return redirect(url_for('vote_page', m='vote'))
             # try:
             #     return render_template("vote.html", m = "checkout", exist = 1)
             # except OperationalError:
             #     os.system("heroku restart -a kssasite")
             return render_template("vote.html", m = "checkout", exist = 1)
+
+        elif m == "rejoin":
+            return render_template("vote.html", m = "checkout", exist = 1)
+
         elif m == "result":
             if check_exist[0] == 1:
                 return render_template("vote.html", m = "result", exist = 1)
             else:
                 return render_template("vote.html", m = "result", exist = 0)
+
         elif m == "conclusion":
+            time.sleep(2)
             result = list(map(int, request.values.get('conclusion').split("-")))
             db.session.execute("update parliamentary set choice = 'adstain' where choice = 'none'")
             db.session.execute("update conference set activation = 0")
@@ -450,13 +462,13 @@ def vote_page(m):
 
 @app.route('/getparliamentary', methods=['POST', 'GET'])
 def getparliamentary():
-    temp = db.session.execute('select * from parliamentary').fetchall()
+    temp = db.session.execute('select * from parliamentary order by ind').fetchall()
     data = []
     for i in temp:
         tempdict = {}
-        tempdict['name'] = i[0]
-        tempdict['choice'] = i[1]
-        tempdict['participation'] = i[2]
+        tempdict['name'] = i[1]
+        tempdict['choice'] = i[2]
+        tempdict['participation'] = i[3]
         data.append(tempdict)
     data = json.dumps(data)
     # print(data)

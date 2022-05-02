@@ -17,7 +17,7 @@
     {% if exist == 1 %}
     <div class="container-fluid bg-dark">
         <br>
-        <div class="row"><h3 class="text-success col-md-3">白色：出席</h3><h3 class="text-success col-md-3">綠色：同意</h3><h3 class="text-danger col-md-3">紅色：不同意</h3><h3 class="text-warning col-md-3">黃色：棄權</h3><h3 class=" col-md-3">黑色：缺席</h3></div>
+        <div class="row"><h3 class="text-white col-md-2">白色：出席</h3><h3 class="text-success col-md-2">綠色：同意</h3><h3 class="text-danger col-md-2">紅色：不同意</h3><h3 class="text-warning col-md-2">黃色：棄權</h3><h3 class=" col-md-2 text-secondary">黑色：缺席</h3></div>
         <br><hr><br>
         
         <div class="container-fluid" id = "result">
@@ -54,11 +54,11 @@
                         if (parliamentary.participation == 1)
                         {
                             conclusion[parliamentary.choice] += 1;
-                            items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-3'>"+parliamentary.name+"</h3>")
+                            items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-2'>"+parliamentary.name+"</h3>")
                         }
                         else
                         {
-                            items.push("<h3 class = 'col-md-3 '>"+parliamentary.name+"</h3>")
+                            items.push("<h3 class = 'col-md-2 text-secondary'>"+parliamentary.name+"</h3>")
                         }
                         if ((index+1) % 4 == 0)
                         {
@@ -84,7 +84,7 @@
     {% endif %}
     
     {% elif m == 'checkout' %}
-    <form method="POST" action="{{ url_for('vote_page', m='vote') }}">
+    <form method="POST" action="{{ url_for('vote_page', m='checkout') }}">
     <br><br>
     <div class="container-fluid">
     <button type="submit" class="btn btn-primary btn-block btn-lg">出席</button>
@@ -94,15 +94,6 @@
     {% elif m == 'vote' %}
     {% if exist == 1 %}
     <br><br><br>
-    <div class="container-fluid bg-dark">
-        <br>
-        <div class="row"><h3 class="text-white col-md-3">出席：白色</h3><h3 class="text-success col-md-3">同意：綠色</h3><h3 class="text-danger col-md-3">不同意：紅色</h3><h3 class="text-warning col-md-3">棄權：黃色</h3></div>
-        <br><hr><br>
-        
-        <div class="container-fluid" id = "result">
-
-        </div>
-    </div>
     <form method="POST" action="{{ url_for('vote_page', m='end') }}">
     <div class="container-fluid" style="padding-inline: 10%;">
         <!-- {% if activation == 1 %}
@@ -133,16 +124,25 @@
         <button type="submit" name="choice" value="adstain" id = "adstain" class = "btn btn-warning col-md-4">棄權</button>
     </div>
     <br><br>
+    <div class="container-fluid bg-dark">
+        <br>
+        <div class="row"><h5 class="text-white col-md-2">出席：白色</h5><h5 class="text-success col-md-2">同意：綠色</h5><h5 class="text-danger col-md-2">不同意：紅色</h5><h5 class="text-warning col-md-2">棄權：黃色</h5><h5 class=" col-md-2 text-secondary">缺席：黑色</h5></div>
+        <br><hr><br>
+        
+        <div class="container-fluid" id = "result">
+
+        </div>
     </div>
-    <br><br>
+    </div>
     </form>
-    <form method="POST" action="{{ url_for('vote_page', m= 'checkout') }}">
+    <form method="POST" action="{{ url_for('vote_page', m= 'rejoin') }}">
         <br><br>
         <div class="container-fluid">
-        <button type="submit" class="btn btn-primary btn-block btn-lg">參與下一輪投票</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">下一案</button>
         <br><br>
         </div>
      </form>
+    
     <!-- <script>
         var clock = setInterval(getact , 1000);
             function getact(){
@@ -178,11 +178,11 @@
                     if (parliamentary.participation == 1)
                     {
                         conclusion[parliamentary.choice] += 1;
-                        items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-3'>"+parliamentary.name+"</h3>")
+                        items.push("<h5 class = '"+colors[parliamentary.choice]+" col-md-2'>"+parliamentary.name+"</h5>")
                     }
                     else
                     {
-                        items.push("<h3 class = 'col-md-3 '>"+parliamentary.name+"</h3>")
+                        items.push("<h5 class = 'col-md-2 text-secondary'>"+parliamentary.name+"</h5>")
                     }
                     if ((index+1) % 4 == 0)
                     {
@@ -238,11 +238,11 @@
                     if (parliamentary.participation == 1)
                     {
                         conclusion[parliamentary.choice] += 1;
-                        items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-3'>"+parliamentary.name+"</h3>")
+                        items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-2'>"+parliamentary.name+"</h3>")
                     }
                     else
                     {
-                        items.push("<h3 class = 'col-md-3 '>"+parliamentary.name+"</h3>")
+                        items.push("<h3 class = 'col-md-2 text-secondary'>"+parliamentary.name+"</h3>")
                     }
                     if ((index+1) % 4 == 0)
                     {
@@ -262,7 +262,7 @@
         <form method="POST" action="{{ url_for('set_conference') }}">
         <br><br>
         <div class="container-fluid">
-        <button type="submit" class="btn btn-primary btn-block btn-lg">進行下一輪投票</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">下一案</button>
         <br><br>
         </div>
         </form>
