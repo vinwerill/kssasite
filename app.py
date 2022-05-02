@@ -24,7 +24,7 @@ app = Flask(__name__)
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
 app.config['SECRET_KEY'] = '18f4173d24f63dd99d2700aad88002c61c864f83255f5c76da4a0002db1f31c4'
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://kssasite:kssaadmin@184.168.117.210:3306/kssadb"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52g9@m7az7525jg6ygibs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xkbq7dgi25ki89nk"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_POOL_SIZE'] = 100
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
@@ -437,7 +437,7 @@ def vote_page(m):
                 return render_template("vote.html", m = "result", exist = 0)
 
         elif m == "conclusion":
-            time.sleep(2)
+            time.sleep(4)
             result = list(map(int, request.values.get('conclusion').split("-")))
             db.session.execute("update parliamentary set choice = 'adstain' where choice = 'none'")
             db.session.execute("update conference set activation = 0")
