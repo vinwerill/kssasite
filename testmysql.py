@@ -28,20 +28,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
-db.session.execute('delete from parliamentary')
-i = 1
-while True:
-    try:
-        element = input().split(", ")
-        db.session.add(parliamentary(i, *element))
-        i+=1
-    except EOFError:
-        break
+# db.session.execute('delete from parliamentary')
+# i = 1
+# while True:
+#     try:
+#         element = input().split(", ")
+#         db.session.add(parliamentary(i, *element))
+#         i+=1
+#     except EOFError:
+#         break
 
-db.session.commit()
+# db.session.commit()
 # db.session.execute('update conference set activation = 0')
 # db.session.commit()
-temp = db.session.execute("select * from parliamentary").fetchall()
+temp = db.session.execute("select * from manager").fetchall()
 for i in temp:
     print(i)
 
