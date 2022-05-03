@@ -130,7 +130,7 @@
                                 <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="vote">
                                     {% if apartment == "議長" %}<a href="{{ url_for('set_conference') }}" class="dropdown-item" role="button">發起投票</a>{% endif %}
                                     <a href="{{ url_for('vote_page', m='checkout') }}" class="dropdown-item" role="button">表決器</a>
-                                    {% if apartment == "議長" %}<a href="{{ url_for('vote_page', m='result') }}" class="dropdown-item" role="button">查看結果</a>{% endif %}
+                                    <a href="{{ url_for('vote_page', m='result') }}" class="dropdown-item" role="button">查看結果</a>
                                 </div>
                         </div></li>
                     {%endif%}

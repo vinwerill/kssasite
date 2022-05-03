@@ -124,7 +124,7 @@
         <button type="submit" name="choice" value="adstain" id = "adstain" class = "btn btn-warning col-md-4">棄權</button>
     </div>
     <br><br>
-    <div class="container-fluid bg-dark">
+    <!-- <div class="container-fluid bg-dark">
         <br>
         <div class="row"><h5 class="text-white col-md-2">出席：白色</h5><h5 class="text-success col-md-2">同意：綠色</h5><h5 class="text-danger col-md-2">不同意：紅色</h5><h5 class="text-warning col-md-2">棄權：黃色</h5><h5 class=" col-md-2 text-secondary">缺席：黑色</h5></div>
         <br><hr><br>
@@ -132,7 +132,7 @@
         <div class="container-fluid" id = "result">
 
         </div>
-    </div>
+    </div> -->
     </div>
     </form>
     <form method="POST" action="{{ url_for('vote_page', m= 'rejoin') }}">
@@ -155,8 +155,8 @@
                     }
                 })
             }   -->
-    </script>
-    <script>
+    <!-- </script> -->
+    <!-- <script>
         showresult()
         var clock = setInterval(showresult , 2000);
         function showresult(){
@@ -197,7 +197,7 @@
             .fail()
             .always()
         }  
-        </script>
+        </script> -->
     {% else %}
     <br><br>
     <div class="container-fluid">
