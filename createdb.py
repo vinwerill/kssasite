@@ -193,7 +193,7 @@ class newlaws(db.Model):
         self.ind = ind
         self.law_title_ind = law_title_ind
         self.chapter_name = chapter_name
-        self.belong_chapter = order
+        self.order = order
         self.content = content
 
 class parliamentary(db.Model):

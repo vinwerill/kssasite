@@ -112,7 +112,7 @@
                         <div class="btn-group">
                             <li class="nav-item"><button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#laws">增訂法律</button>
                                 <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="laws">
-                                    <a href="{{ url_for('addlaws', step = 1) }}" class="dropdown-item " role="button" >新增法律</a>
+                                    <a href="{{ url_for('addlaws') }}" class="dropdown-item " role="button" >新增法律</a>
                                     <a href="{{ url_for('show_laws') }}" class="dropdown-item" role="button" >修改法律</a>
                                 </div>
                             </div></li>
@@ -138,7 +138,9 @@
                         <button type="button" class="btn btn-dark dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" data-target="#report">意見反映</button>
                             <div class="dropdown-menu dropdown-menu dropdown-menu-end" id="report">
                                 <a class="dropdown-item" href="{{ url_for('report_web', report_type = 'report') }}" role="button" >意見反映</a>
+                                {% if manager_login == True or login == True%}
                                 <a class="dropdown-item" href="{{ url_for('mailbox', letters = 'all') }}">意見/回應</a>
+                                {% endif %}
                             </div>
                     </div></li>
                 </ul>

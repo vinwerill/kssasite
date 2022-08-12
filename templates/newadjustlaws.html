@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 <br><br>
-<form method="POST" action="{{url_for('addlaws')}}">
+<form method="POST" action="{{url_for('adjustlaws', ind = ind)}}">
 <div class='container' style="padding-left: align-self; border: 2px;">
 <!-- <form role="form" action="" method="POST"> -->
     <h1 style="text-align: center;">設定</h1>
         <h4>法規名稱:</h4>
        <br>
        <div class="form-group">
-            <input class="form-control" name = "gettitle">
+            <input class="form-control" name = "gettitle" value = "{{law_title.title}}">
         </div>
         <hr>
         <br>&nbsp;<br>
@@ -16,15 +16,15 @@
         <div class="form-check">
             <br>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gettype" id = "組織章程" value="組織章程">
+              <input class="form-check-input" type="radio" name="gettype" id = "組織章程" value="組織章程" {% if law_title.law_type == "組織章程" %} checked {% endif %}>
               <label class="form-check-label" for="組織章程">組織章程</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gettype" id = "自治條例" value="自治條例">
+              <input class="form-check-input" type="radio" name="gettype" id = "自治條例" value="自治條例" {% if law_title.law_type == "自治條例" %} checked {% endif %}>
               <label class="form-check-label" for="自治條例">自治條例</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gettype" id = "自治規則" value="自治規則">
+                <input class="form-check-input" type="radio" name="gettype" id = "自治規則" value="自治規則" {% if law_title.law_type == "自治規則" %} checked {% endif %}>
                 <label class="form-check-label" for="自治規則">自治規則</label>
               </div>
         </div>
@@ -34,17 +34,43 @@
         <h4>沿革</h4>
         <br>
         <div class="form-group">
-                <textarea class="form-control" name = "gethistory"></textarea>
+                <textarea class="form-control" name = "gethistory">{{law_title.history}}</textarea>
             <br>&nbsp;<br>
         <hr>
-        <div id="newdiv0">
-        
-            
-         </div>
-         <button class="btn btn-primary" id = "addchapter0" onclick="addchapter(0)" type="button">增加章節</button>
+        <input type="hidden" id="length" value="{{length}}">
+        {% for i in range(length) %}
+        {% if laws[i].content == '' %}
+        <br>
+        <div id="newdiv{{i}}">
+            <div class="input-group">
+            <input class = "form-control" type="text" id="chapter{{i}}" id = "orginal_content{{i}}" onchange = "editinputvalue({{i}})" value = "{{laws[i].chapter_name.split(' ')[1]}}">
+            <br>
+            <input class = "col-md-1" type="hidden" id="chaptertype{{i}}" name="content" id = "content" value="編" disabled>
+            <div class="input-group-append">
+            <select name="types" id = "types{{i}}" onchange="editinputvalue({{i}})"><option value="{{laws[i].chapter_name.split(' ')[0][-1]}}">編</option><option value="章">章</option><option value="節">節</option><option value="款">款</option></select>
+            </div>
+            <input type="hidden" id="result_content{{i}}" name="content" value="{{laws[i].chapter_name.split(' ')[0][-1]+'_'+laws[i].chapter_name.split(' ')[1]}}">
+            </div>
+        <button class="btn btn-primary" id = "addchapter{{i}}" onclick="addchapter({{i}})" type="button">增加章節</button><button class="btn btn-success" id = "addcolumn{{i}}" onclick="addcolumn({{i}})" type="button">增加條目</button>
+        <br><br><br>
+        </div>
+        {% elif laws[i].chapter_name == ''  %}  
+        <div id="newdiv{{i}}" >
+            <input type="text" id="column-order{{i}}" name="content-order" style = "margin-left: 10%;" value="{{laws[i].order}}">
+            <br>
+            <textarea id = "content{{i}}" class="form-control" row = "5" name="content" style = "margin-left: 10%;">{{laws[i].content}}</textarea>
+            <br>
+            <button class="btn btn-success" id = "addcolumn{{i}}" onclick="addcolumn({{i}})" style = "margin-left: 10%;" type="button">增加條目</button>
+            <br><br>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div id="newdiv{{length}}" >
+        </div>
+         <button class="btn btn-primary" id = "addchapter0" onclick="addchapter({{length}})" type="button">增加章節</button>
         </div>
         <script type="text/javascript">
-            var elementid = 1;
+            var elementid = document.getElementById("length").value+1;
             function addchapter(index) {
                 // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
                 var addcontentarea = '<br><div id="newdiv'+String(elementid)+'"><div class="input-group"><input class = "form-control" type="text" id="chapter'+String(elementid)+'" id = "orginal_content'+String(elementid)+'" onchange = "editinputvalue('+String(elementid)+')">'+'<br><input class = "col-md-1" type="hidden" id="chaptertype'+String(elementid)+'" name="content" id = "content" value="編" disabled><div class="input-group-append"><select name="types" id = "types'+String(elementid)+'" onchange="editinputvalue('+String(elementid)+')"><option value="編">編</option><option value="章">章</option><option value="節">節</option><option value="款">款</option></select></div><input type="hidden" id="result_content'+String(elementid)+'" name="content"></div><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter('+String(elementid)+')" type="button">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')" type="button">增加條目</button><br><br><br><div id="newdiv'+String(elementid)+'"><div>';

@@ -43,11 +43,8 @@
                         <button id="btnGroupDrop222" type="button" class="btn btn-success btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                           分章節
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop222">
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop222" id = "split_drop">
                           {% set s = "" %}
-                          {% for item in allchapters %}
-                            <a type="button" class="dropdown-item" href = "#{{item[0]}}">{{item[0]}}</a>
-                          {% endfor %}
                         </div>
                       </div>
         <br>
@@ -65,27 +62,44 @@
             $.ajax({'type': 'POST', 'data': formData, 'url': '/getlaws/'+$("#all").attr("ind"),})
             .done(function(data, textStatus, jqXHR) {
                 var items = [];
-                // console.log(data);
-                var now_chapter;
-                var exchapter = "";
-                var chapter_list = document.getElementById("list_chapter")
-                // console.log(data.all_laws)
+                var chapter_list = [];
+                console.log(data);
                 $.each(data.all_laws, function(index, all_laws) {
-                    now_chapter = all_laws[3]
-                    // console.log(all_laws)
-                    if (now_chapter == exchapter) {
-                        items.push('<h5 id = >第'+all_laws[2]+'條</h5>')
+                    if (all_laws[2] == '')
+                    {
+                        items.push('<h5 id = "'+all_laws[3]+'">第'+all_laws[3]+'條</h5><br>')
                         items.push('<p>'+all_laws[4]+'</p><br>')
                     }
-                    else{
-                        items.push('<h5 id = "'+all_laws[3]+'">'+all_laws[3]+'</h5><br>')
-                        items.push('<h5>第'+all_laws[2]+'條</h5>')
-                        items.push('<p>'+all_laws[4]+'</p><br>')
+                    else
+                    {
+                        items.push('<h4 id = "'+all_laws[2]+'">'+all_laws[2]+'</h5><br>')
+                        if (chapter_list.indexOf(all_laws[2]) == -1)
+                        {
+                            chapter_list.push(all_laws[2])
+                        }
                     }
-                    exchapter = now_chapter
+                    // now_chapter = all_laws[2]
+                    // // console.log(all_laws)
+                    // if (now_chapter == exchapter) {
+                    //     items.push('<h5 id = >'+all_laws[2]+'</h5>')
+                    //     items.push('<p>'+all_laws[4]+'</p><br>')
+                    // }
+                    // else{
+                    //     items.push('<h5 id = "'+all_laws[3]+'">'+all_laws[3]+'</h5><br>')
+                    //     items.push('<h5>'+all_laws[2]+'</h5>')
+                    //     items.push('<p>'+all_laws[4]+'</p><br>')
+                    // }
+                    // exchapter = now_chapter
                     // console.log(items)
                 $('#content').html(items.join(''));
+               
                 })
+                var chapter_drop = [];
+                $.each(chapter_list, function(index, chapter)
+                {
+                    chapter_drop.push('<a class="dropdown-item" href="#'+chapter+'">'+chapter+'</a>')
+                })
+                $('#split_drop').html(chapter_drop.join(''));
             })
             .fail()
             .always();
@@ -97,46 +111,47 @@
             .done(function(data, textStatus, jqXHR) {
                 var items = [];
                 // console.log(data)
-                items.push('<h5 style="text-align:center; text-align: left;">'+data.history[0][3]+'</h5>')
+                items.push('<h5 style="text-align:center;">'+data.history[0][3]+'</h5>')
                 $('#content').html(items.join(''));
             })
             .fail()
             .always();
         });
-        $("#content").ready(function() {
-            var formData = {};
-            $.ajax({'type': 'POST', 'data': formData, 'url': '/getlaws/'+$("#all").attr("ind"),})
-            .done(function(data, textStatus, jqXHR) {
-                var items = [];
-                // console.log(data);
-                var now_chapter;
-                var exchapter = "";
-                $.each(data.all_laws, function(index, all_laws) {
-                    now_chapter = all_laws[3]
-                    // console.log(all_laws)
-                    if (now_chapter == exchapter) {
-                        if (all_laws[2] != '')
-                        {
-                            items.push('<h5 id = >第'+all_laws[2]+'條</h5>')
-                            items.push('<p>'+all_laws[4]+'</p><br>')
-                        }
-                    }
-                    else{
-                        items.push('<h5 id = "'+all_laws[3]+'">'+all_laws[3]+'</h5><br>')
-                        if (all_laws[2] != '')
-                        {
-                            items.push('<h5>第'+all_laws[2]+'條</h5>')
-                            items.push('<p>'+all_laws[4]+'</p><br>')
-                        }
-                    }
-                    exchapter = now_chapter
-                    // console.log(items)
-                $('#content').html(items.join(''));
-                })
-            })
-            .fail()
-            .always();
-        })
+        // $("#content").ready(function() {
+        //     var formData = {};
+        //     $.ajax({'type': 'POST', 'data': formData, 'url': '/getlaws/'+$("#all").attr("ind"),})
+        //     .done(function(data, textStatus, jqXHR) {
+        //         var items = [];
+        //         console.log(data);
+        //         var now_chapter;
+        //         var exchapter = "";
+        //         $.each(data.all_laws, function(index, all_laws) {
+        //             now_chapter = all_laws[2]
+        //             // console.log(all_laws)
+        //             if (now_chapter == exchapter) {
+        //                 if (all_laws[2] != '')
+        //                 {
+        //                     items.push('<h5 id = >'+all_laws[2]+'</h5>')
+        //                     items.push('<p>'+all_laws[4]+'</p><br>')
+        //                 }
+        //             }
+        //             else{
+        //                 items.push('<h5 id = "'+all_laws[3]+'">'+all_laws[3]+'</h5><br>')
+        //                 if (all_laws[2] != '')
+        //                 {
+        //                     items.push('<h5>'+all_laws[2]+'</h5>')
+        //                     items.push('<p>'+all_laws[4]+'</p><br>')
+        //                 }
+        //             }
+        //             exchapter = now_chapter
+        //             // console.log(items)
+        //         $('#content').html(items.join(''));
+        //         })
+        //     })
+        //     .fail()
+        //     .always();
+        // })
+        document.getElementById("all").click();
         </script>
     </div>
 {% endif %}

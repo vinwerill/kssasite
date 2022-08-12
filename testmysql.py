@@ -28,7 +28,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
-# db.session.execute('delete from parliamentary')
+# db.session.execute('delete from newlaws where law_title_ind = 11')
+
 # i = 1
 # while True:
 #     try:
@@ -41,6 +42,9 @@ db = SQLAlchemy(app)
 # db.session.commit()
 # db.session.execute('update conference set activation = 0')
 # db.session.commit()
+# if input("reset? y/n: ") == "y":
+#     db.session.execute("delete from newlaws")
+#     db.session.commit()
 temp = db.session.execute("select * from manager").fetchall()
 for i in temp:
     print(i)
