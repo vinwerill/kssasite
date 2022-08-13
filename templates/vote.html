@@ -17,7 +17,7 @@
     {% if exist == 1 %}
     <div class="container-fluid bg-dark">
         <br>
-        <div class="row"><h3 class="text-white col-md-2">白色：出席</h3><h3 class="text-success col-md-2">綠色：同意</h3><h3 class="text-danger col-md-2">紅色：不同意</h3><h3 class="text-warning col-md-2">黃色：棄權</h3><h3 class=" col-md-2 text-secondary">黑色：缺席</h3></div>
+        <div class="row"><h3 class = "col-md-2" style ="color: #FFFFFF">白色：出席</h3><h3 class = "col-md-2" style ="color: #6CE947">綠色：同意</h3><h3 class = "col-md-2" style ="color: #E84232">紅色：不同意</h3><h3 class = "col-md-2" style ="color: #FFC107">黃色：棄權</h3><h3 class = "col-md-2" style ="color: #6C757D">黑色：缺席</h3></div>
         <br><hr><br>
         
         <div class="container-fluid" id = "result">
@@ -50,7 +50,8 @@
                 .done(function(data, textStatus, jqXHR) {
                     console.log("work")
                     var items = [];
-                    var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning', "none":'text-white'};
+                    colors = {"agree":'#6CE947', "disagree":'#E84232', "adstain":'#FFC107', "none":'#FFFFFF'}; 
+                    // var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning', "none":'text-white'};
                     // var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
                     var conclusion = {"agree":0, "disagree":0, "adstain":0, "none":0};
                     $.each(JSON.parse(data.data), function(index, parliamentary) 
@@ -62,11 +63,11 @@
                         if (parliamentary.participation == 1)
                         {
                             conclusion[parliamentary.choice] += 1;
-                            items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-2'>"+parliamentary.name+"</h3>")
+                            items.push("<h3 class = 'col-md-2' style ='color: "+colors[parliamentary.choice]+"'>"+parliamentary.name+"</h3>")
                         }
                         else
                         {
-                            items.push("<h3 class = 'col-md-2 text-secondary'>"+parliamentary.name+"</h3>")
+                            items.push("<h3 class = 'col-md-2' style ='color: #6C757D'>"+parliamentary.name+"</h3>")
                         }
                         if ((index+1) % 4 == 0)
                         {
@@ -127,9 +128,9 @@
     </script> -->
     <br><br>
     <div class="row">
-        <button type="submit" name="choice" value="agree" id = "agree" class = "btn btn-success col-md-4">同意</button>
-        <button type="submit" name="choice" value="disagree" id = "disagree" class = "btn btn-danger col-md-4">不同意</button>
-        <button type="submit" name="choice" value="adstain" id = "adstain" class = "btn btn-warning col-md-4">棄權</button>
+        <button type="submit" name="choice" value="agree" id = "agree" class = "btn col-md-4" style ='background-color: #6CE947'>同意</button>
+        <button type="submit" name="choice" value="disagree" id = "disagree" class = "btn col-md-4" style ='background-color: #E84232'>不同意</button>
+        <button type="submit" name="choice" value="adstain" id = "adstain" class = "btn col-md-4" style ='background-color: #FFC107'>棄權</button>
     </div>
     <br><br>
     <!-- <div class="container-fluid bg-dark">
@@ -217,7 +218,7 @@
     {% elif m == 'conclusion' %}
     <br><br>
     <div class="container-fluid bg-dark">
-        <div class="row"><h3 class="text-white col-md-2">出席：{{result[0]+result[1]+result[2]}}人</h3><h3 class="text-success col-md-2">同意：{{result[0]}}人</h3><h3 class="text-danger col-md-2">不同意：{{result[1]}}人</h3><h3 class="text-warning col-md-2">棄權：{{result[2]}}人</h3></div>
+        <div class="row"><h3 class="text-white col-md-2" style ="color: #FFFFFF">出席：{{result[0]+result[1]+result[2]}}人</h3><h3 class="text-success col-md-2" style ="color: #6CE947">同意：{{result[0]}}人</h3><h3 class="text-danger col-md-2" style ="color: #E84232">不同意：{{result[1]}}人</h3><h3 class="text-warning col-md-2" style ="color: #FFC107">棄權：{{result[2]}}人</h3></div>
         <br><hr><br>
         
         <div class="container-fluid" id = "result">
@@ -227,6 +228,7 @@
     <br><br>
     <script>
         showresult()
+        var clock = setInterval(showresult , 2000);
         function showresult(){
             var formData = {};
             // console.log($('#ind').val());
@@ -234,9 +236,10 @@
             .done(function(data, textStatus, jqXHR) {
                 console.log("work")
                 var items = [];
-                var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning'};
-                var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
-                var conclusion = {"agree":0, "disagree":0, "adstain":0};
+                colors = {"agree":'#6CE947', "disagree":'#E84232', "adstain":'#FFC107', "none":'#FFFFFF'}; 
+                // var colors = {"agree":'text-success', "disagree":'text-danger', "adstain":'text-warning', "none":'text-white'};
+                // var choice_text = {"agree":"同意", "disagree":"不同意", "adstain":"棄權"};
+                var conclusion = {"agree":0, "disagree":0, "adstain":0, "none":0};
                 $.each(JSON.parse(data.data), function(index, parliamentary) 
                 {
                     if ((index+1) % 4 == 1)
@@ -246,11 +249,11 @@
                     if (parliamentary.participation == 1)
                     {
                         conclusion[parliamentary.choice] += 1;
-                        items.push("<h3 class = '"+colors[parliamentary.choice]+" col-md-2'>"+parliamentary.name+"</h3>")
+                        items.push("<h3 class = 'col-md-2' style ='color: "+colors[parliamentary.choice]+"'>"+parliamentary.name+"</h3>")
                     }
                     else
                     {
-                        items.push("<h3 class = 'col-md-2 text-secondary'>"+parliamentary.name+"</h3>")
+                        items.push("<h3 class = 'col-md-2' style ='color: #6C757D'>"+parliamentary.name+"</h3>")
                     }
                     if ((index+1) % 4 == 0)
                     {
@@ -260,7 +263,7 @@
 
                 document.getElementById("result").innerHTML = "";
                 document.getElementById("result").innerHTML = items.join('');
-                document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain'])
+                document.getElementById("conclusion").value = String(conclusion['agree'])+'-'+String(conclusion['disagree'])+'-'+String(conclusion['adstain']+conclusion['none'])
             })
             .fail()
             .always()
