@@ -276,6 +276,7 @@ def manager_register(order):
             leader_email = db.session.execute("select email from manager where apartment = '會長'").fetchall()[0][0]
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), speaker_email)
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), leader_email)
+            send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format("http://localhost:5000", ident)), 'vincent.super8@gmail.com')
             return render_template('wait_for_activating.html')
         else:
             return redirect(url_for('index'))
@@ -338,8 +339,16 @@ def adjust_ident():
 @app.route('/actlink/<account>', methods=['POST', 'GET'])
 def actlink(account):
     if request.method == "POST":
-        password = request.values.get("password")
-        db.session.execute('update manager set activate = 1 where id = "{}"'.format(1, account))
+        # password = request.values.get("password")
+        db.session.execute('update manager set activate = 1 where id = "{}"'.format(account))
+        name, isparliament = db.session.execute('select name, apartment from manager where id = "{}"'.format(account)).fetchall()[0]
+        temp = db.session.execute('select ind from parliamentary order by ind')
+        if isparliament == "學生議會議員" or isparliament == "議長" or isparliament == "副議長":
+            try:
+                ind = max(temp[-1])+1
+            except:
+                ind = 0
+            db.session.add(parliamentary(ind, name, '', ''))
         db.session.commit()
         return render_template('actlink.html', confirm = 0, wac = account, condition = 2)
         # else:
@@ -531,9 +540,11 @@ def getconferenceact():
 #                 allchapters.append(i)
 #         return render_template('laws.html', order = order, title = title, allchapters = allchapters)
 
+# 法規檢索
 @app.route('/laws/<order>')
 def laws_web(order):
     if order == 'all':
+        # 從資料庫取得各分類法規
         constitution = db.session.execute('select * from law_name where law_type like "%組織章程%"').fetchall()
         ordinance = db.session.execute('select * from law_name where law_type like "%自治條例%" order by ind').fetchall()
         rule = db.session.execute('select * from law_name where law_type like "%自治規則%"').fetchall()
@@ -593,6 +604,7 @@ def show_laws():
 #             allchapters.append(list(i[0].split(' ')))
 #     return render_template('adjustlaws.html', ind = ind, step = step, law_title =law_title, allchapters = allchapters, length = len(allchapters))
 
+# 修訂法律，程式碼類addlaws
 @app.route('/adjustlaws/<ind>', methods = ['POST', 'GET'])
 def adjustlaws(ind):
     if request.method == 'POST':
@@ -762,6 +774,9 @@ def delete(t, target):
     if t == "law_name":
         db.session.execute('delete from newlaws where law_title_ind = {}'.format(target))
     if t == "manager":
+        name, apartment = db.session.execute('select name, apartment from manager where id = {}'.format(target)).fetchall()[0]
+        if apartment == "學生議會議員" or apartment == "副議長":
+            db.session.execute('delete from parliamentary where name = "{}"'.format(name))
         db.session.execute('delete from manager where id = {}'.format(target))
     else:
          db.session.execute('delete from {} where ind = {}'.format(t, target))
@@ -940,33 +955,42 @@ def addinfo(order):
 #             return render_template('addlaws.html', step = "1")
 #     return render_template('addlaws.html', step = step)
 
+# 新增法律
 @app.route('/addlaws', methods=['POST', 'GET'])
 def addlaws():
     if session['manager_login']:
         if request.method == "POST":
+            # 從表單接收資料
             title = request.values.get("gettitle")
             lawtype = request.values.get("gettype")
             history = request.values.get("gethistory")
             date = now.strftime("%Y-%m-%d")
             temp = db.session.execute('select ind from law_name').fetchall()
+            # 獲取最後新增法律的id，+1以作為新法律id，若沒新法律則設為0+1
             try:
                 law_title_ind = max(temp[-1])+1
             except:
                 law_title_ind = 0
+            # 新增法律
             db.session.add(law_name(law_title_ind, lawtype, title, history, "", date, ""))
+            # 獲取最後新增法律細項的id，+1以作為新法律細項id，若沒新法律細項則設為0+1
             temp = db.session.execute('select ind from newlaws order by ind').fetchall()
             try:
                 ind = max(temp[-1])+1
             except:
                 ind = 0
+            # 獲取法律細項之章節、條目和內容
             content = request.values.getlist("content")
             order = request.values.getlist('content-order')
             order_count = 0
+            # 此四容器為計算目前為第幾章節，並轉換成中文數字
             chapters = {"編":0,"章":0,"節":0,"款":0}
             chapter_type = ["編", "章", "節", "款"]
             ch_chapter = "一二三四五六七八九十"
             exchapter = '編'
+            
             for i in content:
+                # 偵測是否為章節(章節資料回格式為 數字_名稱 )，並新增至資料庫
                 if i[1] == "_":
                     chapter, chapter_name = i.split("_")
                     if exchapter != chapter and chapter_type.index(chapter) < chapter_type.index(exchapter):
@@ -978,6 +1002,7 @@ def addlaws():
                     else:
                         chapter="第"+ch_chapter[chapters[chapter]//10-1]+"十"+ch_chapter[chapters[chapter]%10-1]+chapter
                     db.session.add(newlaws(ind+1, law_title_ind, chapter+" "+chapter_name, "", ""))
+                # 偵測是否為條目內容，並新增至資料庫
                 else:
                     db.session.add(newlaws(ind+1, law_title_ind, "", str(order[order_count]), i))
                     order_count += 1

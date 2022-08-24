@@ -48,6 +48,28 @@
             function addchapter(index) {
                 // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
                 var addcontentarea = '<br><div id="newdiv'+String(elementid)+'"><div class="input-group"><input class = "form-control" type="text" id="chapter'+String(elementid)+'" id = "orginal_content'+String(elementid)+'" onchange = "editinputvalue('+String(elementid)+')">'+'<br><input class = "col-md-1" type="hidden" id="chaptertype'+String(elementid)+'" name="content" id = "content" value="編" disabled><div class="input-group-append"><select name="types" id = "types'+String(elementid)+'" onchange="editinputvalue('+String(elementid)+')"><option value="編">編</option><option value="章">章</option><option value="節">節</option><option value="款">款</option></select></div><input type="hidden" id="result_content'+String(elementid)+'" name="content"></div><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter('+String(elementid)+')" type="button">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')" type="button">增加條文</button><br><br><br><div id="newdiv'+String(elementid)+'"><div>';
+                // 上面壓縮程式為
+                // <br>
+                // <div id="newdiv'+String(elementid)+'">
+                // <div class="input-group"><input class = "form-control" type="text" id="chapter'+String(elementid)+'" id = "orginal_content'+String(elementid)+'" onchange = "editinputvalue('+String(elementid)+')">'+'
+                // <br>
+                // <input class = "col-md-1" type="hidden" id="chaptertype'+String(elementid)+'" name="content" id = "content" value="編" disabled>
+                // <div class="input-group-append">
+                // <select name="types" id = "types'+String(elementid)+'" onchange="editinputvalue('+String(elementid)+')">
+                // <option value="編">編</option>
+                // <option value="章">章</option>
+                // <option value="節">節</option>
+                // <option value="款">款</option>
+                // </select>
+                // </div>
+                // <input type="hidden" id="result_content'+String(elementid)+'" name="content">
+                // </div>
+                // <button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter('+String(elementid)+')" type="button">增加章節</button>
+                // <button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')" type="button">增加條文</button>
+                // <br>
+                // <br>
+                // <br>
+                // <div id="newdiv'+String(elementid)+'"><div>
                 if (index == 0) {$("#newdiv"+String(index)).before(addcontentarea);}
                 else { $("#newdiv"+String(index)).after(addcontentarea);}
                 elementid += 1;
@@ -55,6 +77,15 @@
             function addcolumn(index) {
                 // var addbutton = '<br><button class="btn btn-primary" id = "addchapter'+String(elementid)+'" onclick="addchapter()">增加章節</button><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn()">增加條目</button><br>';
                 var addcontentarea = '<div id="newdiv'+String(elementid)+'" ><input type="text" id="column-order'+elementid+'" name="content-order" style = "margin-left: 10%;"><br><textarea id = "content'+elementid+'" class="form-control" row = "5" name="content" style = "margin-left: 10%;"></textarea><br><button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')" style = "margin-left: 10%;" type="button">增加條目</button><br><br></div>';
+                // 上面壓縮程式為
+                // <div id="newdiv'+String(elementid)+'" ><input type="text" id="column-order'+elementid+'" name="content-order" style = "margin-left: 10%;">
+                // <br>
+                // <textarea id = "content'+elementid+'" class="form-control" row = "5" name="content" style = "margin-left: 10%;"></textarea>
+                // <br>
+                // <button class="btn btn-success" id = "addcolumn'+String(elementid)+'" onclick="addcolumn('+String(elementid)+')" style = "margin-left: 10%;" type="button">增加條目</button>
+                // <br>
+                // <br>
+                // </div>
                 $("#newdiv"+String(index)).after(addcontentarea);
                 elementid += 1;
             };
