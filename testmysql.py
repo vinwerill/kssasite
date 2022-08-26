@@ -43,10 +43,24 @@ db = SQLAlchemy(app)
 # db.session.execute('update conference set activation = 0')
 # db.session.commit()
 # if input("reset? y/n: ") == "y":
-#     db.session.execute("delete from newlaws")
-#     db.session.commit()
-temp = db.session.execute("select * from manager").fetchall()
+# db.session.execute("delete from laws")
+# db.session.execute("delete from newlaws")
+# db.session.execute("delete from law_name")
+# db.session.commit()
+temp = db.session.execute('select * from law_name').fetchall()
 for i in temp:
     print(i)
-
-
+temp = db.session.execute('select * from newlaws').fetchall()
+for i in temp:
+    print(i)
+# temp1 = db.session.execute('select law_title_ind from newlaws order by ind').fetchall()
+# print(temp1)
+# try:
+#     law_title_ind = temp1[-1][0]+1
+# except:
+#     law_title_ind = 0
+# print(law_title_ind)
+# db.session.add(law_name(law_title_ind, "lawtype", "title", "history", "", "date", ""))
+# db.session.commit()
+# result = db.session.execute('select * from law_name').fetchall()
+# print(result)

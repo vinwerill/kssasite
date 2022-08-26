@@ -70,7 +70,7 @@ def addlaws():
        <div class="form-group">
             <textarea class="form-control" rows="5" name = "getcontent" id = "line"></textarea>
         </div>
-        <a class="btn btn-primary" id ="add_line">增加條目</a>
+        <a class="btn btn-primary" id ="add_line">增加條文</a>
         <hr>
        <h4>五、日期:</h4>
         <h5>公布日期:</h4>

@@ -167,7 +167,7 @@
     {% for i in allchapters %}
       <div style="margin-left: {{ chapter_adjust[i[-1]] }};">
           <h4>{{i}}:{{content[allchapters.index(i)]}}</h4>
-          <a class="btn btn-primary" id = "add_line{{allchapters.index(i)}}">增加條目</a>
+          <a class="btn btn-primary" id = "add_line{{allchapters.index(i)}}">增加條文</a>
           <input type="hidden" id = "add_line{{allchapters.index(i)}}" value = "{{i}} {{content[allchapters.index(i)]}}" >
       </div>
       <br><br>

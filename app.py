@@ -558,51 +558,8 @@ def laws_web(order):
 def show_laws():
     if session['manager_login']:
         laws_title = db.session.execute('select * from law_name').fetchall()
+        # print(laws_title)
         return render_template('show_laws.html', laws_title = laws_title)
-
-# @app.route('/adjust_laws/<ind>/<step>', methods=['POST', 'GET'])
-# def adjust_laws(ind, step):
-#     if request.method == "POST":
-#         if step == "2":
-#             title = request.values.get("gettitle")
-#             lawtype = request.values.get("gettype")
-#             history = request.values.get("gethistory")
-#             content = request.values.getlist("getcontent")
-#             allchapter_type = request.values.get("all_getchapter_type")
-#             temp = db.session.execute('select ind from law_name order by ind').fetchall()
-#             try:
-#                 ind = max(temp[-1])
-#             except:
-#                 ind = 0
-#             date = now.strftime("%Y-%m-%d")
-#             chapters = {"編":0,"章":0,"節":0,"款":0}
-#             chapter_adjust_list = {
-#                "編":{"編":"0%","章":"10%","節":"20%","款":"30%"}, "章":{"章":"0%","節":"10%","款":"20%"},"節":{"節":"0%","款":"10%"}
-#             }
-#             chapter_adjust = chapter_adjust_list[request.values.get(allchapter_type.split(" ")[0])]
-#             exchapter = '章'
-#             ch_chapter = "一二三四五六七八九十"
-#             allchapters = []
-#             originallaws = db.session.execute("select * from laws where law_type_ind = {}".format(ind)).fetchall()
-#             for i in allchapter_type.split(" "):
-#                 chapter = request.values.get(i)
-#                 if chapter == None:
-#                     continue
-#                 chapters[chapter] += 1
-#                 if chapters[chapter] <= 10:
-#                     allchapters.append("第"+ch_chapter[chapters[chapter]-1]+chapter)
-#                 else:
-#                     allchapters.append("第"+ch_chapter[chapters[chapter]//10-1]+"十"+ch_chapter[chapters[chapter]%10-1]+chapter)
-#             return render_template('adjustlaws.html', step = "2", title = title, history = history, ind = ind, lawtype = lawtype, allchapters = allchapters, chapter_adjust = chapter_adjust,content = content, length = len(allchapters), originallaws = originallaws)
-#     law_title = db.session.execute('select * from law_name where ind = {}'.format(ind)).fetchall()[0]
-#     temp = db.session.execute('select chapter from laws where law_type_ind = {}'.format(ind)).fetchall()
-#     allchapters = []
-#     for i in temp:
-#         if list(i[0].split(' ')) in allchapters:
-#             pass
-#         else:
-#             allchapters.append(list(i[0].split(' ')))
-#     return render_template('adjustlaws.html', ind = ind, step = step, law_title =law_title, allchapters = allchapters, length = len(allchapters))
 
 # 修訂法律，程式碼類addlaws
 @app.route('/adjustlaws/<ind>', methods = ['POST', 'GET'])
@@ -614,25 +571,30 @@ def adjustlaws(ind):
         lawtype = request.values.get("gettype")
         history = request.values.get("gethistory")
         date = now.strftime("%Y-%m-%d")
-        temp = db.session.execute('select ind from law_name').fetchall()
+        db.session.add(law_name(0, lawtype, title, history, "", date, ""))
+        # 獲取最後新增法律細項的id，+1以作為新法律細項id，若沒新法律細項則設為0+1
+        db.session.commit()
+        temp2 = db.session.execute('select ind from newlaws order by ind').fetchall()
+        print(temp2)
         try:
-            law_title_ind = max(temp[-1])+1
+            lawind = temp2[-1][0]+1
+        except:
+            lawind = 0
+        try:
+            law_title_ind = db.session.execute('select ind from law_name order by ind').fetchall()[-1][0]
         except:
             law_title_ind = 0
-        db.session.add(law_name(law_title_ind, lawtype, title, history, "", date, ""))
-        temp = db.session.execute('select ind from newlaws order by ind').fetchall()
-        try:
-            ind = max(temp[-1])+1
-        except:
-            ind = 0
+        # 獲取法律細項之章節、條文和內容
         content = request.values.getlist("content")
         order = request.values.getlist('content-order')
         order_count = 0
+        # 此四容器為計算目前為第幾章節，並轉換成中文數字
         chapters = {"編":0,"章":0,"節":0,"款":0}
         chapter_type = ["編", "章", "節", "款"]
         ch_chapter = "一二三四五六七八九十"
         exchapter = '編'
         for i in content:
+            # 偵測是否為章節(章節資料回格式為 數字_名稱 )，並新增至資料庫
             if i[1] == "_":
                 chapter, chapter_name = i.split("_")
                 if exchapter != chapter and chapter_type.index(chapter) < chapter_type.index(exchapter):
@@ -643,11 +605,12 @@ def adjustlaws(ind):
                     chapter="第"+ch_chapter[chapters[chapter]-1]+chapter
                 else:
                     chapter="第"+ch_chapter[chapters[chapter]//10-1]+"十"+ch_chapter[chapters[chapter]%10-1]+chapter
-                db.session.add(newlaws(ind+1, law_title_ind, chapter+" "+chapter_name, "", ""))
+                db.session.add(newlaws(0, law_title_ind, chapter+" "+chapter_name, "", ""))
+            # 偵測是否為條文內容，並新增至資料庫
             else:
-                db.session.add(newlaws(ind+1, law_title_ind, "", str(order[order_count]), i))
+                db.session.add(newlaws(0, law_title_ind, "", str(order[order_count]), i))
                 order_count += 1
-            ind += 1
+            lawind += 1
         db.session.commit()
         return redirect(url_for('index'))
     law_title = db.session.execute("select * from law_name where ind = {}".format(ind)).fetchall()[0]
@@ -663,7 +626,7 @@ def adjustlaws(ind):
 
 @app.route('/getlaws/<law>', methods=['POST', 'GET'])
 def getlaws(law):
-    content = db.session.execute('select * from newlaws where law_title_ind = "{}" order by ind'.format(law)).fetchall()
+    content = db.session.execute('select * from newlaws where law_title_ind = {} order by ind'.format(law)).fetchall()
     for i in range(len(content)):
         content[i] = list(content[i])
         s = content[i][4]
@@ -965,21 +928,21 @@ def addlaws():
             lawtype = request.values.get("gettype")
             history = request.values.get("gethistory")
             date = now.strftime("%Y-%m-%d")
-            temp = db.session.execute('select ind from law_name').fetchall()
-            # 獲取最後新增法律的id，+1以作為新法律id，若沒新法律則設為0+1
+            # 新增法律
+            db.session.add(law_name(0, lawtype, title, history, "", date, ""))
+            # 獲取最後新增法律細項的id，+1以作為新法律細項id，若沒新法律細項則設為0+1
+            db.session.commit()
+            temp2 = db.session.execute('select ind from newlaws order by ind').fetchall()
+            print(temp2)
             try:
-                law_title_ind = max(temp[-1])+1
+                lawind = temp2[-1][0]+1
+            except:
+                lawind = 0
+            try:
+                law_title_ind = db.session.execute('select ind from law_name order by ind').fetchall()[-1][0]
             except:
                 law_title_ind = 0
-            # 新增法律
-            db.session.add(law_name(law_title_ind, lawtype, title, history, "", date, ""))
-            # 獲取最後新增法律細項的id，+1以作為新法律細項id，若沒新法律細項則設為0+1
-            temp = db.session.execute('select ind from newlaws order by ind').fetchall()
-            try:
-                ind = max(temp[-1])+1
-            except:
-                ind = 0
-            # 獲取法律細項之章節、條目和內容
+            # 獲取法律細項之章節、條文和內容
             content = request.values.getlist("content")
             order = request.values.getlist('content-order')
             order_count = 0
@@ -988,7 +951,6 @@ def addlaws():
             chapter_type = ["編", "章", "節", "款"]
             ch_chapter = "一二三四五六七八九十"
             exchapter = '編'
-            
             for i in content:
                 # 偵測是否為章節(章節資料回格式為 數字_名稱 )，並新增至資料庫
                 if i[1] == "_":
@@ -1001,12 +963,12 @@ def addlaws():
                         chapter="第"+ch_chapter[chapters[chapter]-1]+chapter
                     else:
                         chapter="第"+ch_chapter[chapters[chapter]//10-1]+"十"+ch_chapter[chapters[chapter]%10-1]+chapter
-                    db.session.add(newlaws(ind+1, law_title_ind, chapter+" "+chapter_name, "", ""))
-                # 偵測是否為條目內容，並新增至資料庫
+                    db.session.add(newlaws(0, law_title_ind, chapter+" "+chapter_name, "", ""))
+                # 偵測是否為條文內容，並新增至資料庫
                 else:
-                    db.session.add(newlaws(ind+1, law_title_ind, "", str(order[order_count]), i))
+                    db.session.add(newlaws(0, law_title_ind, "", str(order[order_count]), i))
                     order_count += 1
-                ind += 1
+                lawind += 1
             db.session.commit()
             return render_template('newaddlaw.html')
         return render_template('newaddlaw.html')
