@@ -24,7 +24,9 @@ SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 # SHA-256 from 'flask20210112'
 app.config['SECRET_KEY'] = '18f4173d24f63dd99d2700aad88002c61c864f83255f5c76da4a0002db1f31c4'
 # app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://kssasite:kssaadmin@184.168.117.210:3306/kssadb"
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52g9@m7az7525jg6ygibs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xkbq7dgi25ki89nk"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://hfcv0x0q041lmavo:vsacpso5298i52g9@m7az7525jg6ygibs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xkbq7dgi25ki89nk"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://gmmjduea_vincent:1014vincent@kssasite.com/gmmjduea_kssasite"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://gmmjduea_site:gs1vT3FKU65Y@kssasite.com:3306/gmmjduea_kssasite"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
@@ -47,12 +49,12 @@ db = SQLAlchemy(app)
 # db.session.execute("delete from newlaws")
 # db.session.execute("delete from law_name")
 # db.session.commit()
-temp = db.session.execute('select * from law_name').fetchall()
+temp = db.session.execute('select * from info').fetchall()
 for i in temp:
     print(i)
-temp = db.session.execute('select * from newlaws').fetchall()
-for i in temp:
-    print(i)
+# temp = db.session.execute('select * from newlaws').fetchall()
+# for i in temp:
+#     print(i)
 # temp1 = db.session.execute('select law_title_ind from newlaws order by ind').fetchall()
 # print(temp1)
 # try:

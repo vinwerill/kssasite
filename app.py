@@ -101,6 +101,7 @@ def send_data(subject, embody, recipient='vincent.super8@gmail.com'):
 def show_manager():
     if session['manager_login'] and (session['apartment'] == "議長" or session['apartment'] =="會長"):
         managers = db.session.execute('select * from manager').fetchall()
+        db.session.close()
         return render_template('show_manager.html', managers = managers)
 
 #議長更替
@@ -123,6 +124,7 @@ def change_speaker(step):
                 session["apartment"] = ""
                 return redirect(url_for('adjust_ident', step = 1))
         managers = db.session.execute('select * from manager').fetchall()
+        db.session.close()
         #1.選擇人選
         return render_template('change_speaker.html', managers = managers, step = step)
 
@@ -143,6 +145,7 @@ def change_leader(step):
                 session["apartment"] = ""
                 return redirect(url_for('adjust_ident', step = 1))
         managers = db.session.execute('select * from manager').fetchall()
+        db.session.close()
         return render_template('change_leader.html', managers = managers, step = step)
 
 # @app.route('/reset_password', methods=['POST', 'GET'])
@@ -181,6 +184,7 @@ def manager_login():
         ident = request.values.get("id")
         password = request.values.get("password")
         found_user = manager.query.filter_by(id = ident).first()
+        db.session.close()
         # 確認有無該使用者
         if found_user != None:
             check_password = manager.query.filter_by(id = ident).first().password
@@ -269,6 +273,7 @@ def manager_register(order):
             os.system("heroku restart -a kssasite")
             db.session.add(manager(ident, user, password, email, enteryear, apartment, exist[order]))
             db.session.commit()
+            db.session.close()
             return render_template('waitcommit.html', user=user, login = True)
         #發送驗證信，等待議長、會長核可
         if order == 'register':
@@ -277,6 +282,7 @@ def manager_register(order):
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), speaker_email)
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), leader_email)
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format("http://localhost:5000", ident)), 'vincent.super8@gmail.com')
+            db.session.close()
             return render_template('wait_for_activating.html')
         else:
             return redirect(url_for('index'))
@@ -320,6 +326,7 @@ def register(order):
             os.system("heroku restart -a kssasite")
             db.session.add(User(ident, user, password, email, enteryear))
             db.session.commit()
+            db.session.close()
             return render_template('waitcommit.html', user=user, login = True)
     return render_template('register.html', errors = "")
 
@@ -329,10 +336,12 @@ def adjust_ident():
     #選取該管理者資料後輸出
     if session['manager_login']:
         ident = list(db.session.execute("select * from manager where id = '{}'".format(session["id"])))[0]
+        db.session.close()
         return render_template('adjust_managerident.html', ident = ident)
     #選取該使用者資料後輸出
     elif session['login']:
         ident = list(db.session.execute("select * from User where id = '{}'".format(session["id"])))[0]
+        db.session.close()
         return render_template('adjust_userident.html', ident = ident)
 
 # 議長、會長激活帳號
@@ -350,6 +359,7 @@ def actlink(account):
                 ind = 0
             db.session.add(parliamentary(ind, name, '', ''))
         db.session.commit()
+        db.session.close()
         return render_template('actlink.html', confirm = 0, wac = account, condition = 2)
         # else:
         #     return render_template('actlink.html', confirm = 0, wac = account, condition = 1)
@@ -388,6 +398,7 @@ def addleader():
         except:
             db.session.execute('update allleaders set leader = "{}", secondleader = "{}" where period = "{}"'.format(leader, secondleader, period))
         db.session.commit()
+        db.session.close()
         return render_template('addleader.html')
     return render_template('addleader.html')
 
@@ -405,6 +416,7 @@ def addspeaker():
         except:
             db.session.execute('update allspeaker set speaker = "{}", secondspeaker = "{}" where period = "{}"'.format(speaker, secondspeaker, period))
         db.session.commit()
+        db.session.close()
         return render_template('addspeaker.html')
     return render_template('addspeaker.html')
 
@@ -412,12 +424,14 @@ def addspeaker():
 @app.route('/showspeaker', methods=['POST', 'GET'])
 def showspeaker():
     contents = db.session.execute("select * from allspeaker order by year desc")
+    db.session.close()
     return render_template('showspeaker.html', contents = contents)
 
 # 顯示歷屆會長
 @app.route('/showleader', methods=['POST', 'GET'])
 def showleader():
     contents = db.session.execute("select * from allleaders order by year desc")
+    db.session.close()
     return render_template('showleader.html', contents = contents)
 
 # 設置會議
@@ -438,12 +452,14 @@ def set_conference():
                 db.session.execute("update parliamentary set choice = '', participation = 0")
                 db.session.execute("update conference set activation = 1, result = ''")
                 db.session.commit()
+                db.session.close()
             #重啟主機(防網站掛掉)
             except OperationalError:
                 os.system("heroku restart -a kssasite")
                 db.session.execute("update parliamentary set choice = '', participation = 0")
                 db.session.execute("update conference set activation = 1, result = ''")
                 db.session.commit()
+                db.session.close()
         else:
             return redirect(url_for('vote_page', m='result'))
         return redirect(url_for('vote_page', m='result'))
@@ -462,6 +478,7 @@ def vote_page(m):
                 choice = request.values.get('choice')
                 db.session.execute('update parliamentary set choice = "{}" where name = "{}"'.format(choice, session['user']))
                 db.session.commit()
+                db.session.close()
             return render_template("vote.html", m = "vote", exist = 1)
         # 跳轉到投票頁面，並設置該議員出席
         elif m == "vote":
@@ -474,6 +491,7 @@ def vote_page(m):
             if request.method == "POST":
                 db.session.execute('update parliamentary set participation = 1, choice = "none" where name = "{}"'.format(session['user']))
                 db.session.commit()
+                db.session.close()
                 return redirect(url_for('vote_page', m='vote'))
             return render_template("vote.html", m = "checkout", exist = 1)
         # 當開啟一次新投票後，所有議員重新跳回出席頁面
@@ -491,6 +509,7 @@ def vote_page(m):
             db.session.execute("update parliamentary set choice = 'adstain' where choice = 'none'")
             db.session.execute("update conference set activation = 0")
             db.session.commit()
+            db.session.close()
             return render_template("vote.html", m = "conclusion", result = result)
     else:
         return redirect(url_for('User_login'))
@@ -499,6 +518,7 @@ def vote_page(m):
 @app.route('/getparliamentary', methods=['POST', 'GET'])
 def getparliamentary():
     temp = db.session.execute('select * from parliamentary order by ind').fetchall()
+    db.session.close()
     data = []
     for i in temp:
         tempdict = {}
@@ -515,9 +535,11 @@ def getconferenceact():
     #重啟主機(防網站掛掉)
     try:
         temp = db.session.execute('select * from conference').fetchall()[0][0]
+        db.session.close()
     except OperationalError:
         os.system("heroku restart -a kssasite")
         temp = db.session.execute('select * from conference').fetchall()[0][0]
+        db.session.close()
     return {'data':temp}
 
 
@@ -548,9 +570,11 @@ def laws_web(order):
         constitution = db.session.execute('select * from law_name where law_type like "%組織章程%"').fetchall()
         ordinance = db.session.execute('select * from law_name where law_type like "%自治條例%" order by ind').fetchall()
         rule = db.session.execute('select * from law_name where law_type like "%自治規則%"').fetchall()
+        db.session.close()
         return render_template('newlaws.html', order = order, constitution = constitution, ordinance = ordinance, rule = rule)
     else:
         title = db.session.execute('select * from law_name where ind = {}'.format(order)).fetchall()[0]
+        db.session.close()
         return render_template('newlaws.html', order = order, title = title)
 
 # 顯示所有法律
@@ -558,6 +582,7 @@ def laws_web(order):
 def show_laws():
     if session['manager_login']:
         laws_title = db.session.execute('select * from law_name').fetchall()
+        db.session.close()
         # print(laws_title)
         return render_template('show_laws.html', laws_title = laws_title)
 
@@ -615,6 +640,7 @@ def adjustlaws(ind):
         return redirect(url_for('index'))
     law_title = db.session.execute("select * from law_name where ind = {}".format(ind)).fetchall()[0]
     laws = db.session.execute("select * from newlaws where law_title_ind = {}".format(ind)).fetchall()
+    db.session.close()
     return render_template('newadjustlaws.html', ind = ind, law_title = law_title, laws = laws, length = len(laws))
 
 # @app.route('/getlaws/<law>', methods=['POST', 'GET'])
@@ -627,6 +653,7 @@ def adjustlaws(ind):
 @app.route('/getlaws/<law>', methods=['POST', 'GET'])
 def getlaws(law):
     content = db.session.execute('select * from newlaws where law_title_ind = {} order by ind'.format(law)).fetchall()
+    db.session.close()
     for i in range(len(content)):
         content[i] = list(content[i])
         s = content[i][4]
@@ -640,6 +667,7 @@ def getlaws(law):
 @app.route('/gethistory/<history>', methods=['POST', 'GET'])
 def gethistory(history):
     result = db.session.execute('select * from law_name where ind = "{}" order by ind'.format(history)).fetchall()
+    db.session.close()
     for i in range(len(result)):
         result[i] = list(result[i])
         s = result[i][3]
@@ -659,6 +687,7 @@ def info_web(order):
     # 點選後進入所選消息內容
     else:
         content = db.session.execute('select * from info where ind = {}'.format(order)).fetchall()
+        db.session.close()
         return render_template('info.html', order = order, content = content[0])
 
 # 顯示所有最新消息並管理(刪除、編輯，管理員用)
@@ -666,6 +695,7 @@ def info_web(order):
 def show_info():
     if session['manager_login']:
         infos = db.session.execute('select * from info').fetchall()
+        db.session.close()
         return render_template('show_info.html', infos = infos)
 
 # 修訂最新消息
@@ -673,6 +703,7 @@ def show_info():
 def adjust_info(ind):
     if session['manager_login']:
         info = db.session.execute('select * from info where ind = {}'.format(ind)).fetchall()
+        db.session.close()
         return render_template('adjust_info.html', info = info[0])
 
 # 會議記錄頁面
@@ -683,10 +714,12 @@ def record_web(order):
     if order == 'all':
         adminstration = db.session.execute('select * from record where apartment like "%學聯會-%"').fetchall()
         parliament = db.session.execute('select * from record where apartment like "%學生議會-%"').fetchall()
+        db.session.close()
         return render_template('record.html', adminstration = adminstration, parliament = parliament, order = order, content = content)
     # 點選後進入該會議記錄
     else:
         content = db.session.execute('select * from record where ind = {}'.format(order)).fetchall()[0]
+        db.session.close()
         return render_template('record.html', order = order, content = content)
 
 # 顯示所有會議記錄並管理(刪除、編輯，管理員用)
@@ -694,6 +727,7 @@ def record_web(order):
 def show_record():
     if session['manager_login']:
         records = db.session.execute('select * from record').fetchall()
+        db.session.close()
         # print(records[0])
         return render_template('show_record.html', records = records)
 
@@ -702,6 +736,7 @@ def show_record():
 def adjust_record(ind):
     if session['manager_login']:
         record = db.session.execute('select * from record where ind = {}'.format(ind)).fetchall()
+        db.session.close()
         return render_template('adjust_record.html', record = record[0])
 
 # 顯示所有使用者並管理(刪除、編輯，管理員用)
@@ -709,6 +744,7 @@ def adjust_record(ind):
 def show_users():
     if session['manager_login']:
         users = db.session.execute('select id, name, email, enteryear from User').fetchall()
+        db.session.close()
     return render_template('show_user.html', users = users)
 
 @app.route('/logout')
@@ -726,6 +762,7 @@ def delete_account(target):
         if request.method=="POST":
             db.session.execute('delete from User where id = {}'.format(target))
             db.session.commit()
+            db.session.close()
             if session['login']:
                 return redirect(url_for('logout'))
             else:
@@ -744,6 +781,7 @@ def delete(t, target):
     else:
          db.session.execute('delete from {} where ind = {}'.format(t, target))
     db.session.commit()
+    db.session.close()
     return redirect( url_for('index'))
 
 # 意見反映
@@ -789,6 +827,7 @@ def report_web():
         db.session.add(report(str(ind+1), anonymous, sender, sender_id, publish, form_type, content, to_who, str(sorter), advice, date, "", "", ""))
         db.session.add(report(str(ind+2), anonymous, sender, sender_id, publish, form_type, content, to_who, str(leader), advice, date, "", "", ""))
         db.session.commit()
+        db.session.close()
         return render_template('index.html')
     return render_template('report.html')
 
@@ -807,9 +846,11 @@ def mailbox(letters):
             progress = request.values.get('progress')
             db.session.execute('update report set return_massege = "{}", progress = "{}" where ind = "{}"'.format(return_massage, progress, sender))
             db.session.commit()
+            db.session.close()
             return render_template('mailbox.html', mails = mails, retrun_mails = retrun_mails, letters = 'all')
         if session['manager_login'] and (session['apartment'] == '秘書部' or session['apartment'] == "會長"):
             managers = db.session.execute('select id, name, apartment from manager').fetchall()
+            db.session.close()
             return render_template('mailbox.html', mails = mails, retrun_mails = retrun_mails, letters = letters, managers = managers)
         return render_template('mailbox.html', mails = mails, retrun_mails = retrun_mails, letters = letters)
     else:
@@ -822,6 +863,7 @@ def change_receiver(receiver, letter_id):
         send_email("新案件審理提醒", "{}/".format(app_host), db.session.execute("select email from manager where id='{}'".format(receiver)).fetchall()[0][0])
         db.session.execute('update report set receiver = "{}" where ind = {}'.format(receiver, letter_id))
         db.session.commit()
+        db.session.close()
     return redirect( url_for('mailbox', letters = 'all'))
 
 # 新增最新消息
@@ -845,7 +887,7 @@ def addinfo(order):
             try:
                 document = '|'.join(request.values.get("getdocument").split('\r\n'))
             except:
-                document = request.values.get("getdocument")
+                document = request.values.get("getdocument")+'|'
             apartment = request.values.get("getapartment")
             y = request.values.get("y")
             m = request.values.get("m")
@@ -854,6 +896,7 @@ def addinfo(order):
                 document = '無'
             db.session.add(info(ind+1, title, content, document, apartment, y+"-"+m+"-"+d))
             db.session.commit()
+            db.session.close()
             # print(ind+1, title, content, document, apartment, y+"-"+m+"-"+d)
         return render_template('addinfo.html')
     else:
@@ -970,6 +1013,7 @@ def addlaws():
                     order_count += 1
                 lawind += 1
             db.session.commit()
+            db.session.close()
             return render_template('newaddlaw.html')
         return render_template('newaddlaw.html')
     else:
@@ -1004,6 +1048,7 @@ def addrecord():
                 form = '無'
             db.session.add(record(ind+1, title, form, video, apartment, y+"-"+m+"-"+d))
             db.session.commit()
+            db.session.close()
         return render_template('addrecord.html')
     else:
         return redirect(url_for('login', errors = ""))
