@@ -281,7 +281,7 @@ def manager_register(order):
             leader_email = db.session.execute("select email from manager where apartment = '會長'").fetchall()[0][0]
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), speaker_email)
             send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), leader_email)
-            send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format("http://localhost:5000", ident)), 'vincent.super8@gmail.com')
+            send_email("管理員申請核可確認", render_template('activation.html', actlink = '{}/actlink/{}'.format(app_host, ident)), 'vincent.super8@gmail.com')
             db.session.close()
             return render_template('wait_for_activating.html')
         else:
