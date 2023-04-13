@@ -1,2 +1,2 @@
-web: gunicorn -b :$PORT app:app
-heroku ps:scale web=0
+web: gunicorn run:app
+heroku ps:scale web=1
